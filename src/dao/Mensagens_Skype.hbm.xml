@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+
+   "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+
+   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="dao">
+
+    <class name="Mensagens_Skype" table="mensagens_skype">
+        <id name="id_geral" column="id_geral" type="long"/>
+        
+        <property name="id" column="id" type="long" not-null="true"/>
+        <property name="id_sender" column="id_sender" type="string"/>
+        <property name="sender_display_name" column="sender_display_name" type="string"/>
+        <property name="content" column="content" type="string" not-null="true"/>                
+        <property name="chat" column="chat" type="string" not-null="true"/>
+        <property name="message_type" column="message_type" type="string" not-null="true"/> 
+    </class>
+
+</hibernate-mapping>
