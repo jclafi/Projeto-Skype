@@ -4,9 +4,6 @@ import com.skype.Skype;
 import com.skype.SkypeException;
 import sourceClasses.SkypeListener;
 import dataBase.Hibernate;
-
-import java.util.concurrent.TimeUnit;
-
 import javax.swing.JOptionPane;
 
 public class MainSkypeClass {
