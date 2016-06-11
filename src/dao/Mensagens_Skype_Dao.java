@@ -8,7 +8,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import dataBase.Hibernate;
+import hibernate.Hibernate;
 
 public class Mensagens_Skype_Dao {
 	private Mensagens_Skype mensagem;

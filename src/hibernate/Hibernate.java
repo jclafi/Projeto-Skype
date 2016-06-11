@@ -1,4 +1,4 @@
-package dataBase;
+package hibernate;
 
 import javax.swing.JOptionPane;
 
@@ -12,11 +12,6 @@ public class Hibernate {
 	
 	public static SessionFactory getFactory() { return factory; }
 	public static void setFactory(SessionFactory pfactory) { factory = pfactory; }
-	
-	public Hibernate() {
-		
-				
-	}
 	
 	public static boolean createFactory() {
 		
@@ -36,8 +31,7 @@ public class Hibernate {
 		
 	}
 		
-	public void finalize() {
-		System.out.println("Método Finalize!");
+	public static void closeFactory() {
 		if (factory != null) {
 			if (! factory.isClosed())
 				factory.close();
