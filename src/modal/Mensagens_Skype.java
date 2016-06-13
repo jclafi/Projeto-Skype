@@ -1,9 +1,9 @@
-package dao;
+package modal;
 
 public class Mensagens_Skype {
 	
 	private long id_geral;
-	private long id;
+	private int id;
 	private String id_sender;
 	private String sender_display_name;
 	private String content;
@@ -14,8 +14,8 @@ public class Mensagens_Skype {
 	public void setMessage_type(String message_type) { this.message_type = message_type; }
 	public long getId_geral() { return id_geral; }
 	public void setId_geral(long id_geral) { this.id_geral = id_geral; }
-	public long getId() { return id; }
-	public void setId(long id) { this.id = id; }
+	public int getId() { return id; }
+	public void setId(int id) { this.id = id; }
 	public String getId_sender() { return id_sender; }
 	public void setId_sender(String id_sender) { this.id_sender = id_sender; }
 	public String getSender_display_name() { return sender_display_name; } 

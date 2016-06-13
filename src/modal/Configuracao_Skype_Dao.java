@@ -1,4 +1,4 @@
-package dao;
+package modal;
 
 import java.util.List;
 
@@ -19,9 +19,9 @@ public class Configuracao_Skype_Dao {
 		this.objRegraConfiguracao = objRegraConfiguracao;
 	}
 
-	public long getPk() {
+	public int getPk() {
 		
-		long pk = 1;
+		int pk = 1;
 		
 		final String CUSTOM_SQL = " select * from configuracao_skype order by id_geral desc limit 1 ";
 				
@@ -38,7 +38,7 @@ public class Configuracao_Skype_Dao {
 		 
 			if ((rows != null) && (! rows.isEmpty())) {
 				for (Object[] index : rows) {
-					pk = Long.parseLong(index[0].toString());
+					pk = Integer.parseInt(index[0].toString());
 					++pk;
 					break;
 				}
@@ -65,7 +65,7 @@ public class Configuracao_Skype_Dao {
 
 	}
 	
-	public boolean carregaConfiguracao(long id_geral) {
+	public boolean carregaConfiguracao(int id_geral) {
 
 		// Objeto Session
 		Session session = Hibernate.getFactory().openSession();

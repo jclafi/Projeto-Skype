@@ -1,4 +1,4 @@
-package dao;
+package modal;
 
 import java.util.List;
 

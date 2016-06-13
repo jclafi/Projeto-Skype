@@ -1,18 +1,20 @@
-package listener;
+package etl;
 
 import javax.swing.JOptionPane;
 import com.skype.*;
 import java.util.concurrent.TimeUnit;
 
-public class SkypeListenerClass  {
+public class IniciaSkypeListener  {
 	
-	private final int TEMPO_MINUTOS = 1;
+	private final int TEMPO_MINUTOS = 10;
 	
 	public boolean verificaInstalação() {
 
 		if (! Skype.isInstalled()) {
+		
 			JOptionPane.showMessageDialog(null, "Atenção instalação do Skype não Identificada !");
 			return false;
+		
 		}
 		
 		return true;
@@ -24,8 +26,10 @@ public class SkypeListenerClass  {
 		boolean connected = false;
 		
 		if (! Skype.isInstalled()) {
+
 			JOptionPane.showMessageDialog(null, "Atenção instalação do Skype não Identificada !");
 			return false;
+	
 		}
 		
 		do {
@@ -37,8 +41,10 @@ public class SkypeListenerClass  {
 					Skype.addApplication("javaw.exe");
 				
 			} catch (SkypeException ex) {
-				System.out.println("Permissão de Acesso Skype solicitada !");
+
+				JOptionPane.showMessageDialog(null, "Permissão de Acesso Skype solicitada !");
 				ex.printStackTrace();
+		
 			}
 			
 			//Se não conectou aguarda para a próxima tentativa
@@ -49,8 +55,11 @@ public class SkypeListenerClass  {
 					
 				 }
 				 catch (InterruptedException ex) {
-					 System.out.println("Exceção ao rodar sleep: " + ex.getMessage());
+			
+					 JOptionPane.showMessageDialog(null, "Exceção ao rodar sleep: " + ex.getMessage());
+				 
 				 }
+				
 			}
 			
 		}
@@ -72,7 +81,7 @@ public class SkypeListenerClass  {
 			Skype.setDeamon(false);
 			
 		} catch (SkypeException ex) {
-			System.out.println("Mensagem exceção Listener Skype: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, "Mensagem exceção Listener Skype: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		

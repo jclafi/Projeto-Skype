@@ -2,8 +2,8 @@ package main;
 
 import hibernate.Hibernate;
 import jdbc.SqlLiteConnection;
-import listener.SkypeListenerClass;
-import dao.Configuracao_Skype;
+import modal.Configuracao_Skype;
+import etl.*;
 
 class MainSkypeClass {
 				
@@ -16,7 +16,7 @@ class MainSkypeClass {
 		
 	}
 	
-	public static boolean ativaListener() {
+	public static boolean ativaSkypeListener() {
 		
 		boolean objTemp = false;
 		
@@ -34,9 +34,9 @@ class MainSkypeClass {
 		return objTemp;		
 	}
 	
-	public static boolean verificaInstalação() {
+	public static boolean verificaInstalacaoSkype() {
 		
-		SkypeListenerClass objSkypeListener = new SkypeListenerClass();		
+		IniciaSkypeListener objSkypeListener = new IniciaSkypeListener();		
 		try {
 			
 			return (objSkypeListener.verificaInstalação());
@@ -76,28 +76,28 @@ class MainSkypeClass {
 	
 	public static void main(String[] args) {
 		
-		if (! verificaInstalação())
+		if (! verificaInstalacaoSkype())
 			finalizaAplicacao();
 	
 		// Cria a Factory de acesso a Dados
 		if (connectHibernate() && connectJDBC()) {
 			
 			//Verifica se a leitura é via listener ou banco de dados
-			if (ativaListener()) {			
+			if (ativaSkypeListener()) {			
 				
-				SkypeListenerClass objSkypeListener = new SkypeListenerClass();
+				IniciaSkypeListener objSkypeListener = new IniciaSkypeListener();
 				
-				//Valida a conexção do listener no Skype via confirmação do Usuário
-				if (objSkypeListener.connectSkype()) {
-				
-					// Cria o Listener que grava Mensagens enviadas/recebidas
+				// Cria o Listener que grava Mensagens enviadas/recebidas
+				if (objSkypeListener.connectSkype())
 					objSkypeListener.startChatListener();
-					
-				}
+
 			}
 			else {
+	
+				//Cria a Thread que gerencia a cargas das mensagens para o Banco de Dados
+				DatabaseExtractLoad objDataETL = new DatabaseExtractLoad();
 				
-				
+				objDataETL.start();
 				
 			}
 			

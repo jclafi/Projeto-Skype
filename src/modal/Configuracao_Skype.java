@@ -1,17 +1,17 @@
-package dao;
+package modal;
 
 import javax.swing.JOptionPane;
 
 public class Configuracao_Skype {
 	
-	private long id_geral;
+	private int id_geral;
 	private String skypeDatabase;
 	private String skypeListener;
 	
-	public long getId_geral() {
+	public int getId_geral() {
 		return id_geral;
 	}
-	public void setId_geral(long id_geral) {
+	public void setId_geral(int id_geral) {
 		this.id_geral = id_geral;
 	}
 	public String getSkypeDatabase() {
@@ -27,19 +27,19 @@ public class Configuracao_Skype {
 		this.skypeListener = skypeListener;
 	}
 	
-	public static final long CODIGO_CONFIGURACAO = 1;
+	public static final int CODIGO_CONFIGURACAO = 1;
 
 	public Configuracao_Skype() {
 	
 	}	
 	
-	public Configuracao_Skype(long varIdGeral) {
+	public Configuracao_Skype(int varIdGeral) {
 		
 		setConfiguracao(varIdGeral);
 		
 	}
 
-	private void setConfiguracao(long id_geral) {
+	public void setConfiguracao(int id_geral) {
 		
 		Configuracao_Skype_Dao objPersistente = new Configuracao_Skype_Dao();
 		try {

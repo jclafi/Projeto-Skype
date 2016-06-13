@@ -2,10 +2,8 @@ package jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-//import java.sql.ResultSet;
-//import java.sql.Statement;
 import javax.swing.JOptionPane;
-import dao.Configuracao_Skype;
+import modal.Configuracao_Skype;
 
 public class SqlLiteConnection {
 	
@@ -34,20 +32,12 @@ public class SqlLiteConnection {
 	
 	public static boolean getSQLLiteConnection() {
 
-//		ResultSet resultSet = null;
-//		Statement statement = null;
-//		"jdbc:sqlite:C:\\Users\\Julio\\AppData\\Roaming\\Skype\\juliocesar_floripa\\main.db"
-
 		try {
+
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection(getDatabasePath());			
+			connection = DriverManager.getConnection(getDatabasePath());	
 			connection.setAutoCommit(true);
 			
-//			statement = connection.createStatement();
-//			resultSet = statement.executeQuery("SELECT EMPNAME FROM EMPLOYEEDETAILS");
-//			while (resultSet.next()) {
-//				System.out.println("EMPLOYEE NAME:" + resultSet.getString("EMPNAME"));
-//			}
 		} 
 		catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Exceção ao Conectar na Base SQL Lite: " + ex.getMessage());
