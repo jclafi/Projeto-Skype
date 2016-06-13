@@ -1,4 +1,4 @@
-package source;
+package listener;
 
 import javax.swing.JOptionPane;
 import com.skype.*;
@@ -7,6 +7,17 @@ import java.util.concurrent.TimeUnit;
 public class SkypeListenerClass  {
 	
 	private final int TEMPO_MINUTOS = 1;
+	
+	public boolean verificaInstalação() {
+
+		if (! Skype.isInstalled()) {
+			JOptionPane.showMessageDialog(null, "Atenção instalação do Skype não Identificada !");
+			return false;
+		}
+		
+		return true;
+		
+	}
 		
 	public boolean connectSkype() {
 		
@@ -66,37 +77,5 @@ public class SkypeListenerClass  {
 		}
 		
 	}
-
-	public void startChatLogBackup() {
-		
-		Chat[] objChat = null;
-		ChatMessage[] objMessage = null;
-		try {
-
-			objChat = (Chat []) Skype.getAllChats();
-			
-			for (Chat indexChat : objChat) {
-				
-				try {
-					
-					objMessage = indexChat.getRecentChatMessages();
-					objMessage.toString();
-					
-				}
-				catch (SkypeException ex) {
-					System.out.println("Mensagem exceção Listener Skype: " + ex.getMessage());
-					ex.printStackTrace();
-				}
-				
-			}
-			
-		}
-		catch (SkypeException ex) {
-			System.out.println("Mensagem exceção Listener Skype: " + ex.getMessage());
-			ex.printStackTrace();			
-		}
-		
-	}
-
 
 }

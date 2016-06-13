@@ -24,5 +24,7 @@
 
    <!-- List of XML mapping files -->
    <mapping resource="dao/Mensagens_Skype.hbm.xml" />
+   <mapping resource="dao/Configuracao_Skype.hbm.xml" />
+
 </session-factory>
 </hibernate-configuration>

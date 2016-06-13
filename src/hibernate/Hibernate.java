@@ -23,7 +23,7 @@ public class Hibernate {
 		catch (HibernateException ex) {
 			System.out.println("Exceção ao criar a Sessionfactory: " + ex.getMessage());
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Exceção na criação da SessionFactory: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, "Atenção exceção ao criar o Hibernate SessionFactory: " + ex.getMessage());
 			return false;
 		}
 		

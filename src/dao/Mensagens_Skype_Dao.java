@@ -1,16 +1,17 @@
 package dao;
 
-//import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import hibernate.Hibernate;
 
 public class Mensagens_Skype_Dao {
+	
 	private Mensagens_Skype mensagem;
 	
 	public Mensagens_Skype getMensagem() { return mensagem; }
@@ -23,6 +24,7 @@ public class Mensagens_Skype_Dao {
 	}
 	
 	public long getPk() {
+		
 		long pk = 1;
 		
 		final String CUSTOM_SQL = " select * from mensagens_skype order by id_geral desc limit 1 ";
@@ -40,17 +42,15 @@ public class Mensagens_Skype_Dao {
 		 
 			if ((rows != null) && (! rows.isEmpty())) {
 				for (Object[] index : rows) {
-					Long varLong = new Long(index[0].toString());
-					pk = ++varLong;
+					pk = Long.parseLong(index[0].toString());
+					++pk;
 					break;
 				}
 			}
-			else
-				return pk;
 		
 		}
 		catch (HibernateException ex) {
-			System.out.println("Exceção ao Executar SQL Customizado:" + ex.getMessage());
+			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -82,6 +82,7 @@ public class Mensagens_Skype_Dao {
 			tx = session.beginTransaction();
 						
 			if (mensagem != null) {
+				mensagem.setId_geral(getPk());
 				session.save(mensagem);
 				tx.commit();			
 			}
@@ -89,7 +90,7 @@ public class Mensagens_Skype_Dao {
 		catch (HibernateException ex) {
 			if (tx != null)
 				tx.rollback();
-			System.out.println("Exceção ao Salvar Pessoa:" + ex.getMessage());
+			JOptionPane.showMessageDialog(null, "Exceção ao Salvar Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -125,6 +126,7 @@ public class Mensagens_Skype_Dao {
 		catch (HibernateException ex) {
 			if (tx != null)
 				tx.rollback();
+			JOptionPane.showMessageDialog(null, "Exceção ao Remover Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -135,12 +137,11 @@ public class Mensagens_Skype_Dao {
 			if (tx != null) 
 				tx = null;
 		}		
-		
-		
+				
 		return true;	
 	}
 	
-	public boolean updatePessoa() {
+	public boolean atualizaMensagem() {
 		
 		//Objeto Session
 		Session session = Hibernate.getFactory().openSession();
@@ -159,6 +160,7 @@ public class Mensagens_Skype_Dao {
 		catch (HibernateException ex) {
 			if (tx != null)
 				tx.rollback();
+			JOptionPane.showMessageDialog(null, "Exceção ao Atualizar Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -173,8 +175,25 @@ public class Mensagens_Skype_Dao {
 		return true;
 	}
 	
-	public void finalize() {
+	public boolean carregaMensagem(long id_geral) {
 
+		// Objeto Session
+		Session session = Hibernate.getFactory().openSession();
+
+		try {
+			setMensagem(session.get(Mensagens_Skype.class, id_geral));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Exceção ao Carregar a Mensagem: " + ex.getMessage());
+			return false;
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+
+		return ((getMensagem() != null) && (getMensagem().getId_geral() > 0));
 	}
-	
+
+		
 }

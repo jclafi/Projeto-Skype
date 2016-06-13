@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+
+   "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+
+   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="dao">
+
+    <class name="Configuracao_Skype" table="configuracao_skype">
+        <id name="id_geral" column="id_geral" type="long"/>
+        
+        <property name="skypeDatabase" column="skypedatabase" type="string" not-null="true"/> 
+        <property name="skypeListener" column="skypelistener" type="string" not-null="true"/> 
+    </class>
+
+</hibernate-mapping>

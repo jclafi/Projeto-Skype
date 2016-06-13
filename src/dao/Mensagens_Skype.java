@@ -9,12 +9,9 @@ public class Mensagens_Skype {
 	private String content;
 	private String chat;
 	private String message_type;
-	private Mensagens_Skype_Dao objPersistente;		
 	
 	public String getMessage_type() {	return message_type; }
 	public void setMessage_type(String message_type) { this.message_type = message_type; }
-	public Mensagens_Skype_Dao getObjPersistente() { return objPersistente; }
-	public void setObjPersistente(Mensagens_Skype_Dao objPersistente) { this.objPersistente = objPersistente; }
 	public long getId_geral() { return id_geral; }
 	public void setId_geral(long id_geral) { this.id_geral = id_geral; }
 	public long getId() { return id; }
@@ -28,22 +25,59 @@ public class Mensagens_Skype {
 	public String getChat() { return chat; }
 	public void setChat(String chat) { this.chat = chat; }
 	
-    public Mensagens_Skype() {
-
-    	objPersistente = new Mensagens_Skype_Dao(this);
-    	
-    }
-    
-    public void criaObjPersistente() {
-    	
-    	objPersistente = new Mensagens_Skype_Dao(this);
-    	
-    }
-    
-    public void finalize() {
-    	
-    	if (objPersistente != null)
-    		objPersistente = null;
-    	
-    }
+	public boolean salvaMensagem() {
+		
+		boolean bolOk = false;
+		
+		Mensagens_Skype_Dao objPersistente = new Mensagens_Skype_Dao(this);
+		try {
+			
+			bolOk = objPersistente.salvaMensagem();
+			
+		}
+		finally {
+	    	if (objPersistente != null)
+	    		objPersistente = null;			
+		}
+		
+		return bolOk;
+	}
+	
+	public boolean atualizaMensagem() {
+		
+		boolean bolOk = false;
+		
+		Mensagens_Skype_Dao objPersistente = new Mensagens_Skype_Dao(this);
+		try {
+			
+			bolOk = objPersistente.atualizaMensagem();
+			
+		}
+		finally {
+	    	if (objPersistente != null)
+	    		objPersistente = null;			
+		}
+		
+		return bolOk;		
+		
+	}
+	
+	public boolean removeMensagem() {
+		
+		boolean bolOk = false;
+		
+		Mensagens_Skype_Dao objPersistente = new Mensagens_Skype_Dao(this);
+		try {
+			
+			bolOk = objPersistente.removeMensagem();
+			
+		}
+		finally {
+	    	if (objPersistente != null)
+	    		objPersistente = null;			
+		}
+		
+		return bolOk;
+	}
+        
 }
