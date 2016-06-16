@@ -13,7 +13,7 @@
 
    <!-- Assume test is the database name -->
    <property name="hibernate.connection.url">
-      jdbc:postgresql://localhost:5432/estudosjava
+      jdbc:postgresql://localhost:5432/skypedb
    </property>
    <property name="hibernate.connection.username">
       postgres
@@ -23,8 +23,8 @@
    </property>
 
    <!-- List of XML mapping files -->
-   <mapping resource="dao/Mensagens_Skype.hbm.xml" />
-   <mapping resource="dao/Configuracao_Skype.hbm.xml" />
+   <mapping resource="modal/Mensagens_Skype.hbm.xml" />
+   <mapping resource="modal/Configuracao_Skype.hbm.xml" />
 
 </session-factory>
 </hibernate-configuration>

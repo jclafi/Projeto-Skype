@@ -1,5 +1,15 @@
 package modal;
 
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+
+import hibernate.Hibernate;
+
 public class Mensagens_Skype {
 	
 	private long id_geral;
@@ -24,6 +34,52 @@ public class Mensagens_Skype {
 	public void setContent(String content) { this.content = content; }
 	public String getChat() { return chat; }
 	public void setChat(String chat) { this.chat = chat; }
+	
+	public int retornaUltimoID() {
+		
+		int id = 0;
+		
+		final String CUSTOM_SQL = " select * from mensagens_skype order by id_geral desc limit 1 ";
+				
+		//Cria a sessão
+		Session session = Hibernate.getFactory().openSession();
+
+		SQLQuery qryTeste = null;
+		try {			
+		
+			qryTeste = session.createSQLQuery(CUSTOM_SQL);
+
+			@SuppressWarnings("unchecked")
+			List<Object[]> rows = qryTeste.list();
+		 
+			if ((rows != null) && (! rows.isEmpty())) {
+				for (Object[] index : rows) {
+					id = Integer.parseInt(index[0].toString());
+					++id;
+					break;
+				}
+			}
+		
+		}
+		catch (HibernateException ex) {
+			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		finally {
+			if (!qryTeste.list().isEmpty()) {
+				qryTeste.list().clear();
+				qryTeste = null;
+			}
+		
+			if (session != null) {
+				session.close();
+				session = null;				
+			}
+		}
+		
+		return id;
+
+	}
 	
 	public boolean salvaMensagem() {
 		

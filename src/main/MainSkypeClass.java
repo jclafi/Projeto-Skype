@@ -6,6 +6,36 @@ import modal.Configuracao_Skype;
 import etl.*;
 
 class MainSkypeClass {
+	
+	public static void main(String[] args) {
+		
+		if (! verificaInstalacaoSkype())
+			finalizaAplicacao();
+	
+		// Cria a Factory de acesso a Dados
+		if (connectHibernate() && connectJDBC()) {
+			
+			//Verifica se a leitura é via listener ou banco de dados
+			if (verificaTipoImportacao()) {			
+				
+				//Cria a Thread que gerencia a as mensagens via Listener para o Banco de Dados
+				IniciaSkypeListener objSkypeListener = new IniciaSkypeListener();
+				objSkypeListener.start();
+
+			}
+			else {
+				
+				//Cria a Thread que gerencia a cargas das mensagens para o Banco de Dados
+				IniciaSalvaMensagens objSalvaMensagens = new IniciaSalvaMensagens();
+				objSalvaMensagens.start();							
+			
+			}
+			
+		}
+		else
+			finalizaAplicacao();
+
+	}
 				
 	public static void finalizaAplicacao() {
 		
@@ -16,7 +46,7 @@ class MainSkypeClass {
 		
 	}
 	
-	public static boolean ativaSkypeListener() {
+	public static boolean verificaTipoImportacao() {
 		
 		boolean objTemp = false;
 		
@@ -36,15 +66,15 @@ class MainSkypeClass {
 	
 	public static boolean verificaInstalacaoSkype() {
 		
-		IniciaSkypeListener objSkypeListener = new IniciaSkypeListener();		
+		IniciaSkypeListener objVerificaInstalacao = new IniciaSkypeListener();		
 		try {
 			
-			return (objSkypeListener.verificaInstalação());
+			return (objVerificaInstalacao.verificaInstalação());
 				
 		}
 		finally {
-			if (objSkypeListener != null)
-				objSkypeListener = null;
+			if (objVerificaInstalacao != null)
+				objVerificaInstalacao = null;
 				
 		}
 		
@@ -71,39 +101,6 @@ class MainSkypeClass {
 	public static void closeHibernate() {
 
 		Hibernate.closeFactory();
-
-	}
-	
-	public static void main(String[] args) {
-		
-		if (! verificaInstalacaoSkype())
-			finalizaAplicacao();
-	
-		// Cria a Factory de acesso a Dados
-		if (connectHibernate() && connectJDBC()) {
-			
-			//Verifica se a leitura é via listener ou banco de dados
-			if (ativaSkypeListener()) {			
-				
-				IniciaSkypeListener objSkypeListener = new IniciaSkypeListener();
-				
-				// Cria o Listener que grava Mensagens enviadas/recebidas
-				if (objSkypeListener.connectSkype())
-					objSkypeListener.startChatListener();
-
-			}
-			else {
-	
-				//Cria a Thread que gerencia a cargas das mensagens para o Banco de Dados
-				DatabaseExtractLoad objDataETL = new DatabaseExtractLoad();
-				
-				objDataETL.start();
-				
-			}
-			
-		}
-		else
-			finalizaAplicacao();
 
 	}
 

@@ -6,7 +6,7 @@
 
    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping package="dao">
+<hibernate-mapping package="modal">
 
     <class name="Configuracao_Skype" table="configuracao_skype">
         <id name="id_geral" column="id_geral" type="integer"/>

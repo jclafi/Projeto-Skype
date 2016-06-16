@@ -2,11 +2,36 @@ package etl;
 
 import javax.swing.JOptionPane;
 import com.skype.*;
+
+import modal.UsuarioLogado;
+
 import java.util.concurrent.TimeUnit;
 
-public class IniciaSkypeListener  {
+public class IniciaSkypeListener extends Thread {
 	
 	private final int TEMPO_MINUTOS = 10;
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Thread#run()
+	 */
+	public void run() {
+		
+		//Valida se o Operador conectou no Skype e Cria o Listener que grava Mensagens enviadas/recebidas
+		if ((carregaUsuario() != null) && (connectSkype()))
+			startChatListener();
+		
+	}	
+	
+	private UsuarioLogado carregaUsuario() {
+		
+		UsuarioLogado objUser = new UsuarioLogado();
+		
+		objUser.getUsuarioLogado();
+		
+		return objUser;
+		
+	}
 	
 	public boolean verificaInstalação() {
 
@@ -21,16 +46,9 @@ public class IniciaSkypeListener  {
 		
 	}
 		
-	public boolean connectSkype() {
+	private boolean connectSkype() {
 		
 		boolean connected = false;
-		
-		if (! Skype.isInstalled()) {
-
-			JOptionPane.showMessageDialog(null, "Atenção instalação do Skype não Identificada !");
-			return false;
-	
-		}
 		
 		do {
 			try {
@@ -69,7 +87,7 @@ public class IniciaSkypeListener  {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void startChatListener() {
+	private void startChatListener() {
 
 		SkypeListener skypeListener = new SkypeListener();;
 		try {
