@@ -1,14 +1,12 @@
 package modal;
 
+import java.util.Date;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-
-import hibernate.Hibernate;
+import org.hibernate.SessionFactory;
 
 public class Mensagens_Skype {
 	
@@ -19,9 +17,9 @@ public class Mensagens_Skype {
 	private String content;
 	private String chat;
 	private String message_type;
+	private Date message_date;
+	private SessionFactory objSessionFactory;
 	
-	public String getMessage_type() {	return message_type; }
-	public void setMessage_type(String message_type) { this.message_type = message_type; }
 	public long getId_geral() { return id_geral; }
 	public void setId_geral(long id_geral) { this.id_geral = id_geral; }
 	public int getId() { return id; }
@@ -34,7 +32,13 @@ public class Mensagens_Skype {
 	public void setContent(String content) { this.content = content; }
 	public String getChat() { return chat; }
 	public void setChat(String chat) { this.chat = chat; }
-	
+	public String getMessage_type() {	return message_type; }
+	public void setMessage_type(String message_type) { this.message_type = message_type; }
+	public Date getMessage_date() { return message_date; }
+	public void setMessage_date(Date message_date) { this.message_date = message_date; }
+	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
+	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
+
 	public int retornaUltimoID() {
 		
 		int id = 0;
@@ -42,7 +46,7 @@ public class Mensagens_Skype {
 		final String CUSTOM_SQL = " select * from mensagens_skype order by id_geral desc limit 1 ";
 				
 		//Cria a sessão
-		Session session = Hibernate.getFactory().openSession();
+		Session session = objSessionFactory.openSession();
 
 		SQLQuery qryTeste = null;
 		try {			
@@ -72,7 +76,8 @@ public class Mensagens_Skype {
 			}
 		
 			if (session != null) {
-				session.close();
+				if (session.isOpen())
+					session.close();
 				session = null;				
 			}
 		}
@@ -88,6 +93,7 @@ public class Mensagens_Skype {
 		Mensagens_Skype_Dao objPersistente = new Mensagens_Skype_Dao(this);
 		try {
 			
+			objPersistente.setObjSessionFactory(objSessionFactory);
 			bolOk = objPersistente.salvaMensagem();
 			
 		}
@@ -106,6 +112,7 @@ public class Mensagens_Skype {
 		Mensagens_Skype_Dao objPersistente = new Mensagens_Skype_Dao(this);
 		try {
 			
+			objPersistente.setObjSessionFactory(objSessionFactory);
 			bolOk = objPersistente.atualizaMensagem();
 			
 		}
@@ -125,6 +132,7 @@ public class Mensagens_Skype {
 		Mensagens_Skype_Dao objPersistente = new Mensagens_Skype_Dao(this);
 		try {
 			
+			objPersistente.setObjSessionFactory(objSessionFactory);	
 			bolOk = objPersistente.removeMensagem();
 			
 		}

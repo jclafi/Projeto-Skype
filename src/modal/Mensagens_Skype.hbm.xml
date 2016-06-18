@@ -17,6 +17,7 @@
         <property name="content" column="content" type="string"/>                
         <property name="chat" column="chat" type="string"/>
         <property name="message_type" column="message_type" type="string"/> 
+        <property name="message_date" column="message_date" type="date"/>
     </class>
 
 </hibernate-mapping>

@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="D:/Desenvolvimento/Java/DataBse/hibernate-release-5.1.0.Final/lib/required/jboss-logging-3.3.0.Final.jar"/>
 	<classpathentry kind="lib" path="D:/Desenvolvimento/Java/DataBse/postgresql-9.2-1004.jdbc41.jar"/>
 	<classpathentry kind="lib" path="D:/Desenvolvimento/Java/DataBse/sqlite-jdbc-3.8.11.2.jar"/>
+	<classpathentry kind="lib" path="D:/Desenvolvimento/Java/DataBse/mysql-connector-java-5.1.39-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

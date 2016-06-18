@@ -4,45 +4,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
-
 import javax.swing.JOptionPane;
 import jdbc.SqlLiteConnection;
 
-public class UsuarioLogado {
+public class UsuarioSkype {
 	
 	private int id;
 	private int isPermanent;
 	private int status;
 	private String signinName;
+	private SqlLiteConnection connectionSQLLite;
+	private final int TEMPO_MINUTOS = 5;	
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public int getIsPermanent() {
-		return isPermanent;
-	}
-	public void setIsPermanent(int isPermanent) {
-		this.isPermanent = isPermanent;
-	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
-	public String getSigninName() {
-		return signinName;
-	}
-	public void setSigninName(String signinName) {
-		this.signinName = signinName;
-	}
+	public int getId() { return id; }
+	public void setId(int id) { this.id = id; }
+	public int getIsPermanent() { return isPermanent; }
+	public void setIsPermanent(int isPermanent) { this.isPermanent = isPermanent; }
+	public int getStatus() { return status; }
+	public void setStatus(int status) { this.status = status; }
+	public String getSigninName() { return signinName; }
+	public void setSigninName(String signinName) { this.signinName = signinName; }
+	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
+	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }	
 	
-	private final int TEMPO_MINUTOS = 10;
-	
-	public UsuarioLogado getUsuarioLogado() {
+	public UsuarioSkype getUsuarioLogado() {
 		
 		String SQL = null;		
 		ResultSet resultSet = null;
@@ -55,7 +40,7 @@ public class UsuarioLogado {
 				
 				SQL = " select * from accounts where status = 7 limit 1 ";
 				
-				statement = SqlLiteConnection.getConnection().createStatement();
+				statement = connectionSQLLite.getConnection().createStatement();
 				resultSet = statement.executeQuery(SQL);
 				
 				while (resultSet.next()) {
@@ -68,8 +53,8 @@ public class UsuarioLogado {
 					
 				}
 				
-				if (! resultSet.isClosed())
-					resultSet.close();
+				if (! statement.isClosed())
+					statement.close();
 				
 				if (! usuarioOk) {
 					

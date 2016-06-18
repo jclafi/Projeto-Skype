@@ -7,36 +7,21 @@ import modal.Configuracao_Skype;
 
 public class SqlLiteConnection {
 	
-	private static Connection connection;
-	public static Connection getConnection() { return connection; }
-	public static void setConnection(Connection connection) { SqlLiteConnection.connection = connection; }
+	private Connection connection;
+	private Configuracao_Skype objConfiguracao;
 	
-	private static String getDatabasePath() {	
-		
-		String objTemp = "";
-		
-		Configuracao_Skype objConfiguracao = new Configuracao_Skype(Configuracao_Skype.CODIGO_CONFIGURACAO);
-		try {
+	public Connection getConnection() { return connection; }
+	public void setConnection(Connection connection) { this.connection = connection; }
+	public Configuracao_Skype getObjConfiguracao() { return objConfiguracao; }
+	public void setObjConfiguracao(Configuracao_Skype objConfiguracao) { this.objConfiguracao = objConfiguracao; }
 	
-			objTemp = objConfiguracao.getSkypeDatabase();
-			
-		}
-		finally {
-			if (objConfiguracao != null)
-				objConfiguracao = null;
-		}
-		
-		return objTemp;
-		
-	}
-	
-	public static boolean getSQLLiteConnection() {
+	public boolean getSQLLiteConnection() {
 
 		try {
 
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection(getDatabasePath());	
-			connection.setAutoCommit(true);
+			connection = DriverManager.getConnection(objConfiguracao.getSkypeDatabase());	
+			connection.setAutoCommit(false);
 			
 		} 
 		catch (Exception ex) {
@@ -46,11 +31,11 @@ public class SqlLiteConnection {
 			return false;
 		} 
 		
-		return true;
+		return (connection != null);
 		
 	}
 
-	public static void closeSQLLiteConnection() {
+	public void closeSQLLiteConnection() {
 		
 		if (connection != null) {
 			

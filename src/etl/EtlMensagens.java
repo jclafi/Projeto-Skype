@@ -1,19 +1,27 @@
 package etl;
 
-import modal.UsuarioLogado;
+import modal.UsuarioSkype;
 import modal.Mensagens_Skype;
 import jdbc.SqlLiteConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
-public class SalvaMensagens {
-	
-	private UsuarioLogado objUsuarioRegras; 
-		
-	public UsuarioLogado getObjUsuario() { return objUsuarioRegras; }
-	public void setObjUsuario(UsuarioLogado objUsuario) { this.objUsuarioRegras = objUsuario; }
+import org.hibernate.SessionFactory;
 
+public class EtlMensagens {
+	
+	private UsuarioSkype objUsuarioRegras; 
+	private SessionFactory objSessionFactory;
+	private SqlLiteConnection connectionSQLLite;	
+
+	public UsuarioSkype getObjUsuario() { return objUsuarioRegras; }
+	public void setObjUsuario(UsuarioSkype objUsuario) { this.objUsuarioRegras = objUsuario; }
+	public SessionFactory getObjSessionFactory() { return this.objSessionFactory; }
+	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
+	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
+	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }		
+	
 	public void executaCargaMensagens() {
 		
 		//Identifica o Usuario logado no Sistema
@@ -43,10 +51,10 @@ public class SalvaMensagens {
 			PreparedStatement statement = null;			
 			try {				
 				
-				SQL = " select id, chatname, author, from_dispname, body_xml " + 
-						" from messages where body_xml is not null and id > ? order by timestamp ";
+				SQL = " select id, chatname, author, from_dispname, body_xml, timestamp__ms " + 
+						" from messages where body_xml is not null and id > ? order by timestamp__ms ";
 				
-				statement = SqlLiteConnection.getConnection().prepareStatement(SQL);
+				statement = connectionSQLLite.getConnection().prepareStatement(SQL);
 				statement.setInt(1, ultimoID);
 				resultSet = statement.executeQuery();
 				
@@ -56,7 +64,8 @@ public class SalvaMensagens {
 					objMensagensRegra.setChat(resultSet.getString("chatname"));
 					objMensagensRegra.setSender_display_name(resultSet.getString("from_dispname"));
 					objMensagensRegra.setContent(resultSet.getString("body_xml"));
-					objMensagensRegra.setId_sender(resultSet.getString("author"));
+					objMensagensRegra.setId_sender(resultSet.getString("author"));						
+					objMensagensRegra.setMessage_date(resultSet.getDate("timestamp__ms"));					
 					
 					//Identifica a origem das mensagens de acordo com a estação Cliente
 					if (resultSet.getString("author").equals(objUsuarioRegras.getSigninName()))
@@ -67,8 +76,8 @@ public class SalvaMensagens {
 					objMensagensRegra.salvaMensagem();
 				}
 				
-				if (! resultSet.isClosed())
-					resultSet.close();
+				if (! statement.isClosed())
+					statement.close();
 				
 			}
 			finally {				
@@ -90,10 +99,11 @@ public class SalvaMensagens {
 			
 	}
 	
-	private UsuarioLogado carregaUsuario() {
+	private UsuarioSkype carregaUsuario() {
 		
-		UsuarioLogado objUser = new UsuarioLogado();
+		UsuarioSkype objUser = new UsuarioSkype();
 		
+		objUser.setConnectionSQLLite(connectionSQLLite);
 		objUser.getUsuarioLogado();
 		
 		return objUser;

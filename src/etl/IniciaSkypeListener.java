@@ -1,15 +1,22 @@
 package etl;
 
 import javax.swing.JOptionPane;
+import org.hibernate.SessionFactory;
 import com.skype.*;
-
-import modal.UsuarioLogado;
-
-import java.util.concurrent.TimeUnit;
+import jdbc.SqlLiteConnection;
+import modal.UsuarioSkype;
 
 public class IniciaSkypeListener extends Thread {
 	
-	private final int TEMPO_MINUTOS = 10;
+	//Entre uma carga e outra aguarda 5 minutos
+	private final long SLEEP_TIME = 300000;
+	private SessionFactory objSessionFactory;
+	private SqlLiteConnection connectionSQLLite;
+	
+	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
+	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
+	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
+	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }	
 	
 	/*
 	 * (non-Javadoc)
@@ -23,10 +30,11 @@ public class IniciaSkypeListener extends Thread {
 		
 	}	
 	
-	private UsuarioLogado carregaUsuario() {
+	private UsuarioSkype carregaUsuario() {
 		
-		UsuarioLogado objUser = new UsuarioLogado();
+		UsuarioSkype objUser = new UsuarioSkype();
 		
+		objUser.setConnectionSQLLite(connectionSQLLite);
 		objUser.getUsuarioLogado();
 		
 		return objUser;
@@ -67,16 +75,15 @@ public class IniciaSkypeListener extends Thread {
 			
 			//Se não conectou aguarda para a próxima tentativa
 			if (! connected) {
+
+				//Pausa para a nova carga de Mensagens
 				try {
 
-					TimeUnit.MINUTES.sleep(TEMPO_MINUTOS);
-					
-				 }
-				 catch (InterruptedException ex) {
-			
-					 JOptionPane.showMessageDialog(null, "Exceção ao rodar sleep: " + ex.getMessage());
-				 
-				 }
+					IniciaSkypeListener.sleep(SLEEP_TIME);
+				
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				
 			}
 			
@@ -91,6 +98,9 @@ public class IniciaSkypeListener extends Thread {
 
 		SkypeListener skypeListener = new SkypeListener();;
 		try {
+			
+			//Objeto Session Factory Hibernate
+			skypeListener.setObjSessionFactory(objSessionFactory);
 			
 			//Adiciona o Listener para Mensagens On The Fly
 			Skype.addChatMessageListener(skypeListener);

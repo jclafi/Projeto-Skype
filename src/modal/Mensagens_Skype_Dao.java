@@ -7,13 +7,16 @@ import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import hibernate.Hibernate;
 
 public class Mensagens_Skype_Dao {
 	
 	private Mensagens_Skype mensagem;
+	private SessionFactory objSessionFactory;	
 	
+	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
+	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 	public Mensagens_Skype getMensagem() { return mensagem; }
 	public void setMensagem(Mensagens_Skype mensagem) { this.mensagem = mensagem; }
 
@@ -30,7 +33,7 @@ public class Mensagens_Skype_Dao {
 		final String CUSTOM_SQL = " select * from mensagens_skype order by id_geral desc limit 1 ";
 				
 		//Cria a sessão
-		Session session = Hibernate.getFactory().openSession();
+		Session session = objSessionFactory.openSession();
 
 		SQLQuery qryTeste = null;
 		try {			
@@ -60,7 +63,8 @@ public class Mensagens_Skype_Dao {
 			}
 		
 			if (session != null) {
-				session.close();
+				if (session.isOpen())
+					session.close();
 				session = null;				
 			}
 		}
@@ -72,7 +76,7 @@ public class Mensagens_Skype_Dao {
 	public boolean salvaMensagem() {
 
 		//Cria a Session
-		Session session = Hibernate.getFactory().openSession();
+		Session session = objSessionFactory.openSession();
 		
 		//Cria a Transacation
 		Transaction tx = null;		
@@ -96,7 +100,8 @@ public class Mensagens_Skype_Dao {
 		}
 		finally {
 			if (session != null) {
-				session.close();
+				if (session.isOpen())
+					session.close();
 				session = null;
 			}			
 			if (tx != null)
@@ -109,7 +114,7 @@ public class Mensagens_Skype_Dao {
 	public boolean removeMensagem() {		
 				
 		//Objeto Session
-		Session session = Hibernate.getFactory().openSession();
+		Session session = objSessionFactory.openSession();
 		
 		//Objeto Transação
 		Transaction tx = null;
@@ -132,7 +137,9 @@ public class Mensagens_Skype_Dao {
 		}
 		finally {
 			if (session != null) {
-				session.close();				
+				if (session.isOpen())
+					session.close();
+				session = null;				
 			}			
 			if (tx != null) 
 				tx = null;
@@ -144,7 +151,7 @@ public class Mensagens_Skype_Dao {
 	public boolean atualizaMensagem() {
 		
 		//Objeto Session
-		Session session = Hibernate.getFactory().openSession();
+		Session session = objSessionFactory.openSession();
 		
 		//Objeto Transação
 		Transaction tx = null;
@@ -166,7 +173,9 @@ public class Mensagens_Skype_Dao {
 		}
 		finally {
 			if (session != null) {
-				session.close();				
+				if (session.isOpen())
+					session.close();
+				session = null;				
 			}			
 			if (tx != null) 
 				tx = null;
@@ -178,7 +187,7 @@ public class Mensagens_Skype_Dao {
 	public boolean carregaMensagem(long id_geral) {
 
 		// Objeto Session
-		Session session = Hibernate.getFactory().openSession();
+		Session session = objSessionFactory.openSession();
 
 		try {
 			setMensagem(session.get(Mensagens_Skype.class, id_geral));
@@ -188,12 +197,13 @@ public class Mensagens_Skype_Dao {
 			return false;
 		} finally {
 			if (session != null) {
-				session.close();
-			}
+				if (session.isOpen())
+					session.close();
+				session = null;				
+			}			
 		}
 
 		return ((getMensagem() != null) && (getMensagem().getId_geral() > 0));
 	}
 
-		
 }

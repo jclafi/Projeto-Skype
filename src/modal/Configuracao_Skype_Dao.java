@@ -6,19 +6,18 @@ import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import hibernate.Hibernate;
+import org.hibernate.SessionFactory;
 
 public class Configuracao_Skype_Dao {
 	
 	private Configuracao_Skype objRegraConfiguracao;
+	private SessionFactory objSessionFactory;	
 
-	public Configuracao_Skype getObjRegraConfiguracao() {
-		return objRegraConfiguracao;
-	}
-	public void setObjRegraConfiguracao(Configuracao_Skype objRegraConfiguracao) {
-		this.objRegraConfiguracao = objRegraConfiguracao;
-	}
-
+	public Configuracao_Skype getObjRegraConfiguracao() { return objRegraConfiguracao; }
+	public void setObjRegraConfiguracao(Configuracao_Skype objRegraConfiguracao) { this.objRegraConfiguracao = objRegraConfiguracao; }
+	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
+	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
+	
 	public int getPk() {
 		
 		int pk = 1;
@@ -26,7 +25,7 @@ public class Configuracao_Skype_Dao {
 		final String CUSTOM_SQL = " select * from configuracao_skype order by id_geral desc limit 1 ";
 				
 		//Cria a sessão
-		Session session = Hibernate.getFactory().openSession();
+		Session session = objSessionFactory.openSession();
 
 		SQLQuery qryTeste = null;
 		try {			
@@ -68,7 +67,7 @@ public class Configuracao_Skype_Dao {
 	public boolean carregaConfiguracao(int id_geral) {
 
 		// Objeto Session
-		Session session = Hibernate.getFactory().openSession();
+		Session session = objSessionFactory.openSession();
 
 		try {
 			setObjRegraConfiguracao(session.get(Configuracao_Skype.class, id_geral));
