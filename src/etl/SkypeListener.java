@@ -1,19 +1,25 @@
 package etl;
 
+import java.net.InetAddress;
+
 import javax.swing.JOptionPane;
 import org.hibernate.SessionFactory;
 import com.skype.ChatMessage;
 import com.skype.ChatMessageListener;
 import com.skype.SkypeException;
 import modal.Mensagens_Skype;
+import modal.UsuarioSkype;
 
 public class SkypeListener implements ChatMessageListener {
 	
 	private final String VERSION = "Versão Skype Homologada: 7.24.0.104";
 	private SessionFactory objSessionFactory;	
-	
+	private UsuarioSkype objUsuarioRegras;
+
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
+	public UsuarioSkype getUsuarioRegras() { return objUsuarioRegras; }
+	public void setUsuarioRegras(UsuarioSkype objSkypeUser) { this.objUsuarioRegras = objSkypeUser; }
 	
 	@Override
 	public void chatMessageReceived(ChatMessage recMessage) throws SkypeException {
@@ -29,10 +35,17 @@ public class SkypeListener implements ChatMessageListener {
 			objMensagem.setChat(recMessage.getChat().toString());
 			objMensagem.setMessage_date(recMessage.getTime());
 			objMensagem.setMessage_type("R");
+			objMensagem.setAccount_logged(objUsuarioRegras.getSigninName());			
+			objMensagem.setHost_name(InetAddress.getLocalHost().getHostName());
+			objMensagem.setIp_adress(InetAddress.getLocalHost().getHostAddress());
 			
 			objMensagem.salvaMensagem();
 		}
 		catch (final SkypeException ex) {
+			JOptionPane.showMessageDialog(null, VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
@@ -45,6 +58,7 @@ public class SkypeListener implements ChatMessageListener {
 
 	@Override
 	public void chatMessageSent(ChatMessage sentMessage) throws SkypeException {
+
 		Mensagens_Skype objMensagem = new Mensagens_Skype();
 		try {					
 			objMensagem.setObjSessionFactory(objSessionFactory);
@@ -56,10 +70,17 @@ public class SkypeListener implements ChatMessageListener {
 			objMensagem.setChat(sentMessage.getChat().toString());
 			objMensagem.setMessage_date(sentMessage.getTime());
 			objMensagem.setMessage_type("E");
+			objMensagem.setAccount_logged(objUsuarioRegras.getSigninName());			
+			objMensagem.setHost_name(InetAddress.getLocalHost().getHostName());
+			objMensagem.setIp_adress(InetAddress.getLocalHost().getHostAddress());
 			
 			objMensagem.salvaMensagem();
 		}
 		catch (final SkypeException ex) {
+			JOptionPane.showMessageDialog(null, VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}

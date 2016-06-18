@@ -18,6 +18,9 @@ public class Mensagens_Skype {
 	private String chat;
 	private String message_type;
 	private Date message_date;
+	private String ip_adress;
+	private String host_name;
+	private String account_logged;
 	private SessionFactory objSessionFactory;
 	
 	public long getId_geral() { return id_geral; }
@@ -35,7 +38,13 @@ public class Mensagens_Skype {
 	public String getMessage_type() {	return message_type; }
 	public void setMessage_type(String message_type) { this.message_type = message_type; }
 	public Date getMessage_date() { return message_date; }
-	public void setMessage_date(Date message_date) { this.message_date = message_date; }
+	public void setMessage_date(Date message_date) { this.message_date = message_date; }	
+	public String getIp_adress() { return ip_adress; }
+	public void setIp_adress(String ip_adress) { this.ip_adress = ip_adress; }
+	public String getHost_name() { return host_name; }
+	public void setHost_name(String host_name) { this.host_name = host_name; }	
+	public String getAccount_logged() { return account_logged; }
+	public void setAccount_logged(String account_logged) { this.account_logged = account_logged; }
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 
@@ -59,7 +68,6 @@ public class Mensagens_Skype {
 			if ((rows != null) && (! rows.isEmpty())) {
 				for (Object[] index : rows) {
 					id = Integer.parseInt(index[1].toString());
-					++id;
 					break;
 				}
 			}

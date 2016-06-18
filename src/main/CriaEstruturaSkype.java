@@ -2,14 +2,16 @@ package main;
 
 import etl.IniciaSkypeListener;
 import hibernate.HibernatePostgreSQL;
+import hibernate.HibernateMySQL;
 import jdbc.SqlLiteConnection;
 import modal.Configuracao_Skype;
 
 public class CriaEstruturaSkype {
 
-	private HibernatePostgreSQL objPostgreSQLFactory = new HibernatePostgreSQL();	
-	private Configuracao_Skype objConfiguracao;
+	private HibernatePostgreSQL objPostgreSQLFactory;	
+	private HibernateMySQL objMySQLFactory;
 	private SqlLiteConnection connectionSQLLite;
+	private Configuracao_Skype objConfiguracao;
 	
 	public HibernatePostgreSQL getObjPostgreSQLFactory() { return objPostgreSQLFactory; }
 	public void setObjPostgreSQLFactory(HibernatePostgreSQL objPostgreSQLFactory) { this.objPostgreSQLFactory = objPostgreSQLFactory; }
@@ -17,6 +19,8 @@ public class CriaEstruturaSkype {
 	public void setObjConfiguracao(Configuracao_Skype objConfiguracao) { this.objConfiguracao = objConfiguracao; }
 	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
 	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }
+	public HibernateMySQL getObjMySQLFactory() { return objMySQLFactory; }
+	public void setObjMySQLFactory(HibernateMySQL objMySQLFactory) { this.objMySQLFactory = objMySQLFactory; }
 	
 	public boolean criaObjetoConfiguracao() {
 		
@@ -57,6 +61,15 @@ public class CriaEstruturaSkype {
 		objPostgreSQLFactory = new HibernatePostgreSQL();
 		
 		return objPostgreSQLFactory.createFactory();
+		
+	}
+	
+	public boolean connectMySQLHibernate() {
+
+		objMySQLFactory = new HibernateMySQL();
+		
+		objMySQLFactory.setObjConfiguracao(objConfiguracao);
+		return objMySQLFactory.createFactory();
 		
 	}
 	

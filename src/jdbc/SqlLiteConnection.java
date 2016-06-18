@@ -20,8 +20,8 @@ public class SqlLiteConnection {
 		try {
 
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection(objConfiguracao.getSkypeDatabase());	
-			connection.setAutoCommit(false);
+			connection = DriverManager.getConnection("jdbc:sqlite:" + objConfiguracao.getSkypeDatabase());	
+			connection.setAutoCommit(true);
 			
 		} 
 		catch (Exception ex) {

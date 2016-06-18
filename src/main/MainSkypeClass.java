@@ -1,6 +1,7 @@
 package main;
 
-import etl.*;
+import etl.IniciaSkypeListener;
+import etl.IniciaEtlMensagens;
 
 class MainSkypeClass {
 	
@@ -34,6 +35,13 @@ class MainSkypeClass {
 				objSalvaMensagens.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());
 				objSalvaMensagens.start();							
 			
+			}
+			
+			// Valida conexão com servidor Remoto
+			if (objEstruturaSkype.connectMySQLHibernate()) {
+				
+				
+				
 			}
 			
 		}

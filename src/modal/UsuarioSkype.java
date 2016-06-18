@@ -14,7 +14,7 @@ public class UsuarioSkype {
 	private int status;
 	private String signinName;
 	private SqlLiteConnection connectionSQLLite;
-	private final int TEMPO_MINUTOS = 5;	
+	private final long TEMPO_MINUTOS = 1;	
 	
 	public int getId() { return id; }
 	public void setId(int id) { this.id = id; }
@@ -55,7 +55,7 @@ public class UsuarioSkype {
 				
 				if (! statement.isClosed())
 					statement.close();
-				
+								
 				if (! usuarioOk) {
 					
 					try {

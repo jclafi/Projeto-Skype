@@ -13,6 +13,9 @@
         
         <property name="skypeDatabase" column="skypedatabase" type="string" not-null="true"/> 
         <property name="skypeListener" column="skypelistener" type="string" not-null="true"/> 
+        <property name="mySqlRoot" column="mysqlroot" type="string"/> 
+        <property name="mySqlPassWord" column="mysqlpassword" type="string"/> 
+        <property name="mySQLHost" column="mysqlhost" type="string"/> 
     </class>
 
 </hibernate-mapping>

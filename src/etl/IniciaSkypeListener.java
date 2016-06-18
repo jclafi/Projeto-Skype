@@ -12,11 +12,14 @@ public class IniciaSkypeListener extends Thread {
 	private final long SLEEP_TIME = 300000;
 	private SessionFactory objSessionFactory;
 	private SqlLiteConnection connectionSQLLite;
+	private UsuarioSkype objUsuarioRegras;
 	
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
 	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }	
+	public UsuarioSkype getUsuarioRegras() { return objUsuarioRegras; }
+	public void setUsuarioRegras(UsuarioSkype objSkypeUser) { this.objUsuarioRegras = objSkypeUser; }
 	
 	/*
 	 * (non-Javadoc)
@@ -24,10 +27,11 @@ public class IniciaSkypeListener extends Thread {
 	 */
 	public void run() {
 		
-		//Valida se o Operador conectou no Skype e Cria o Listener que grava Mensagens enviadas/recebidas
-		if ((carregaUsuario() != null) && (connectSkype()))
-			startChatListener();
+		objUsuarioRegras = carregaUsuario();
 		
+		//Valida se o Operador conectou no Skype e Cria o Listener que grava Mensagens enviadas/recebidas
+		if ((objUsuarioRegras != null) && (connectSkype()))
+			startChatListener();
 	}	
 	
 	private UsuarioSkype carregaUsuario() {
@@ -98,6 +102,9 @@ public class IniciaSkypeListener extends Thread {
 
 		SkypeListener skypeListener = new SkypeListener();;
 		try {
+			
+			//Objeto com dados do Usuário Skype
+			skypeListener.setUsuarioRegras(objUsuarioRegras);
 			
 			//Objeto Session Factory Hibernate
 			skypeListener.setObjSessionFactory(objSessionFactory);

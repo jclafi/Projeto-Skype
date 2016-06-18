@@ -3,6 +3,8 @@ package etl;
 import modal.UsuarioSkype;
 import modal.Mensagens_Skype;
 import jdbc.SqlLiteConnection;
+
+import java.net.InetAddress;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
@@ -66,12 +68,15 @@ public class EtlMensagens {
 					objMensagensRegra.setContent(resultSet.getString("body_xml"));
 					objMensagensRegra.setId_sender(resultSet.getString("author"));						
 					objMensagensRegra.setMessage_date(resultSet.getDate("timestamp__ms"));					
+					objMensagensRegra.setAccount_logged(objUsuarioRegras.getSigninName());
+					objMensagensRegra.setHost_name(InetAddress.getLocalHost().getHostName());
+					objMensagensRegra.setIp_adress(InetAddress.getLocalHost().getHostAddress());
 					
 					//Identifica a origem das mensagens de acordo com a estação Cliente
 					if (resultSet.getString("author").equals(objUsuarioRegras.getSigninName()))
 						objMensagensRegra.setMessage_type("E");
 					else
-						objMensagensRegra.setMessage_type("R");
+						objMensagensRegra.setMessage_type("R");					
 					
 					objMensagensRegra.salvaMensagem();
 				}

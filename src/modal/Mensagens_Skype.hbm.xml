@@ -18,6 +18,9 @@
         <property name="chat" column="chat" type="string"/>
         <property name="message_type" column="message_type" type="string"/> 
         <property name="message_date" column="message_date" type="date"/>
+        <property name="ip_adress" column="ip_adress" type="string"/> 
+        <property name="host_name" column="host_name" type="string"/> 
+        <property name="account_logged" column="account_logged" type="string"/> 
     </class>
 
 </hibernate-mapping>

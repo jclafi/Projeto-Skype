@@ -1,19 +1,22 @@
 package hibernate;
 
 import javax.swing.JOptionPane;
-
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import modal.Configuracao_Skype;
+
 public class HibernateMySQL {
 	
-	private static SessionFactory factory;	
+	private SessionFactory factory;
+	private Configuracao_Skype objConfiguracao;
 	
-	public static SessionFactory getFactory() { return factory; }
-	public static void setFactory(SessionFactory pfactory) { factory = pfactory; }
+	public SessionFactory getFactory() { return factory; }
+	public void setFactory(SessionFactory pfactory) { factory = pfactory; }	public Configuracao_Skype getObjConfiguracao() { return objConfiguracao; }
+	public void setObjConfiguracao(Configuracao_Skype objConfiguracao) { this.objConfiguracao = objConfiguracao; }
 	
-	public static boolean createFactory() {
+	public boolean createFactory() {
 		
 		try {			
 		        
@@ -21,9 +24,9 @@ public class HibernateMySQL {
 
 			config.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 			config.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-			config.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/skypedb"); 
-			config.setProperty("hibernate.connection.username", "root");
-			config.setProperty("hibernate.connection.password", "mysql");
+			config.setProperty("hibernate.connection.url", "jdbc:mysql:" + objConfiguracao.getMySQLHost()); 
+			config.setProperty("hibernate.connection.username", objConfiguracao.getMySqlRoot());
+			config.setProperty("hibernate.connection.password", objConfiguracao.getMySqlPassWord());
 			config.setProperty("hibernate.show_sql", "false");           
 			config.setProperty("hibernate.format_sql","false");
 
@@ -39,11 +42,11 @@ public class HibernateMySQL {
 			return false;
 		}
 		
-		return true;
+		return (factory != null);
 		
 	}
 		
-	public static void closeFactory() {
+	public void closeFactory() {
 		if (factory != null) {
 			if (! factory.isClosed())
 				factory.close();
