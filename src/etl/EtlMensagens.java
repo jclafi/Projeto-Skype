@@ -42,10 +42,10 @@ public class EtlMensagens {
 		try {
 			
 			//Identifica o último ID salvo na base de backup
+			objMensagensRegra.setObjSessionFactory(objSessionFactory);
 			ultimoID = objMensagensRegra.retornaUltimoID();
 			
-			//Consulta na base do Skype as Mensagens lançadas 
-			//com ID maior que i retornado acima
+			//Consulta na base do Skype as Mensagens lançadas com ID maior que o retornado acima
 			String SQL = null;		
 			ResultSet resultSet = null;
 			PreparedStatement statement = null;			

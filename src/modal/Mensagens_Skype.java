@@ -43,8 +43,8 @@ public class Mensagens_Skype {
 		
 		int id = 0;
 		
-		final String CUSTOM_SQL = " select * from mensagens_skype order by id_geral desc limit 1 ";
-				
+		final String CUSTOM_SQL = " select * from mensagens_skype order by id desc limit 1 ";
+		
 		//Cria a sessão
 		Session session = objSessionFactory.openSession();
 
@@ -58,7 +58,7 @@ public class Mensagens_Skype {
 		 
 			if ((rows != null) && (! rows.isEmpty())) {
 				for (Object[] index : rows) {
-					id = Integer.parseInt(index[0].toString());
+					id = Integer.parseInt(index[1].toString());
 					++id;
 					break;
 				}
