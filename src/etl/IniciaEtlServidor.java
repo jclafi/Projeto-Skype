@@ -5,8 +5,8 @@ import main.CriaEstruturaSkype;
 
 public class IniciaEtlServidor extends Thread {
 	
-	//Entre uma carga e outra aguarda 1 minuto
-	private final long SLEEP_TIME = 60000;
+	//Entre uma carga e outra aguarda 5 minutos
+	private final long SLEEP_TIME = 300000;
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
 	private CriaEstruturaSkype objEstruturaSkype;
@@ -26,13 +26,10 @@ public class IniciaEtlServidor extends Thread {
 		
 		criaObjetoClienteServidor();
 		
-	}	
+	}
 	
-	/*
-	 * Método recursivo que gerencia o E.T.L das mensagens
-	 */
-	private void criaObjetoClienteServidor() {
-		
+	private void connectServer() {
+
 		//Inicia a conexão com delay, espera primeira carga de mensagens Skype-Banco Local
 		do {
 			
@@ -45,10 +42,26 @@ public class IniciaEtlServidor extends Thread {
 				e.printStackTrace();
 			}
 			
+			//Se o objeto já existe e está conectado no servidor aborda a nova conexão
+			if ((getObjMySQLFactory() != null) && 
+				(! getObjMySQLFactory().isClosed()))
+				break;
+			
 		} while (! objEstruturaSkype.connectMySQLHibernate());
 		
 		//Define a conexão a classe Cliente/Servidor
-		setObjMySQLFactory(objEstruturaSkype.getObjMySQLFactory().getFactory());		
+		if (getObjMySQLFactory() == null)
+			setObjMySQLFactory(objEstruturaSkype.getObjMySQLFactory().getFactory());		
+		
+	}
+	
+	/*
+	 * Método recursivo que gerencia o E.T.L das mensagens
+	 */
+	private void criaObjetoClienteServidor() {
+		
+		connectServer();
+
 		
 		EtlMensagensServidor objCargaMensagensServidor = new EtlMensagensServidor();
 		try {

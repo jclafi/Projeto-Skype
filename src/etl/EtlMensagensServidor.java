@@ -22,9 +22,7 @@ public class EtlMensagensServidor {
 		Mensagens_Skype objMensagensMysQL = new Mensagens_Skype();
 		Mensagens_Skype objMensagensPostgreSQL = new Mensagens_Skype();
 		try {
-			
-			int ultimoID = 0;
-			
+						
 			//Identifica as conexões com as bases de dados local e remota
 			objMensagensMysQL.setObjSessionFactory(this.getObjMySQLFactory());
 			objMensagensPostgreSQL.setObjSessionFactory(this.getObjPostgreSQLFactory());
@@ -34,16 +32,18 @@ public class EtlMensagensServidor {
 			
 			if (objContasSkype != null) {
 				
+				int ultimoID = 0;
+				
 				for (String usuarioSkype : objContasSkype) {
 					
 					//Identifica o último ID salvo no Servidor MySQL para esta conta do Skype
-					ultimoID = objMensagensMysQL.retornaUltimoID(usuarioSkype);
+					ultimoID = objMensagensMysQL.retornaUltimoID(usuarioSkype.toString(), true);
 					
 					//Cria a Session
 					Session localSession = this.getObjPostgreSQLFactory().openSession();	
 					
 					//Valida os Filtros da Consulta SQL
-					String whereSQL = "where id > " + ultimoID + " and account_logged = " + usuarioSkype;
+					String whereSQL = "where id > " + ultimoID + " and account_logged = '" + usuarioSkype +"' order by id_geral";
 					
 					//Reliza uma consulta das mensagens pendentes de envio da base Local para Servidor
 					@SuppressWarnings("unchecked")

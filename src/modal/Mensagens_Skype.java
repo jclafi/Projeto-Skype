@@ -1,6 +1,8 @@
 package modal;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
@@ -94,9 +96,56 @@ public class Mensagens_Skype {
 		
 	}
 	
-	public int retornaUltimoID(String accountLogged) {
+	public int retornaUltimoID(String accountLogged, boolean metodoAntigo) {
 		
 		int id = 0;
+		
+		final String CUSTOM_SQL = " select * from mensagens_skype where account_logged = :account order by id desc limit 1 ";
+		
+		//Cria a sessão
+		Session session = objSessionFactory.openSession();
+
+		SQLQuery qryTeste = null;
+		try {			
+		
+			qryTeste = session.createSQLQuery(CUSTOM_SQL);
+			qryTeste.setParameter("account", accountLogged);	
+
+			@SuppressWarnings("unchecked")
+			List<Object[]> rows = qryTeste.list();
+		 
+			if ((rows != null) && (! rows.isEmpty())) {
+				for (Object[] index : rows) {
+					id = Integer.parseInt(index[1].toString());
+					break;
+				}
+			}
+		
+		}
+		catch (HibernateException ex) {
+			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		finally {
+			if (!qryTeste.list().isEmpty()) {
+				qryTeste.list().clear();
+				qryTeste = null;
+			}
+		
+			if (session != null) {
+				if (session.isOpen())
+					session.close();
+				session = null;				
+			}
+		}
+		
+		return id;
+
+	}
+	
+	public int retornaUltimoID(String accountLogged) {
+		
+		int varId = 0;
 		
 		final String CUSTOM_SQL = " select coalesce(max(id), 0) as id from mensagens_skype where account_logged = :account ";
 				
@@ -110,7 +159,7 @@ public class Mensagens_Skype {
 			qryTeste.setParameter("account", accountLogged);	
 			
 			for (int index = 0; index < qryTeste.list().size();) {
-				id = (Integer) qryTeste.list().get(index);
+				varId = (Integer) qryTeste.list().get(index);
 				break;
 			}
 		
@@ -132,7 +181,7 @@ public class Mensagens_Skype {
 			}
 		}
 				
-		return id;
+		return varId;
 
 	}
 	
