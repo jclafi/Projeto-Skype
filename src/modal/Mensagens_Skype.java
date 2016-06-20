@@ -1,7 +1,6 @@
 package modal;
 
 import java.util.Date;
-import java.util.List;
 import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
@@ -48,11 +47,11 @@ public class Mensagens_Skype {
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 
-	public int retornaUltimoID() {
+	public String[] retornaListaUsuarios() {
 		
-		int id = 0;
+		String[] objTemp = null;
 		
-		final String CUSTOM_SQL = " select * from mensagens_skype order by id desc limit 1 ";
+		final String CUSTOM_SQL = " select distinct(mensagens_skype.account_logged) from mensagens_skype ";
 		
 		//Cria a sessão
 		Session session = objSessionFactory.openSession();
@@ -60,16 +59,59 @@ public class Mensagens_Skype {
 		SQLQuery qryTeste = null;
 		try {			
 		
+			//Cria objeto de consulta SQL
 			qryTeste = session.createSQLQuery(CUSTOM_SQL);
 
-			@SuppressWarnings("unchecked")
-			List<Object[]> rows = qryTeste.list();
-		 
-			if ((rows != null) && (! rows.isEmpty())) {
-				for (Object[] index : rows) {
-					id = Integer.parseInt(index[1].toString());
-					break;
-				}
+			//Inicializa o tamanho do Objeto de retorno
+			objTemp = new String[qryTeste.list().size()];
+			
+			for (int index = 0; index < qryTeste.list().size(); index++) {
+
+				//Carrega o valor para a posição do array de retorno
+				objTemp[index] = (String) qryTeste.list().get(index);
+	
+			}
+				
+		}
+		catch (HibernateException ex) {
+			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		finally {
+			if (!qryTeste.list().isEmpty()) {
+				qryTeste.list().clear();
+				qryTeste = null;
+			}
+		
+			if (session != null) {
+				if (session.isOpen())
+					session.close();
+				session = null;				
+			}
+		}		
+		
+		return objTemp;
+		
+	}
+	
+	public int retornaUltimoID(String accountLogged) {
+		
+		int id = 0;
+		
+		final String CUSTOM_SQL = " select coalesce(max(id), 0) as id from mensagens_skype where account_logged = :account ";
+				
+		//Cria a sessão
+		Session session = objSessionFactory.openSession();		
+		
+		SQLQuery qryTeste = null;
+		try {			
+		
+			qryTeste = session.createSQLQuery(CUSTOM_SQL);
+			qryTeste.setParameter("account", accountLogged);	
+			
+			for (int index = 0; index < qryTeste.list().size();) {
+				id = (Integer) qryTeste.list().get(index);
+				break;
 			}
 		
 		}
@@ -89,7 +131,7 @@ public class Mensagens_Skype {
 				session = null;				
 			}
 		}
-		
+				
 		return id;
 
 	}

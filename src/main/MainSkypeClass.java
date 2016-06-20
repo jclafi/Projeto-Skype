@@ -2,6 +2,7 @@ package main;
 
 import etl.IniciaSkypeListener;
 import etl.IniciaEtlMensagens;
+import etl.IniciaEtlServidor;
 
 class MainSkypeClass {
 	
@@ -29,20 +30,19 @@ class MainSkypeClass {
 			}
 			else {
 				
-				//Cria a Thread que gerencia a cargas das mensagens para o Banco de Dados
+				//Cria a Thread que gerencia a cargas das mensagens para o Banco de Dados Local
 				IniciaEtlMensagens objSalvaMensagens = new IniciaEtlMensagens();
 				objSalvaMensagens.setObjSessionFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
 				objSalvaMensagens.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());
 				objSalvaMensagens.start();							
 			
 			}
-			
-			// Valida conexão com servidor Remoto
-			if (objEstruturaSkype.connectMySQLHibernate()) {
-				
-				
-				
-			}
+		
+			//Cria a Thread que envia as Mensagens do Banco Local para Servidor
+			IniciaEtlServidor IniciaCargaServidor = new IniciaEtlServidor();
+			IniciaCargaServidor.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
+			IniciaCargaServidor.setObjEstruturaSkype(objEstruturaSkype);
+			IniciaCargaServidor.start();
 			
 		}
 		else

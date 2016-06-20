@@ -6,8 +6,8 @@ import jdbc.SqlLiteConnection;
 
 public class IniciaEtlMensagens extends Thread {
 	
-	//Entre uma carga e outra aguarda 5 minutos
-	private final long SLEEP_TIME = 300000;
+	//Entre uma carga e outra aguarda 1 minutos
+	private final long SLEEP_TIME = 60000;
 	private SessionFactory objSessionFactory;
 	private SqlLiteConnection connectionSQLLite;	
 

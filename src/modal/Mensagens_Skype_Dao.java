@@ -1,14 +1,12 @@
 package modal;
 
-import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import java.math.BigInteger;
 
 public class Mensagens_Skype_Dao {
 	
@@ -28,9 +26,9 @@ public class Mensagens_Skype_Dao {
 	
 	public long getPk() {
 		
-		long pk = 1;
+		long pk = 0;
 		
-		final String CUSTOM_SQL = " select * from mensagens_skype order by id_geral desc limit 1 ";
+		final String CUSTOM_SQL = " select coalesce(max(id_geral), 0) as id_geral from mensagens_skype ";
 				
 		//Cria a sessão
 		Session session = objSessionFactory.openSession();
@@ -40,15 +38,10 @@ public class Mensagens_Skype_Dao {
 		
 			qryTeste = session.createSQLQuery(CUSTOM_SQL);
 
-			@SuppressWarnings("unchecked")
-			List<Object[]> rows = qryTeste.list();
-		 
-			if ((rows != null) && (! rows.isEmpty())) {
-				for (Object[] index : rows) {
-					pk = Long.parseLong(index[0].toString());
-					++pk;
-					break;
-				}
+			for (int index = 0; index < qryTeste.list().size();) {
+				BigInteger objTemp = (BigInteger) qryTeste.list().get(index);
+				pk = objTemp.longValue();
+				break;
 			}
 		
 		}
@@ -69,7 +62,7 @@ public class Mensagens_Skype_Dao {
 			}
 		}
 		
-		return pk;
+		return ++pk;
 
 	}
 	
