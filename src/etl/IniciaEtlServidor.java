@@ -6,7 +6,7 @@ import main.CriaEstruturaSkype;
 public class IniciaEtlServidor extends Thread {
 	
 	//Entre uma carga e outra aguarda 5 minutos
-	private final long SLEEP_TIME = 300000;
+	private final long SLEEP_TIME = 1;//300000;
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
 	private CriaEstruturaSkype objEstruturaSkype;

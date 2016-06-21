@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import jdbc.SqlLiteConnection;
 
-public class UsuarioSkype {
+public class Usuario_Logado {
 	
 	private int id;
 	private int isPermanent;
@@ -27,7 +27,7 @@ public class UsuarioSkype {
 	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
 	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }	
 	
-	public UsuarioSkype getUsuarioLogado() {
+	public Usuario_Logado getUsuarioLogado() {
 		
 		String SQL = null;		
 		ResultSet resultSet = null;

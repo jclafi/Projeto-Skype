@@ -1,6 +1,6 @@
 package etl;
 
-import modal.UsuarioSkype;
+import modal.Usuario_Logado;
 import modal.Mensagens_Skype;
 import jdbc.SqlLiteConnection;
 
@@ -13,12 +13,12 @@ import org.hibernate.SessionFactory;
 
 public class EtlMensagens {
 	
-	private UsuarioSkype objUsuarioRegras; 
+	private Usuario_Logado objUsuarioRegras; 
 	private SessionFactory objSessionFactory;
 	private SqlLiteConnection connectionSQLLite;	
 
-	public UsuarioSkype getObjUsuario() { return objUsuarioRegras; }
-	public void setObjUsuario(UsuarioSkype objUsuario) { this.objUsuarioRegras = objUsuario; }
+	public Usuario_Logado getObjUsuario() { return objUsuarioRegras; }
+	public void setObjUsuario(Usuario_Logado objUsuario) { this.objUsuarioRegras = objUsuario; }
 	public SessionFactory getObjSessionFactory() { return this.objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
@@ -71,6 +71,8 @@ public class EtlMensagens {
 					objMensagensRegra.setAccount_logged(objUsuarioRegras.getSigninName());
 					objMensagensRegra.setHost_name(InetAddress.getLocalHost().getHostName());
 					objMensagensRegra.setIp_adress(InetAddress.getLocalHost().getHostAddress());
+					objMensagensRegra.setAccount_verified("N");
+					objMensagensRegra.setContact_verified("N");			
 					
 					//Identifica a origem das mensagens de acordo com a estação Cliente
 					if (resultSet.getString("author").equals(objUsuarioRegras.getSigninName()))
@@ -104,9 +106,9 @@ public class EtlMensagens {
 			
 	}
 	
-	private UsuarioSkype carregaUsuario() {
+	private Usuario_Logado carregaUsuario() {
 		
-		UsuarioSkype objUser = new UsuarioSkype();
+		Usuario_Logado objUser = new Usuario_Logado();
 		
 		objUser.setConnectionSQLLite(connectionSQLLite);
 		objUser.getUsuarioLogado();

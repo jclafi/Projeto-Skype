@@ -8,18 +8,18 @@ import com.skype.ChatMessage;
 import com.skype.ChatMessageListener;
 import com.skype.SkypeException;
 import modal.Mensagens_Skype;
-import modal.UsuarioSkype;
+import modal.Usuario_Logado;
 
 public class SkypeListener implements ChatMessageListener {
 	
 	private final String VERSION = "Versão Skype Homologada: 7.24.0.104";
 	private SessionFactory objSessionFactory;	
-	private UsuarioSkype objUsuarioRegras;
+	private Usuario_Logado objUsuarioRegras;
 
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
-	public UsuarioSkype getUsuarioRegras() { return objUsuarioRegras; }
-	public void setUsuarioRegras(UsuarioSkype objSkypeUser) { this.objUsuarioRegras = objSkypeUser; }
+	public Usuario_Logado getUsuarioRegras() { return objUsuarioRegras; }
+	public void setUsuarioRegras(Usuario_Logado objSkypeUser) { this.objUsuarioRegras = objSkypeUser; }
 	
 	@Override
 	public void chatMessageReceived(ChatMessage recMessage) throws SkypeException {
@@ -38,6 +38,8 @@ public class SkypeListener implements ChatMessageListener {
 			objMensagem.setAccount_logged(objUsuarioRegras.getSigninName());			
 			objMensagem.setHost_name(InetAddress.getLocalHost().getHostName());
 			objMensagem.setIp_adress(InetAddress.getLocalHost().getHostAddress());
+//			objMensagem.setAccount_verified("N");
+//			objMensagem.setContact_verified("N");			
 			
 			objMensagem.salvaMensagem();
 		}
@@ -73,6 +75,8 @@ public class SkypeListener implements ChatMessageListener {
 			objMensagem.setAccount_logged(objUsuarioRegras.getSigninName());			
 			objMensagem.setHost_name(InetAddress.getLocalHost().getHostName());
 			objMensagem.setIp_adress(InetAddress.getLocalHost().getHostAddress());
+//			objMensagem.setAccount_verified("N");
+//			objMensagem.setContact_verified("N");			
 			
 			objMensagem.salvaMensagem();
 		}

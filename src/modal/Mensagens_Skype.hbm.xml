@@ -20,7 +20,9 @@
         <property name="message_date" column="message_date" type="date"/>
         <property name="ip_adress" column="ip_adress" type="string"/> 
         <property name="host_name" column="host_name" type="string"/> 
-        <property name="account_logged" column="account_logged" type="string"/> 
+        <property name="account_logged" column="account_logged" type="string"/>  
+        <property name="account_verified" column="account_verified" type="string"/> 
+        <property name="contact_verified" column="contact_verified" type="string"/>  
     </class>
 
 </hibernate-mapping>

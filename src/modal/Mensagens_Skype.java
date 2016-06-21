@@ -22,6 +22,8 @@ public class Mensagens_Skype {
 	private String ip_adress;
 	private String host_name;
 	private String account_logged;
+	private String contact_verified;
+	private String account_verified;	
 	private SessionFactory objSessionFactory;
 	
 	public long getId_geral() { return id_geral; }
@@ -46,6 +48,10 @@ public class Mensagens_Skype {
 	public void setHost_name(String host_name) { this.host_name = host_name; }	
 	public String getAccount_logged() { return account_logged; }
 	public void setAccount_logged(String account_logged) { this.account_logged = account_logged; }
+	public String getContact_verified() { return contact_verified; }
+	public void setContact_verified(String contact_verified) { this.contact_verified = contact_verified; }
+	public String getAccount_verified() { return account_verified; }
+	public void setAccount_verified(String account_verified) { this.account_verified = account_verified; }
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 

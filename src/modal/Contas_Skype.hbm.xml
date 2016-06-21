@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+
+   "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+
+   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="modal">
+
+    <class name="Contas_Skype" table="contas_skype">
+        <id name="id_geral" column="id_geral" type="integer"/>
+        
+        <property name="account_name" column="account_name" type="string"/>
+        <property name="display_name" column="display_name" type="string"/>
+        <property name="ip_adress" column="ip_adress" type="string"/>                
+        <property name="host_name" column="host_name" type="string"/>
+        <property name="account_verified" column="account_verified" type="string"/>
+    </class>
+
+</hibernate-mapping>

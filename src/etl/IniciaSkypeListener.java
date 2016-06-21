@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 import org.hibernate.SessionFactory;
 import com.skype.*;
 import jdbc.SqlLiteConnection;
-import modal.UsuarioSkype;
+import modal.Usuario_Logado;
 
 public class IniciaSkypeListener extends Thread {
 	
@@ -12,14 +12,14 @@ public class IniciaSkypeListener extends Thread {
 	private final long SLEEP_TIME = 300000;
 	private SessionFactory objSessionFactory;
 	private SqlLiteConnection connectionSQLLite;
-	private UsuarioSkype objUsuarioRegras;
+	private Usuario_Logado objUsuarioRegras;
 	
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
 	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }	
-	public UsuarioSkype getUsuarioRegras() { return objUsuarioRegras; }
-	public void setUsuarioRegras(UsuarioSkype objSkypeUser) { this.objUsuarioRegras = objSkypeUser; }
+	public Usuario_Logado getUsuarioRegras() { return objUsuarioRegras; }
+	public void setUsuarioRegras(Usuario_Logado objSkypeUser) { this.objUsuarioRegras = objSkypeUser; }
 	
 	/*
 	 * (non-Javadoc)
@@ -34,9 +34,9 @@ public class IniciaSkypeListener extends Thread {
 			startChatListener();
 	}	
 	
-	private UsuarioSkype carregaUsuario() {
+	private Usuario_Logado carregaUsuario() {
 		
-		UsuarioSkype objUser = new UsuarioSkype();
+		Usuario_Logado objUser = new Usuario_Logado();
 		
 		objUser.setConnectionSQLLite(connectionSQLLite);
 		objUser.getUsuarioLogado();
