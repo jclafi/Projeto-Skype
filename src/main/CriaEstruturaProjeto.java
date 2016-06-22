@@ -1,6 +1,6 @@
 package main;
 
-import etl.IniciaSkypeListener;
+import etl.IniciaEtlListener;
 import hibernate.HibernatePostgreSQL;
 import hibernate.HibernateMySQL;
 import jdbc.SqlLiteConnection;
@@ -42,7 +42,7 @@ public class CriaEstruturaSkype {
 	
 	public boolean verificaInstalacaoSkype() {
 		
-		IniciaSkypeListener objVerificaInstalacao = new IniciaSkypeListener();		
+		IniciaEtlListener objVerificaInstalacao = new IniciaEtlListener();		
 		try {
 			
 			return (objVerificaInstalacao.verificaInstalação());

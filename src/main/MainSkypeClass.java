@@ -1,8 +1,9 @@
 package main;
 
-import etl.IniciaSkypeListener;
+import etl.IniciaEtlListener;
 import etl.IniciaEtlMensagens;
-import etl.IniciaEtlServidor;
+import etl.IniciaEtlMensagensServidor;
+import etl.IniciaEtlContaContatos;
 
 class MainSkypeClass {
 	
@@ -22,7 +23,7 @@ class MainSkypeClass {
 			if (objEstruturaSkype.verificaTipoImportacao()) {			
 				
 				//Cria a Thread que gerencia a as mensagens via Listener para o Banco de Dados
-				IniciaSkypeListener objSkypeListener = new IniciaSkypeListener();
+				IniciaEtlListener objSkypeListener = new IniciaEtlListener();
 				objSkypeListener.setObjSessionFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
 				objSkypeListener.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());
 				objSkypeListener.start();
@@ -39,10 +40,16 @@ class MainSkypeClass {
 			}
 		
 			//Cria a Thread que envia as Mensagens do Banco Local para Servidor
-			IniciaEtlServidor IniciaCargaServidor = new IniciaEtlServidor();
+			IniciaEtlMensagensServidor IniciaCargaServidor = new IniciaEtlMensagensServidor();
 			IniciaCargaServidor.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
 			IniciaCargaServidor.setObjEstruturaSkype(objEstruturaSkype);
 			IniciaCargaServidor.start();
+			
+			//Cria a Thread de identificação do conta e contatos do Skype
+			IniciaEtlContaContatos IniciaContaContatos = new IniciaEtlContaContatos();
+			IniciaContaContatos.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
+			IniciaContaContatos.setObjEstruturaSkype(objEstruturaSkype);
+			IniciaContaContatos.start();			
 			
 		}
 		else

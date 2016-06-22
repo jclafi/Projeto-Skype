@@ -11,11 +11,12 @@
     <class name="Configuracao_Skype" table="configuracao_skype">
         <id name="id_geral" column="id_geral" type="integer"/>
         
-        <property name="skypeDatabase" column="skypedatabase" type="string" not-null="true"/> 
+        <property name="skypeDatabase" column="skypedatabase" type="string" not-null="true"/>
         <property name="skypeListener" column="skypelistener" type="string" not-null="true"/> 
         <property name="mySqlRoot" column="mysqlroot" type="string"/> 
         <property name="mySqlPassWord" column="mysqlpassword" type="string"/> 
-        <property name="mySQLHost" column="mysqlhost" type="string"/> 
+        <property name="mySQLHost" column="mysqlhost" type="string"/>
+        <property name="skypeAccount" column="skypeaccount" type="string"/> 
     </class>
 
 </hibernate-mapping>

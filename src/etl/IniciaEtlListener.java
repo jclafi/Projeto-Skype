@@ -6,7 +6,7 @@ import com.skype.*;
 import jdbc.SqlLiteConnection;
 import modal.Usuario_Logado;
 
-public class IniciaSkypeListener extends Thread {
+public class IniciaEtlListener extends Thread {
 	
 	//Entre uma carga e outra aguarda 5 minutos
 	private final long SLEEP_TIME = 300000;
@@ -83,7 +83,7 @@ public class IniciaSkypeListener extends Thread {
 				//Pausa para a nova carga de Mensagens
 				try {
 
-					IniciaSkypeListener.sleep(SLEEP_TIME);
+					IniciaEtlListener.sleep(SLEEP_TIME);
 				
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -100,7 +100,7 @@ public class IniciaSkypeListener extends Thread {
 	@SuppressWarnings("deprecation")
 	private void startChatListener() {
 
-		SkypeListener skypeListener = new SkypeListener();;
+		EtlListener skypeListener = new EtlListener();;
 		try {
 			
 			//Objeto com dados do Usuário Skype

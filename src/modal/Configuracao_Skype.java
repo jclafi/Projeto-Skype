@@ -12,6 +12,7 @@ public class Configuracao_Skype {
 	private String mySqlRoot;
 	private String mySqlPassWord;
 	private String mySQLHost;
+	private String skypeAccount;
 	
 	public int getId_geral() { return id_geral; }
 	public void setId_geral(int id_geral) { this.id_geral = id_geral; }
@@ -25,7 +26,9 @@ public class Configuracao_Skype {
 	public void setMySqlPassWord(String mySqlPassWord) { this.mySqlPassWord = mySqlPassWord; }
 	public String getMySQLHost() { return mySQLHost; }
 	public void setMySQLHost(String mySQLHost) { this.mySQLHost = mySQLHost; }
-	
+	public String getSkypeAccount() { return skypeAccount; }
+	public void setSkypeAccount(String skypeAccount) { this.skypeAccount = skypeAccount; }
+
 	private final int CODIGO_CONFIGURACAO = 1;
 	private SessionFactory objSessionFactory;		
 
@@ -48,6 +51,7 @@ public class Configuracao_Skype {
 				setMySQLHost(objPersistente.getObjRegraConfiguracao().getMySQLHost());
 				setMySqlPassWord(objPersistente.getObjRegraConfiguracao().getMySqlPassWord());
 				setMySqlRoot(objPersistente.getObjRegraConfiguracao().getMySqlRoot());
+				setSkypeAccount(objPersistente.getObjRegraConfiguracao().getSkypeAccount());
 			}				
 			else
 				JOptionPane.showMessageDialog(null, "Atenção não foi possível carregar a configuração !");

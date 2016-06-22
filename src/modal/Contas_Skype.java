@@ -27,7 +27,7 @@ public class Contas_Skype {
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 	
-	public boolean salvaMensagem() {
+	public boolean salvaConta() {
 		
 		boolean bolOk = false;
 		
@@ -35,7 +35,7 @@ public class Contas_Skype {
 		try {
 			
 			objPersistente.setObjSessionFactory(objSessionFactory);
-			//bolOk = objPersistente.salvaMensagem();
+			bolOk = objPersistente.salvaConta();
 			
 		}
 		finally {
@@ -46,7 +46,7 @@ public class Contas_Skype {
 		return bolOk;
 	}
 	
-	public boolean atualizaMensagem() {
+	public boolean atualizaConta() {
 		
 		boolean bolOk = false;
 		
@@ -54,7 +54,7 @@ public class Contas_Skype {
 		try {
 			
 			objPersistente.setObjSessionFactory(objSessionFactory);
-			//bolOk = objPersistente.atualizaMensagem();
+			bolOk = objPersistente.atualizaConta();
 			
 		}
 		finally {
@@ -66,7 +66,7 @@ public class Contas_Skype {
 		
 	}
 	
-	public boolean removeMensagem() {
+	public boolean removeConta() {
 		
 		boolean bolOk = false;
 		
@@ -74,7 +74,7 @@ public class Contas_Skype {
 		try {
 			
 			objPersistente.setObjSessionFactory(objSessionFactory);	
-			//bolOk = objPersistente.removeMensagem();
+			bolOk = objPersistente.removeConta();
 			
 		}
 		finally {

@@ -10,7 +10,7 @@ import com.skype.SkypeException;
 import modal.Mensagens_Skype;
 import modal.Usuario_Logado;
 
-public class SkypeListener implements ChatMessageListener {
+public class EtlListener implements ChatMessageListener {
 	
 	private final String VERSION = "Versão Skype Homologada: 7.24.0.104";
 	private SessionFactory objSessionFactory;	
