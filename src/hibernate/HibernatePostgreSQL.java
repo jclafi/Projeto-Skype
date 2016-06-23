@@ -33,6 +33,7 @@ public class HibernatePostgreSQL {
 		    
 		}
 		catch (HibernateException ex) {
+			setFactory(null);
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Exceção ao criar o PostgreSQL SessionFactory: " + ex.getMessage());
 			return false;

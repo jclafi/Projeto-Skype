@@ -9,7 +9,7 @@ class MainSkypeClass {
 	
 	public static void main(String[] args) {
 		
-		CriaEstruturaSkype objEstruturaSkype = new CriaEstruturaSkype();
+		DefineEstruturaProjeto objEstruturaSkype = new DefineEstruturaProjeto();
 		
 		if (! objEstruturaSkype.verificaInstalacaoSkype())
 			objEstruturaSkype.finalizaAplicacao();
@@ -48,7 +48,8 @@ class MainSkypeClass {
 			//Cria a Thread de identificação do conta e contatos do Skype
 			IniciaEtlContaContatos IniciaContaContatos = new IniciaEtlContaContatos();
 			IniciaContaContatos.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
-			IniciaContaContatos.setObjEstruturaSkype(objEstruturaSkype);
+			IniciaContaContatos.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());			
+			IniciaContaContatos.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
 			IniciaContaContatos.start();			
 			
 		}

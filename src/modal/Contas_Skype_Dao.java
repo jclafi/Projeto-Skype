@@ -14,12 +14,12 @@ public class Contas_Skype_Dao {
 	
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
-	public Contas_Skype getContas_Skype() { return conta; }
-	public void setContas_Skype(Contas_Skype conta) { this.conta = conta; }
+	public Contas_Skype getObjContas_Skype() { return conta; }
+	public void setObjContas_Skype(Contas_Skype conta) { this.conta = conta; }
 
 	public Contas_Skype_Dao(Contas_Skype conta) {
 		
-		setContas_Skype(conta);
+		setObjContas_Skype(conta);
 				
 	}
 	
@@ -181,7 +181,7 @@ public class Contas_Skype_Dao {
 		// Objeto Session
 		Session session = objSessionFactory.openSession();
 		try {
-			setContas_Skype(session.get(Contas_Skype.class, id_geral));
+			setObjContas_Skype(session.get(Contas_Skype.class, id_geral));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Exceção ao Carregar a Conta: " + ex.getMessage());
@@ -194,7 +194,7 @@ public class Contas_Skype_Dao {
 			}			
 		}
 
-		return ((getContas_Skype() != null) && (getContas_Skype().getId_geral() > 0));
+		return ((getObjContas_Skype() != null) && (getObjContas_Skype().getId_geral() > 0));
 	}	
 	
 }

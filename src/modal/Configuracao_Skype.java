@@ -36,7 +36,7 @@ public class Configuracao_Skype {
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };			
 	public int getCODIGO_CONFIGURACAO() { return CODIGO_CONFIGURACAO; }
 	
-	public void setConfiguracao(int id_geral) {
+	public boolean carregaConfiguracao(int id_geral) {
 		
 		Configuracao_Skype_Dao objPersistente = new Configuracao_Skype_Dao();
 		try {
@@ -53,13 +53,19 @@ public class Configuracao_Skype {
 				setMySqlRoot(objPersistente.getObjRegraConfiguracao().getMySqlRoot());
 				setSkypeAccount(objPersistente.getObjRegraConfiguracao().getSkypeAccount());
 			}				
-			else
+			else {
+				
 				JOptionPane.showMessageDialog(null, "Atenção não foi possível carregar a configuração !");
+				return false;
+				
+			}
 		}
 		finally {
 			if (objPersistente != null)
 				objPersistente = null;
 		}
+		
+		return true;
 		
 	}
 	

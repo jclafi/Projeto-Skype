@@ -25,8 +25,8 @@ public class SqlLiteConnection {
 			
 		} 
 		catch (Exception ex) {
+			setConnection(null);
 			JOptionPane.showMessageDialog(null, "Exceção ao Conectar na Base SQL Lite: " + ex.getMessage());
-			System.out.println("Exceção ao conectar JDBC: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		} 

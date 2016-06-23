@@ -1,5 +1,12 @@
 package modal;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JOptionPane;
+import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 public class Contatos_Contas_Skype {
@@ -10,6 +17,7 @@ public class Contatos_Contas_Skype {
 	private String display_name;
 	private String contact_verified;
 	private SessionFactory objSessionFactory;
+	private Set<Contatos_Contas_Skype> objListaContatosContaSkype = new HashSet<Contatos_Contas_Skype>();
 
 	public int getId_geral() { return id_geral; }
 	public void setId_geral(int id_geral) { this.id_geral = id_geral; }
@@ -23,7 +31,63 @@ public class Contatos_Contas_Skype {
 	public void setContact_verified(String contact_verified) { this.contact_verified = contact_verified; }	
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
+	public Set<Contatos_Contas_Skype> getObjListaContatosContaSkype() { return objListaContatosContaSkype; }
+	public void setObjListaContatosContaSkype(Set<Contatos_Contas_Skype> objContatosContaSkype) { this.objListaContatosContaSkype = objContatosContaSkype; }
+	
+	public boolean carregaContatosConta(int id_conta_skype) {
+		
+		boolean ok = false;
 
+		final String CUSTOM_SQL = " select id_geral from contatos_contas_skype where id_conta_skype = :id_conta_skype ";
+				
+		Contatos_Contas_Skype_Dao objPersistente;
+			
+		Session session = objSessionFactory.openSession();
+
+		SQLQuery qryTeste = null;
+		try {			
+		
+			qryTeste = session.createSQLQuery(CUSTOM_SQL);
+			qryTeste.setParameter("id_conta_skype", id_conta_skype);
+			
+			for (int index = 0; index < qryTeste.list().size();) {
+				
+				Integer objTemp = (Integer) qryTeste.list().get(index);
+				
+				objPersistente = new Contatos_Contas_Skype_Dao(this);
+				
+				if (objPersistente.carregaContatosConta(objTemp.intValue())) 
+					ok = objListaContatosContaSkype.add(objPersistente.getContatos_Contas_Skype());
+				else 
+					ok = false;
+				
+				if (! ok) break;
+			}
+		
+		}
+		catch (HibernateException ex) {
+			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Conta: " + ex.getMessage());
+			ex.printStackTrace();
+			return false;
+		}
+		finally {
+			if (!qryTeste.list().isEmpty()) {
+				qryTeste.list().clear();
+				qryTeste = null;
+			}
+		
+			if (session != null) {
+				if (session.isOpen())
+					session.close();
+				session = null;				
+			}
+			
+		}
+		
+		return ok;
+		
+	}
+	
 	public boolean salvaContatosConta() {
 		
 		boolean bolOk = false;
@@ -80,6 +144,46 @@ public class Contatos_Contas_Skype {
 		}
 		
 		return bolOk;
+	}
+	
+	public boolean equals(Object o) {
+		
+		//O parâmetro não pode ser nulo
+		if (o == null) return false;
+		
+		//Se não for um objeto da classe Contatos Conta retorna nulo
+		if (! (this.getClass().equals(o.getClass()))) return false;
+		
+		Contatos_Contas_Skype outra = (Contatos_Contas_Skype) o;
+		
+		return ( (this.account_name.equals(outra.getAccount_name())) &&
+				 (this.display_name.equals(outra.getDisplay_name())) &&
+				 (this.id_conta_skype == outra.getId_conta_skype()) &&
+				 (this.contact_verified.equals(outra.getContact_verified())) );
+				
+	}	
+
+	public int hashCode() {
+
+		String atributos = (this.account_name + 
+							this.display_name + 
+							this.contact_verified + 
+							this.id_conta_skype);
+		
+		return atributos.hashCode();
+	
+	}
+	
+	public void finalize() {		
+		
+		if (objListaContatosContaSkype != null) {
+	
+			if (! objListaContatosContaSkype.isEmpty())
+				objListaContatosContaSkype.clear();
+			objListaContatosContaSkype = null;
+	
+		}
+		
 	}
 	
 }

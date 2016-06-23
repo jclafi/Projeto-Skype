@@ -1,7 +1,7 @@
 package etl;
 
 import org.hibernate.SessionFactory;
-import main.CriaEstruturaSkype;
+import main.DefineEstruturaProjeto;
 
 public class IniciaEtlMensagensServidor extends Thread {
 	
@@ -9,14 +9,14 @@ public class IniciaEtlMensagensServidor extends Thread {
 	private final long SLEEP_TIME = 600000;
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
-	private CriaEstruturaSkype objEstruturaSkype;
+	private DefineEstruturaProjeto objEstruturaSkype;
 
 	public SessionFactory getObjPostgreSQLFactory() { return this.objPostgreSQLFactory; }
 	public void setObjPostgreSQLFactory(SessionFactory varSessionFactory) { this.objPostgreSQLFactory = varSessionFactory; };	
 	public SessionFactory getObjMySQLFactory() { return objMySQLFactory; }
 	public void setObjMySQLFactory(SessionFactory objMySQLFactory) { this.objMySQLFactory = objMySQLFactory; }
-	public CriaEstruturaSkype getObjEstruturaSkype() { return objEstruturaSkype; }
-	public void setObjEstruturaSkype(CriaEstruturaSkype objEstruturaSkype) { this.objEstruturaSkype = objEstruturaSkype; }
+	public DefineEstruturaProjeto getObjEstruturaSkype() { return objEstruturaSkype; }
+	public void setObjEstruturaSkype(DefineEstruturaProjeto objEstruturaSkype) { this.objEstruturaSkype = objEstruturaSkype; }
 	
 	/*
 	 * (non-Javadoc)

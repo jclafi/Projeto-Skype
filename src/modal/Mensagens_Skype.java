@@ -248,5 +248,48 @@ public class Mensagens_Skype {
 		
 		return bolOk;
 	}
+	
+	public boolean equals(Object o) {
+		
+		//O parâmetro não pode ser nulo
+		if (o == null) return false;
+		
+		//Se não for um objeto da classe Pessoa retorna nulo
+		if (! (this.getClass().equals(o.getClass()))) return false;
+		
+		Mensagens_Skype outra = (Mensagens_Skype) o;
+		
+		return ( (this.id == outra.getId())) &&
+				 (this.id_sender.equals(outra.getId_sender())) &&
+				 (this.sender_display_name.equals(outra.getSender_display_name())) &&
+				 (this.content.equals(outra.getContent())) &&
+				 (this.chat.equals(outra.getChat())) &&
+				 (this.message_type.equals(outra.getMessage_type())) &&
+				 (this.message_date.equals(outra.getMessage_date())) &&
+				 (this.host_name.equals(outra.getHost_name())) &&
+				 (this.account_logged.equals(outra.getAccount_logged()) &&
+				 (this.ip_adress.equals(outra.getIp_adress())) &&
+				 (this.host_name.equals(outra.getHost_name())) &&
+				 (this.account_verified.equals(outra.getAccount_verified())) );					
+	}	
+
+	public int hashCode() {
+
+		String atributos = (this.id + 
+							this.id_sender + 
+							this.sender_display_name + 
+							this.content + 
+							this.chat + 
+							this.message_type + 
+							this.message_date + 
+							this.host_name + 
+							this.account_logged + 
+							this.ip_adress + 
+							this.host_name + 
+							this.account_verified);
+		
+		return atributos.hashCode();
+	
+	}	
         
 }

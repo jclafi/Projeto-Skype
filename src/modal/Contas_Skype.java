@@ -1,5 +1,10 @@
 package modal;
 
+import javax.swing.JOptionPane;
+
+import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 public class Contas_Skype {
@@ -84,5 +89,113 @@ public class Contas_Skype {
 		
 		return bolOk;
 	}
+	
+	public boolean carregaConta(int id_geral) {
+		
+		Contas_Skype_Dao objPersistente = new Contas_Skype_Dao(this);
+		try {
+			
+			objPersistente.setObjSessionFactory(objSessionFactory);
+			
+			if (objPersistente.carregaConta(id_geral)) {
+
+				setId_geral(objPersistente.getObjContas_Skype().getId_geral());
+				setAccount_name(objPersistente.getObjContas_Skype().getAccount_name());
+				setAccount_verified(objPersistente.getObjContas_Skype().getAccount_verified());
+				setDisplay_name(objPersistente.getObjContas_Skype().getDisplay_name());
+				setHost_name(objPersistente.getObjContas_Skype().getHost_name());
+				setIp_adress(objPersistente.getObjContas_Skype().getIp_adress());
+				
+			}				
+			else {
+				
+				JOptionPane.showMessageDialog(null, "Atenção não foi possível carregar a Conta do Usuário !");
+				return false;
+				
+			}
+		}
+		finally {
+			if (objPersistente != null)
+				objPersistente = null;
+		}
+		
+		return true;
+		
+	}
+		
+	public boolean carregaConta(String accountName) {
+
+		boolean ok = false;
+		
+		final String CUSTOM_SQL = " select id_geral from contas_skype where account_name = :accountname limit 1 ";
+		
+		//Cria a sessão
+		Session session = objSessionFactory.openSession();
+
+		SQLQuery qryTeste = null;
+		try {			
+		
+			qryTeste = session.createSQLQuery(CUSTOM_SQL);
+			qryTeste.setParameter("accountname", accountName);
+			
+			for (int index = 0; index < qryTeste.list().size();) {
+				
+				Integer objTemp = (Integer) qryTeste.list().get(index);
+				ok =  carregaConta(objTemp.intValue());
+				break;
+				
+			}
+		
+		}
+		catch (HibernateException ex) {
+			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Conta: " + ex.getMessage());
+			ex.printStackTrace();
+			return false;
+		}
+		finally {
+			if (!qryTeste.list().isEmpty()) {
+				qryTeste.list().clear();
+				qryTeste = null;
+			}
+		
+			if (session != null) {
+				if (session.isOpen())
+					session.close();
+				session = null;				
+			}
+		}
+		
+		return ok;
+		
+	}
+	
+	public boolean equals(Object o) {
+		
+		//O parâmetro não pode ser nulo
+		if (o == null) return false;
+		
+		//Se não for um objeto da classe Contas retorna nulo
+		if (! (this.getClass().equals(o.getClass()))) return false;
+		
+		Contas_Skype outra = (Contas_Skype) o;
+		
+		return ( (this.account_name.equals(outra.getAccount_name())) &&
+				 (this.display_name.equals(outra.getDisplay_name())) &&
+				 (this.ip_adress.equals(outra.getIp_adress())) &&
+				 (this.host_name.equals(outra.getHost_name())) &&
+				 (this.account_verified.equals(outra.getAccount_verified())) );
+	}	
+
+	public int hashCode() {
+
+		String atributos = (this.account_name + 
+							this.display_name + 
+							this.ip_adress + 
+							this.host_name + 
+							this.account_verified);
+		
+		return atributos.hashCode();
+	
+	}		
 	
 }

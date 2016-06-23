@@ -6,7 +6,7 @@ import hibernate.HibernateMySQL;
 import jdbc.SqlLiteConnection;
 import modal.Configuracao_Skype;
 
-public class CriaEstruturaSkype {
+public class DefineEstruturaProjeto {
 
 	private HibernatePostgreSQL objPostgreSQLFactory;	
 	private HibernateMySQL objMySQLFactory;
@@ -26,9 +26,10 @@ public class CriaEstruturaSkype {
 		
 		objConfiguracao = new Configuracao_Skype();
 		objConfiguracao.setObjSessionFactory(objPostgreSQLFactory.getFactory());
-		objConfiguracao.setConfiguracao(objConfiguracao.getCODIGO_CONFIGURACAO());
 		
-		return (objConfiguracao != null);
+		return ((objConfiguracao.carregaConfiguracao(objConfiguracao.getCODIGO_CONFIGURACAO())) && 
+				(objConfiguracao != null));
+		
 	}
 	
 	public boolean verificaTipoImportacao() {
