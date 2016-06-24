@@ -2,9 +2,7 @@ package modal;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.swing.JOptionPane;
-import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -50,11 +48,12 @@ public class Contatos_Contas_Skype {
 			qryTeste = session.createSQLQuery(CUSTOM_SQL);
 			qryTeste.setParameter("id_conta_skype", id_conta_skype);
 			
-			for (int index = 0; index < qryTeste.list().size();) {
+			for (int index = 0; index < qryTeste.list().size(); index++) {
 				
 				Integer objTemp = (Integer) qryTeste.list().get(index);
 				
 				objPersistente = new Contatos_Contas_Skype_Dao(this);
+				objPersistente.setObjSessionFactory(objSessionFactory);
 				
 				if (objPersistente.carregaContatosConta(objTemp.intValue())) 
 					ok = objListaContatosContaSkype.add(objPersistente.getContatos_Contas_Skype());
@@ -65,7 +64,7 @@ public class Contatos_Contas_Skype {
 			}
 		
 		}
-		catch (HibernateException ex) {
+		catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Conta: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;

@@ -1,7 +1,6 @@
 package modal;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
@@ -74,7 +73,7 @@ public class Usuario_Logado {
 			}			
 			while (! usuarioOk);
 		}
-		catch (SQLException ex) {
+		catch (Exception ex) {
 			usuarioOk = false;
 			JOptionPane.showMessageDialog(null, "Atenção erro ao consultar o Usuário Skype: " + ex.getMessage());
 			ex.printStackTrace();

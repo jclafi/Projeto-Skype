@@ -2,9 +2,7 @@ package modal;
 
 import java.util.Date;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -81,7 +79,7 @@ public class Mensagens_Skype {
 			}
 				
 		}
-		catch (HibernateException ex) {
+		catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
@@ -128,7 +126,7 @@ public class Mensagens_Skype {
 			}
 		
 		}
-		catch (HibernateException ex) {
+		catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
@@ -170,7 +168,7 @@ public class Mensagens_Skype {
 			}
 		
 		}
-		catch (HibernateException ex) {
+		catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}

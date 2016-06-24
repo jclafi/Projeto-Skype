@@ -1,7 +1,6 @@
 package modal;
 
 import javax.swing.JOptionPane;
-import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -44,7 +43,7 @@ public class Contas_Skype_Dao {
 			}
 		
 		}
-		catch (HibernateException ex) {
+		catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Conta: " + ex.getMessage());
 			ex.printStackTrace();
 		}
@@ -83,7 +82,7 @@ public class Contas_Skype_Dao {
 				tx.commit();			
 			}
 		}
-		catch (HibernateException ex) {
+		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
 			JOptionPane.showMessageDialog(null, "Exceção ao Salvar Conta: " + ex.getMessage());
@@ -120,7 +119,7 @@ public class Contas_Skype_Dao {
 			}
 
 		}
-		catch (HibernateException ex) {
+		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
 			JOptionPane.showMessageDialog(null, "Exceção ao Remover a Conta: " + ex.getMessage());
@@ -156,7 +155,7 @@ public class Contas_Skype_Dao {
 				tx.commit();
 			}
 		}
-		catch (HibernateException ex) {
+		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
 			JOptionPane.showMessageDialog(null, "Exceção ao Atualizar a Conta: " + ex.getMessage());

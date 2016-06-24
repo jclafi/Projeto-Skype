@@ -93,11 +93,137 @@ public class EtlContaContatos {
 	
 	private boolean atualizaConta() {
 		
+		boolean dadosAlterados = false;
+		
+		String SQL = null;		
+		ResultSet resultSet = null;
+		PreparedStatement statement = null;			
+		try {				
+			
+			SQL = " select fullname from accounts where signin_name = ? limit 1 ";
+			
+			statement = connectionSQLLite.getConnection().prepareStatement(SQL);
+			statement.setString(1, skypeSigninConfig);
+			resultSet = statement.executeQuery();
+			
+			while (resultSet.next()) {
+				
+				//Verifica se alguma informação da conta ou estação foi alterada
+				dadosAlterados =   (! objContaSkype.getIp_adress().equals(InetAddress.getLocalHost().getHostAddress())) ||
+								   (! objContaSkype.getHost_name().equals(InetAddress.getLocalHost().getHostName())) ||
+								   (! objContaSkype.getDisplay_name().equals(resultSet.getString("fullname")));
+										
+				break;
+			}
+			
+			//Se alguma informação foi alterada atualiza a base de dados local
+			if (dadosAlterados) {
+				
+				objContaSkype.setIp_adress(InetAddress.getLocalHost().getHostAddress());
+				objContaSkype.setHost_name(InetAddress.getLocalHost().getHostName());
+				objContaSkype.setDisplay_name(resultSet.getString("fullname"));
+				
+				return objContaSkype.atualizaConta();
+				
+			}
+			
+			if (! statement.isClosed())
+				statement.close();
+			
+		}
+		catch(Exception ex) {
+		
+			JOptionPane.showMessageDialog(null, "Atenção erro ao criar a conta Skype. Mensagem: " + ex.getMessage());
+			return false;
+			
+		}
+		finally {				
+			if (statement != null)
+				statement = null;
+			if (resultSet != null)
+				resultSet = null;
+		}	
+		
 		return true;
 		
 	}
 	
 	private boolean atualizaContatosConta() {
+		
+		boolean existeContato = false;
+		
+		String SQL = null;		
+		ResultSet resultSet = null;
+		PreparedStatement statement = null;			
+		
+		try {				
+			
+			SQL = " select skypename, fullname from contacts ";
+			
+			statement = connectionSQLLite.getConnection().prepareStatement(SQL);
+			resultSet = statement.executeQuery();
+			
+			//Percorre os contatos da base do skype
+			while (resultSet.next()) {				
+
+				existeContato = false;
+				
+				//Identifica na lista se o contato já foi inserido na base
+				for (Contatos_Contas_Skype index : objContatosContaSkype.getObjListaContatosContaSkype()) {
+				
+					//Verifica se a conta está na lista já salva na base de dados
+					if (index.getAccount_name().equals(resultSet.getString("skypename"))) {
+						
+						existeContato = true;		
+						break;
+						
+					}
+					
+				}
+				
+				//Se o contato não existe na lista cria na base local
+				if (! existeContato) {
+					
+					Contatos_Contas_Skype objPersistente = new Contatos_Contas_Skype(); 
+					try {
+						objPersistente.setObjSessionFactory(objPostgreSQLFactory);
+						
+						objPersistente.setAccount_name(resultSet.getString("skypename"));
+						objPersistente.setContact_verified("S");
+						objPersistente.setDisplay_name(resultSet.getString("fullname"));
+						objPersistente.setId_conta_skype(objContaSkype.getId_geral());
+						
+						if (! objPersistente.salvaContatosConta())
+							JOptionPane.showMessageDialog(null, "Atenção erro ao criar o Contato Skype. Mensagem: ");
+
+					}
+					finally {
+						
+						if (objPersistente != null) 
+							objPersistente = null;
+						
+					}
+					
+				}
+			
+			}
+			
+			if (! statement.isClosed())
+				statement.close();
+			
+		}
+		catch(Exception ex) {
+		
+			JOptionPane.showMessageDialog(null, "Atenção erro ao atualizar os Contatos da Conta Skype. Mensagem: " + ex.getMessage());
+			return false;
+			
+		}
+		finally {				
+			if (statement != null)
+				statement = null;
+			if (resultSet != null)
+				resultSet = null;
+		}	
 		
 		return true;
 		
@@ -122,7 +248,8 @@ public class EtlContaContatos {
 			while (resultSet.next()) {
 				
 				objPersistente.setAccount_name(skypeSigninConfig);
-				objPersistente.setAccount_verified("S");
+				//Ao criar a conta na base ela não vai aprovada
+				objPersistente.setAccount_verified("N");
 				objPersistente.setDisplay_name(resultSet.getString("fullname"));
 				objPersistente.setIp_adress(InetAddress.getLocalHost().getHostAddress());
 				objPersistente.setHost_name(InetAddress.getLocalHost().getHostName());
@@ -178,7 +305,8 @@ public class EtlContaContatos {
 				objPersistente.setObjSessionFactory(objPostgreSQLFactory);
 				
 				objPersistente.setAccount_name(resultSet.getString("skypename"));
-				objPersistente.setContact_verified("N");
+				//Novos contatos são importados já aprovados
+				objPersistente.setContact_verified("S");
 				objPersistente.setDisplay_name(resultSet.getString("fullname"));
 				objPersistente.setId_conta_skype(getObjSkypeAccount().getId_geral());
 				

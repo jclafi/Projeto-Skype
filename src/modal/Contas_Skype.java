@@ -1,8 +1,6 @@
 package modal;
 
 import javax.swing.JOptionPane;
-
-import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -147,7 +145,7 @@ public class Contas_Skype {
 			}
 		
 		}
-		catch (HibernateException ex) {
+		catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Conta: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;

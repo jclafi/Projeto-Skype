@@ -2,7 +2,7 @@ package etl;
 
 import javax.swing.JOptionPane;
 import org.hibernate.SessionFactory;
-import com.skype.*;
+import com.skype.Skype;
 import jdbc.SqlLiteConnection;
 import modal.Usuario_Logado;
 
@@ -70,7 +70,7 @@ public class IniciaEtlListener extends Thread {
 				else
 					Skype.addApplication("javaw.exe");
 				
-			} catch (SkypeException ex) {
+			} catch (Exception ex) {
 
 				JOptionPane.showMessageDialog(null, "Permissão de Acesso Skype solicitada !");
 				ex.printStackTrace();
@@ -115,7 +115,7 @@ public class IniciaEtlListener extends Thread {
 			// Para não permitir desabilitar o programa
 			Skype.setDeamon(false);
 			
-		} catch (SkypeException ex) {
+		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Mensagem exceção Listener Skype: " + ex.getMessage());
 			ex.printStackTrace();
 		}

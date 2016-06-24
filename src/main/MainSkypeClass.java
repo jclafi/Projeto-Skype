@@ -18,7 +18,14 @@ class MainSkypeClass {
 		if (objEstruturaSkype.connectPostgreSQLHibernate() && 
 			objEstruturaSkype.criaObjetoConfiguracao() && 
 			objEstruturaSkype.connectSQLLiteJDBC()) {
-						
+			
+			//Cria a Thread de identificação do conta e contatos do Skype
+			IniciaEtlContaContatos IniciaContaContatos = new IniciaEtlContaContatos();
+			IniciaContaContatos.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
+			IniciaContaContatos.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());			
+			IniciaContaContatos.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
+			IniciaContaContatos.start();						
+			
 			//Verifica se a leitura é via listener ou banco de dados
 			if (objEstruturaSkype.verificaTipoImportacao()) {			
 				
@@ -44,14 +51,7 @@ class MainSkypeClass {
 			IniciaCargaServidor.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
 			IniciaCargaServidor.setObjEstruturaSkype(objEstruturaSkype);
 			IniciaCargaServidor.start();
-			
-			//Cria a Thread de identificação do conta e contatos do Skype
-			IniciaEtlContaContatos IniciaContaContatos = new IniciaEtlContaContatos();
-			IniciaContaContatos.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
-			IniciaContaContatos.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());			
-			IniciaContaContatos.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
-			IniciaContaContatos.start();			
-			
+						
 		}
 		else
 			objEstruturaSkype.finalizaAplicacao();
