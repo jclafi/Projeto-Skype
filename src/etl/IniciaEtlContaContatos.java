@@ -1,7 +1,6 @@
 package etl;
 
 import org.hibernate.SessionFactory;
-
 import jdbc.SqlLiteConnection;
 import modal.Configuracao_Skype;
 

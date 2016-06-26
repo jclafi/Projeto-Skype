@@ -96,9 +96,16 @@ public class DefineEstruturaProjeto {
 
 	}
 	
+	public void closeMySQLHibernate() {
+
+		objMySQLFactory.closeFactory();
+
+	}
+	
 	public void finalizaAplicacao() {
 		
 		closePostgreSQLHibernate();
+		closeMySQLHibernate();
 		closeSQLLiteJDBC();
 		System.gc();
 		System.exit(0);

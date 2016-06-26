@@ -1,7 +1,5 @@
 package modal;
 
-import javax.swing.JOptionPane;
-
 import org.hibernate.SessionFactory;
 
 public class Configuracao_Skype {
@@ -55,7 +53,7 @@ public class Configuracao_Skype {
 			}				
 			else {
 				
-				JOptionPane.showMessageDialog(null, "Atenção não foi possível carregar a configuração !");
+				Erros_Skype.salvaErroSkype("Atenção erro ao carregar a configuração !");
 				return false;
 				
 			}

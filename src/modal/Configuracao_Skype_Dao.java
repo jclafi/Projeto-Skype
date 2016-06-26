@@ -1,8 +1,8 @@
 package modal;
 
-import javax.swing.JOptionPane;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import modal.Erros_Skype;
 
 public class Configuracao_Skype_Dao {
 	
@@ -24,7 +24,7 @@ public class Configuracao_Skype_Dao {
 		} catch (Exception ex) {
 			setObjRegraConfiguracao(null);
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Exceção ao Carregar a Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Carregar Configuração Skype. Mensagem: " + ex.getMessage());
 			return false;
 		} finally {
 			if (session != null) {

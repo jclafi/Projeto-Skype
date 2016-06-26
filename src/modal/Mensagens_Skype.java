@@ -2,7 +2,6 @@ package modal;
 
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -52,53 +51,6 @@ public class Mensagens_Skype {
 	public void setAccount_verified(String account_verified) { this.account_verified = account_verified; }
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
-
-	public String[] retornaListaUsuarios() {
-		
-		String[] objTemp = null;
-		
-		final String CUSTOM_SQL = " select distinct(mensagens_skype.account_logged) from mensagens_skype ";
-		
-		//Cria a sessão
-		Session session = objSessionFactory.openSession();
-
-		SQLQuery qryTeste = null;
-		try {			
-		
-			//Cria objeto de consulta SQL
-			qryTeste = session.createSQLQuery(CUSTOM_SQL);
-
-			//Inicializa o tamanho do Objeto de retorno
-			objTemp = new String[qryTeste.list().size()];
-			
-			for (int index = 0; index < qryTeste.list().size(); index++) {
-
-				//Carrega o valor para a posição do array de retorno
-				objTemp[index] = (String) qryTeste.list().get(index);
-	
-			}
-				
-		}
-		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
-			ex.printStackTrace();
-		}
-		finally {
-			if (!qryTeste.list().isEmpty()) {
-				qryTeste.list().clear();
-				qryTeste = null;
-			}
-		
-			if (session != null) {
-				if (session.isOpen())
-					session.close();
-				session = null;				
-			}
-		}		
-		
-		return objTemp;
-		
-	}
 	
 	public int retornaUltimoID(String accountLogged, boolean metodoAntigo) {
 		
@@ -127,7 +79,7 @@ public class Mensagens_Skype {
 		
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Retornar último ID Tabela (OLD). Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -169,7 +121,7 @@ public class Mensagens_Skype {
 		
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Retornar último ID Tabela (NEW). Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {

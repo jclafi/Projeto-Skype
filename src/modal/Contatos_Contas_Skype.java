@@ -2,7 +2,6 @@ package modal;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.JOptionPane;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -65,7 +64,7 @@ public class Contatos_Contas_Skype {
 		
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Conta: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Carregar Contatos da Conta Skype: Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}

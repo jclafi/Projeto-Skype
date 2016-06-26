@@ -1,6 +1,5 @@
 package modal;
 
-import javax.swing.JOptionPane;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -107,7 +106,7 @@ public class Contas_Skype {
 			}				
 			else {
 				
-				JOptionPane.showMessageDialog(null, "Atenção não foi possível carregar a Conta do Usuário !");
+				Erros_Skype.salvaErroSkype("Atenção não foi possível carregar a Conta do Usuário !");
 				return false;
 				
 			}
@@ -146,7 +145,7 @@ public class Contas_Skype {
 		
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Conta: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Carregar a Conta Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}

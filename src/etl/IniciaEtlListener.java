@@ -1,6 +1,6 @@
 package etl;
 
-import javax.swing.JOptionPane;
+import modal.Erros_Skype;
 import org.hibernate.SessionFactory;
 import com.skype.Skype;
 import jdbc.SqlLiteConnection;
@@ -80,7 +80,7 @@ public class IniciaEtlListener extends Thread {
 
 		if (! Skype.isInstalled()) {
 		
-			JOptionPane.showMessageDialog(null, "Atenção instalação do Skype não Identificada !");
+			Erros_Skype.salvaErroSkype("Atenção instalação do Skype não Identificada !");
 			return false;
 		
 		}
@@ -103,7 +103,7 @@ public class IniciaEtlListener extends Thread {
 				
 			} catch (Exception ex) {
 
-				JOptionPane.showMessageDialog(null, "Permissão de Acesso Skype solicitada !");
+				Erros_Skype.salvaErroSkype("Permissão de Acesso via Listener Skype solicitada !");
 				ex.printStackTrace();
 		
 			}
@@ -151,7 +151,7 @@ public class IniciaEtlListener extends Thread {
 			Skype.setDeamon(false);
 			
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Mensagem exceção Listener Skype: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao definir o Listener Skype: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		

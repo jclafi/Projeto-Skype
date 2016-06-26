@@ -2,8 +2,9 @@ package main;
 
 import etl.IniciaEtlListener;
 import etl.IniciaEtlMensagens;
-import etl.IniciaEtlMensagensServidor;
+import etl.IniciaEtlDadosServidor;
 import etl.IniciaEtlContaContatos;
+import modal.Erros_Skype;
 
 class MainSkypeClass {
 	
@@ -18,6 +19,9 @@ class MainSkypeClass {
 		if (objEstruturaSkype.connectPostgreSQLHibernate() && 
 			objEstruturaSkype.criaObjetoConfiguracao() && 
 			objEstruturaSkype.connectSQLLiteJDBC()) {
+			
+			//Define a conexão local para o objeto de Log de Erros
+			Erros_Skype.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
 			
 			//Realiza a carga inicial da conta e contatos do Skype via processo local, para criar a estrutura das Threads
 			IniciaEtlContaContatos objCargaContaContatosInicial = new IniciaEtlContaContatos();
@@ -57,7 +61,7 @@ class MainSkypeClass {
 			}
 		
 			//Cria a Thread que envia as Mensagens do Banco Local para Servidor
-			IniciaEtlMensagensServidor IniciaCargaServidor = new IniciaEtlMensagensServidor();
+			IniciaEtlDadosServidor IniciaCargaServidor = new IniciaEtlDadosServidor();
 			IniciaCargaServidor.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
 			IniciaCargaServidor.setObjEstruturaSkype(objEstruturaSkype);
 			IniciaCargaServidor.setAccountName(objEstruturaSkype.getObjConfiguracao().getSkypeAccount());

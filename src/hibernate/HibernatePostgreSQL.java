@@ -1,6 +1,5 @@
 package hibernate;
 
-import javax.swing.JOptionPane;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -33,7 +32,7 @@ public class HibernatePostgreSQL {
 		catch (Exception ex) {
 			setFactory(null);
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Exceção ao criar o PostgreSQL SessionFactory: " + ex.getMessage());
+			System.out.println("Exceção ao criar o PostgreSQL SessionFactory: " + ex.getMessage());
 			return false;
 		}
 		

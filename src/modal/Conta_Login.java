@@ -3,7 +3,6 @@ package modal;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.concurrent.TimeUnit;
-import javax.swing.JOptionPane;
 import jdbc.SqlLiteConnection;
 
 public class Conta_Login {
@@ -64,7 +63,7 @@ public class Conta_Login {
 					 }
 					 catch (InterruptedException ex) {
 
-						 JOptionPane.showMessageDialog(null, "Exceção ao rodar sleep: " + ex.getMessage());
+						 Erros_Skype.salvaErroSkype("Exceção no sleep Login Skype: " + ex.getMessage());
 					 
 					 }
 					
@@ -75,7 +74,7 @@ public class Conta_Login {
 		}
 		catch (Exception ex) {
 			usuarioOk = false;
-			JOptionPane.showMessageDialog(null, "Atenção erro ao consultar o Usuário Skype: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Atenção erro ao consultar o Usuário Login Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return null;
 		}

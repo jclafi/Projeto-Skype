@@ -1,6 +1,5 @@
 package modal;
 
-import javax.swing.JOptionPane;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -45,7 +44,7 @@ public class Mensagens_Skype_Dao {
 		
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Identificar PK DAO Mensagem Skype. Erro: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -86,7 +85,7 @@ public class Mensagens_Skype_Dao {
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			JOptionPane.showMessageDialog(null, "Exceção ao Salvar Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Salvar DAO Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -123,7 +122,7 @@ public class Mensagens_Skype_Dao {
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			JOptionPane.showMessageDialog(null, "Exceção ao Remover Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Remover DAO Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -159,7 +158,7 @@ public class Mensagens_Skype_Dao {
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			JOptionPane.showMessageDialog(null, "Exceção ao Atualizar Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Atualizar DAO Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -185,7 +184,7 @@ public class Mensagens_Skype_Dao {
 			setMensagem(session.get(Mensagens_Skype.class, id_geral));
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Exceção ao Carregar a Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Carregar DAO a Mensagem: " + ex.getMessage());
 			return false;
 		} finally {
 			if (session != null) {

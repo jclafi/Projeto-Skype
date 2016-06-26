@@ -3,7 +3,7 @@ package etl;
 import java.net.InetAddress;
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.JOptionPane;
+import modal.Erros_Skype;
 import org.hibernate.SessionFactory;
 import com.skype.ChatMessage;
 import com.skype.ChatMessageListener;
@@ -61,15 +61,15 @@ public class EtlListener implements ChatMessageListener {
 			objMensagem.setAccount_verified("*");
 			
 			if (! objMensagem.salvaMensagem())
-				JOptionPane.showMessageDialog(null, VERSION +  "\n  Falha ao inserir a Mensagem via Listener!");
+				Erros_Skype.salvaErroSkype(VERSION +  "\n  Falha ao inserir a Mensagem via Listener!");
 				
 		}
 		catch (final SkypeException ex) {
-			JOptionPane.showMessageDialog(null, VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype(VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype(VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -105,15 +105,15 @@ public class EtlListener implements ChatMessageListener {
 			objMensagem.setContact_verified("*");			
 			
 			if (! objMensagem.salvaMensagem())
-				JOptionPane.showMessageDialog(null, VERSION +  "\n  Falha ao inserir a Mensagem via Listener!");
+				Erros_Skype.salvaErroSkype(VERSION +  "\n  Falha ao inserir a Mensagem via Listener!");
 
 		}
 		catch (final SkypeException ex) {
-			JOptionPane.showMessageDialog(null, VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype(VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype(VERSION +  "\n  Exceção no Listener. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {

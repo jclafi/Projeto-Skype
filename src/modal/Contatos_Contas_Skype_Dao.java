@@ -1,6 +1,5 @@
 package modal;
 
-import javax.swing.JOptionPane;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -44,7 +43,7 @@ public class Contatos_Contas_Skype_Dao {
 		
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Exceção ao Executar SQL Mensagem: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Identificar a PK DAO Contatos Contas Skype. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -85,7 +84,7 @@ public class Contatos_Contas_Skype_Dao {
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			JOptionPane.showMessageDialog(null, "Exceção ao Salvar Contatos: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Salvar DAO Contatos Contas Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -122,7 +121,7 @@ public class Contatos_Contas_Skype_Dao {
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			JOptionPane.showMessageDialog(null, "Exceção ao Remover Contatos: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Remover DAO Contatos Conta Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -158,7 +157,7 @@ public class Contatos_Contas_Skype_Dao {
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			JOptionPane.showMessageDialog(null, "Exceção ao Atualizar Contatos: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Atualizar DAO Contatos Conta Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -184,7 +183,7 @@ public class Contatos_Contas_Skype_Dao {
 			setContatos_Contas_Skype(session.get(Contatos_Contas_Skype.class, id_geral));
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Exceção ao Carregar a Contatos: " + ex.getMessage());
+			Erros_Skype.salvaErroSkype("Exceção ao Carregar DAO os Contatos da Conta Skype: " + ex.getMessage());
 			return false;
 		} finally {
 			if (session != null) {
