@@ -19,12 +19,20 @@ class MainSkypeClass {
 			objEstruturaSkype.criaObjetoConfiguracao() && 
 			objEstruturaSkype.connectSQLLiteJDBC()) {
 			
-			//Cria a Thread de identificação do conta e contatos do Skype
-			IniciaEtlContaContatos IniciaContaContatos = new IniciaEtlContaContatos();
-			IniciaContaContatos.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
-			IniciaContaContatos.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());			
-			IniciaContaContatos.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
-			IniciaContaContatos.start();						
+			//Realiza a carga inicial da conta e contatos do Skype via processo local, para criar a estrutura das Threads
+			IniciaEtlContaContatos objCargaContaContatosInicial = new IniciaEtlContaContatos();
+			try {
+				objCargaContaContatosInicial.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
+				objCargaContaContatosInicial.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());			
+				objCargaContaContatosInicial.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
+				objCargaContaContatosInicial.executaCargaInicial();						
+			}
+			finally {
+				if (objCargaContaContatosInicial != null)
+					objCargaContaContatosInicial = null;					
+			}
+			
+			System.gc();
 			
 			//Verifica se a leitura é via listener ou banco de dados
 			if (objEstruturaSkype.verificaTipoImportacao()) {			
@@ -33,6 +41,7 @@ class MainSkypeClass {
 				IniciaEtlListener objSkypeListener = new IniciaEtlListener();
 				objSkypeListener.setObjSessionFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
 				objSkypeListener.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());
+				objSkypeListener.setAccountName(objEstruturaSkype.getObjConfiguracao().getSkypeAccount());
 				objSkypeListener.start();
 
 			}
@@ -42,6 +51,7 @@ class MainSkypeClass {
 				IniciaEtlMensagens objSalvaMensagens = new IniciaEtlMensagens();
 				objSalvaMensagens.setObjSessionFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
 				objSalvaMensagens.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());
+				objSalvaMensagens.setAccountName(objEstruturaSkype.getObjConfiguracao().getSkypeAccount());
 				objSalvaMensagens.start();							
 			
 			}
@@ -50,7 +60,15 @@ class MainSkypeClass {
 			IniciaEtlMensagensServidor IniciaCargaServidor = new IniciaEtlMensagensServidor();
 			IniciaCargaServidor.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
 			IniciaCargaServidor.setObjEstruturaSkype(objEstruturaSkype);
+			IniciaCargaServidor.setAccountName(objEstruturaSkype.getObjConfiguracao().getSkypeAccount());
 			IniciaCargaServidor.start();
+			
+			//Cria a Thread de identificação do conta e contatos do Skype
+			IniciaEtlContaContatos IniciaContaContatos = new IniciaEtlContaContatos();
+			IniciaContaContatos.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
+			IniciaContaContatos.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());			
+			IniciaContaContatos.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
+			IniciaContaContatos.start();
 						
 		}
 		else

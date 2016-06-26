@@ -134,6 +134,7 @@ public class EtlContaContatos {
 		catch(Exception ex) {
 		
 			JOptionPane.showMessageDialog(null, "Atenção erro ao criar a conta Skype. Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
 			return false;
 			
 		}
@@ -215,6 +216,7 @@ public class EtlContaContatos {
 		catch(Exception ex) {
 		
 			JOptionPane.showMessageDialog(null, "Atenção erro ao atualizar os Contatos da Conta Skype. Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
 			return false;
 			
 		}
@@ -269,6 +271,7 @@ public class EtlContaContatos {
 		catch(Exception ex) {
 		
 			JOptionPane.showMessageDialog(null, "Atenção erro ao criar a conta Skype. Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
 			return false;
 			
 		}
@@ -324,6 +327,7 @@ public class EtlContaContatos {
 		catch(Exception ex) {
 		
 			JOptionPane.showMessageDialog(null, "Atenção erro ao criar os Contatos da Conta Skype. Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
 			return false;
 			
 		}

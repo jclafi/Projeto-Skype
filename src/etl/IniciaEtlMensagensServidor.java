@@ -7,6 +7,7 @@ public class IniciaEtlMensagensServidor extends Thread {
 	
 	//Entre uma carga e outra aguarda 10 minutos
 	private final long SLEEP_TIME = 600000;
+	private String accountName;
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
 	private DefineEstruturaProjeto objEstruturaSkype;
@@ -17,6 +18,8 @@ public class IniciaEtlMensagensServidor extends Thread {
 	public void setObjMySQLFactory(SessionFactory objMySQLFactory) { this.objMySQLFactory = objMySQLFactory; }
 	public DefineEstruturaProjeto getObjEstruturaSkype() { return objEstruturaSkype; }
 	public void setObjEstruturaSkype(DefineEstruturaProjeto objEstruturaSkype) { this.objEstruturaSkype = objEstruturaSkype; }
+	public String getAccountName() { return accountName; }
+	public void setAccountName(String accountName) { this.accountName = accountName; }
 	
 	/*
 	 * (non-Javadoc)
@@ -61,13 +64,13 @@ public class IniciaEtlMensagensServidor extends Thread {
 	private void criaObjetoClienteServidor() {
 		
 		connectServer();
-
 		
 		EtlMensagensServidor objCargaMensagensServidor = new EtlMensagensServidor();
 		try {
 			
 			objCargaMensagensServidor.setObjMySQLFactory(this.getObjMySQLFactory());
 			objCargaMensagensServidor.setObjPostgreSQLFactory(this.getObjPostgreSQLFactory());
+			objCargaMensagensServidor.setAccountName(accountName);
 			objCargaMensagensServidor.executaEnvioServidor();
 			
 		}

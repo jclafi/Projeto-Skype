@@ -11,12 +11,15 @@ public class EtlMensagensServidor {
 	
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
+	private String accountName;
 
 	public SessionFactory getObjPostgreSQLFactory() { return this.objPostgreSQLFactory; }
 	public void setObjPostgreSQLFactory(SessionFactory varSessionFactory) { this.objPostgreSQLFactory = varSessionFactory; };	
 	public SessionFactory getObjMySQLFactory() { return objMySQLFactory; }
 	public void setObjMySQLFactory(SessionFactory objMySQLFactory) { this.objMySQLFactory = objMySQLFactory; }
-
+	public String getAccountName() { return accountName; }
+	public void setAccountName(String accountName) { this.accountName = accountName; }
+	
 	public void executaEnvioServidor() {
 				
 		Mensagens_Skype objMensagensMysQL = new Mensagens_Skype();
@@ -26,69 +29,56 @@ public class EtlMensagensServidor {
 			//Identifica as conexões com as bases de dados local e remota
 			objMensagensMysQL.setObjSessionFactory(this.getObjMySQLFactory());
 			objMensagensPostgreSQL.setObjSessionFactory(this.getObjPostgreSQLFactory());
-
-			//Percorre todas as contas salvas na base local para enviar as Mensagens para o Servidor
-			String[] objContasSkype = objMensagensPostgreSQL.retornaListaUsuarios();
-			
-			if (objContasSkype != null) {
-				
-				int ultimoID = 0;
-				
-				for (String usuarioSkype : objContasSkype) {
+									
+			//Identifica o último ID salvo no Servidor MySQL para esta conta do Skype
+			int ultimoID = objMensagensMysQL.retornaUltimoID(accountName, true);
 					
-					//Identifica o último ID salvo no Servidor MySQL para esta conta do Skype
-					ultimoID = objMensagensMysQL.retornaUltimoID(usuarioSkype.toString(), true);
+			//Cria a Session
+			Session localSession = this.getObjPostgreSQLFactory().openSession();	
 					
-					//Cria a Session
-					Session localSession = this.getObjPostgreSQLFactory().openSession();	
+			//Valida os Filtros da Consulta SQL
+			String whereSQL = "where id > " + ultimoID + " and account_logged = '" + accountName +"' order by id_geral";
 					
-					//Valida os Filtros da Consulta SQL
-					String whereSQL = "where id > " + ultimoID + " and account_logged = '" + usuarioSkype +"' order by id_geral";
-					
-					//Reliza uma consulta das mensagens pendentes de envio da base Local para Servidor
-					@SuppressWarnings("unchecked")
-					List<Mensagens_Skype> QryMensagens = localSession.createQuery("FROM Mensagens_Skype " + whereSQL).list();
-					try {
+			//Reliza uma consulta das mensagens pendentes de envio da base Local para Servidor
+			@SuppressWarnings("unchecked")
+			List<Mensagens_Skype> QryMensagens = localSession.createQuery("FROM Mensagens_Skype " + whereSQL).list();
+			try {
 						
-						//Pega os objetos de Mensagens da base local e os insere no Servidor MysQL
-						Iterator<Mensagens_Skype> iterator = QryMensagens.iterator();
-						while (iterator.hasNext()) {
+				//Pega os objetos de Mensagens da base local e os insere no Servidor MysQL
+				Iterator<Mensagens_Skype> iterator = QryMensagens.iterator();
+				while (iterator.hasNext()) {
 							
-							//Pega o objMensagens_Skype da lista e o persiste no Servidor
-							Mensagens_Skype objTempMensagensMysQL = (Mensagens_Skype) iterator.next();
-							objTempMensagensMysQL.setObjSessionFactory(this.getObjMySQLFactory());
+					//Pega o objMensagens_Skype da lista e o persiste no Servidor
+					Mensagens_Skype objTempMensagensMysQL = (Mensagens_Skype) iterator.next();
+					objTempMensagensMysQL.setObjSessionFactory(this.getObjMySQLFactory());
 							
-							//Persiste a Mensagem no Servidor
-							if (! objTempMensagensMysQL.salvaMensagem())
-								JOptionPane.showMessageDialog(null, "Não foi possível persistir a Mensagem Id_Geral: " + objTempMensagensMysQL.getId_geral());							
+					//Persiste a Mensagem no Servidor
+					if (! objTempMensagensMysQL.salvaMensagem())
+						JOptionPane.showMessageDialog(null, "Não foi possível persistir a Mensagem no Servidor: " + objTempMensagensMysQL.getId_geral());							
 							
-						}
-
 					}
-					finally {
-						
-						if (localSession != null) {
-							if (localSession.isConnected())
-								localSession.close();
-							localSession = null;
-						}
-						
-						if (QryMensagens != null) {
-							if (QryMensagens.size() > 0)
-								QryMensagens.clear();
-							QryMensagens = null;
-						}
-						
-					}
-					
+
 				}
-			
+			finally {
+				
+				if (localSession != null) {
+					if (localSession.isConnected())
+						localSession.close();
+					localSession = null;
+				}
+						
+				if (QryMensagens != null) {
+					if (QryMensagens.size() > 0)
+						QryMensagens.clear();
+					QryMensagens = null;
+				}
+						
 			}
-			
+		
 		}
 		catch (Exception ex) {
 
-			JOptionPane.showMessageDialog(null, "Exceção ao Enviar dados Servidor. Mensagem: " + ex.getMessage());
+			JOptionPane.showMessageDialog(null, "Exceção ao Enviar dados ao Servidor. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		
 		}

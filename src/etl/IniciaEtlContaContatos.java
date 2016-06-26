@@ -30,6 +30,28 @@ public class IniciaEtlContaContatos  extends Thread {
 		
 	}
 	
+	public void executaCargaInicial() {
+		
+		EtlContaContatos objContaContato = new EtlContaContatos();
+		try {
+			
+			objContaContato.setSkypeAccountConfig(getObjConfiguracao().getSkypeAccount());
+			objContaContato.setObjPostgreSQLFactory(this.getObjPostgreSQLFactory());
+			objContaContato.setConnectionSQLLite(this.getConnectionSQLLite());			
+			
+			//Valida se o contato já foi inserido na base e se sim, é o mesmo definido nas configurações
+			objContaContato.validaContaContatos();		
+
+		}
+		finally {
+			
+			if (objContaContato != null)
+				objContaContato = null;
+			
+		}
+		
+	}
+	
 	/*
 	 * Método recursivo que gerencia o E.T.L dos contatos
 	 */
@@ -43,7 +65,7 @@ public class IniciaEtlContaContatos  extends Thread {
 			objContaContato.setConnectionSQLLite(this.getConnectionSQLLite());			
 			
 			//Valida se o contato já foi inserido na base e se sim, é o mesmo definido nas configurações
-			objContaContato.validaContaContatos();
+			objContaContato.validaContaContatos();		
 
 		}
 		finally {

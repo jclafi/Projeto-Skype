@@ -27,6 +27,7 @@ public class HibernateMySQL {
 			config.setProperty("hibernate.connection.password", objConfiguracao.getMySqlPassWord());
 			config.setProperty("hibernate.show_sql", "false");           
 			config.setProperty("hibernate.format_sql","false");
+			config.setProperty("hibernate.useSSL", "false");
 
 			for (int index = 0; index < ClassMap.getMySQLClasses().length; index++)        
 				config.addClass(ClassMap.getMySQLClasses()[index]);

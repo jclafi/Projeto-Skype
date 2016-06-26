@@ -1,28 +1,39 @@
 package etl;
 
-import modal.Usuario_Logado;
+import modal.Conta_Login;
+import modal.Contas_Skype;
+import modal.Contatos_Contas_Skype;
 import modal.Mensagens_Skype;
 import jdbc.SqlLiteConnection;
 
 import java.net.InetAddress;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.swing.JOptionPane;
 
 import org.hibernate.SessionFactory;
 
 public class EtlMensagens {
 	
-	private Usuario_Logado objUsuarioRegras; 
+	private Conta_Login objUsuarioRegras; 
 	private SessionFactory objSessionFactory;
 	private SqlLiteConnection connectionSQLLite;	
-
-	public Usuario_Logado getObjUsuario() { return objUsuarioRegras; }
-	public void setObjUsuario(Usuario_Logado objUsuario) { this.objUsuarioRegras = objUsuario; }
+	private Contas_Skype objContasSkype;
+	private Set<Contatos_Contas_Skype> objListaContatosContaSkype = new HashSet<Contatos_Contas_Skype>();
+	
+	public Conta_Login getObjUsuario() { return objUsuarioRegras; }
+	public void setObjUsuario(Conta_Login objUsuario) { this.objUsuarioRegras = objUsuario; }
 	public SessionFactory getObjSessionFactory() { return this.objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
-	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }		
+	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }	
+	public Contas_Skype getObjContasSkype() { return objContasSkype; }
+	public void setObjContasSkype(Contas_Skype objContasSkype) { this.objContasSkype = objContasSkype; }
+	public Set<Contatos_Contas_Skype> getObjListaContatosContaSkype() { return objListaContatosContaSkype; }
+	public void setObjListaContatosContaSkype(Set<Contatos_Contas_Skype> objListaContatosContaSkype) { this.objListaContatosContaSkype = objListaContatosContaSkype; }
 	
 	public void executaCargaMensagens() {
 		
@@ -71,16 +82,36 @@ public class EtlMensagens {
 					objMensagensRegra.setAccount_logged(objUsuarioRegras.getSigninName());
 					objMensagensRegra.setHost_name(InetAddress.getLocalHost().getHostName());
 					objMensagensRegra.setIp_adress(InetAddress.getLocalHost().getHostAddress());
-					objMensagensRegra.setAccount_verified("N");
-					objMensagensRegra.setContact_verified("N");			
 					
 					//Identifica a origem das mensagens de acordo com a estação Cliente
-					if (resultSet.getString("author").equals(objUsuarioRegras.getSigninName()))
-						objMensagensRegra.setMessage_type("E");
-					else
-						objMensagensRegra.setMessage_type("R");					
+					if (resultSet.getString("author").equals(objUsuarioRegras.getSigninName())) {
 					
-					objMensagensRegra.salvaMensagem();
+						objMensagensRegra.setMessage_type("E");
+						objMensagensRegra.setAccount_verified(objContasSkype.getAccount_verified());
+						objMensagensRegra.setContact_verified("*");			
+					
+					}
+					else {
+					
+						objMensagensRegra.setMessage_type("R");			
+						objMensagensRegra.setContact_verified("N");
+						
+						//Verifica se o Contato da mensagem recebida está autorizado
+						for (Contatos_Contas_Skype index : objListaContatosContaSkype) {
+							
+							if (index.getAccount_name().equals(resultSet.getString("author"))) {
+								objMensagensRegra.setContact_verified(index.getContact_verified());
+								break;
+							}
+							
+						}
+						objMensagensRegra.setAccount_verified("*");
+					
+					}
+										
+					if (! objMensagensRegra.salvaMensagem())
+						JOptionPane.showMessageDialog(null, "Falha ao inserir a Mensagem via Listener!");
+
 				}
 				
 				if (! statement.isClosed())
@@ -106,9 +137,9 @@ public class EtlMensagens {
 			
 	}
 	
-	private Usuario_Logado carregaUsuario() {
+	private Conta_Login carregaUsuario() {
 		
-		Usuario_Logado objUser = new Usuario_Logado();
+		Conta_Login objUser = new Conta_Login();
 		
 		objUser.setConnectionSQLLite(connectionSQLLite);
 		objUser.getUsuarioLogado();

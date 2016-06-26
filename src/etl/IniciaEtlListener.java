@@ -4,39 +4,70 @@ import javax.swing.JOptionPane;
 import org.hibernate.SessionFactory;
 import com.skype.Skype;
 import jdbc.SqlLiteConnection;
-import modal.Usuario_Logado;
+import modal.Contas_Skype;
+import modal.Contatos_Contas_Skype;
+import modal.Conta_Login;
 
 public class IniciaEtlListener extends Thread {
 	
 	//Entre uma carga e outra aguarda 5 minutos
 	private final long SLEEP_TIME = 300000;
+	private String accountName;
 	private SessionFactory objSessionFactory;
 	private SqlLiteConnection connectionSQLLite;
-	private Usuario_Logado objUsuarioRegras;
+	private Conta_Login objLoginRegras;
+	private Contas_Skype objContasSkype;
+	private Contatos_Contas_Skype objContatosContasSkype;
 	
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
 	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }	
-	public Usuario_Logado getUsuarioRegras() { return objUsuarioRegras; }
-	public void setUsuarioRegras(Usuario_Logado objSkypeUser) { this.objUsuarioRegras = objSkypeUser; }
+	public Conta_Login getUsuarioRegras() { return objLoginRegras; }
+	public void setUsuarioRegras(Conta_Login objSkypeUser) { this.objLoginRegras = objSkypeUser; }
+	public String getAccountName() { return accountName; }
+	public void setAccountName(String accountName) { this.accountName = accountName; }
+	public Contas_Skype getObjContasSkype() { return objContasSkype; }
+	public void setObjContasSkype(Contas_Skype objContasSkype) { this.objContasSkype = objContasSkype; }
+	public Contatos_Contas_Skype getObjContatosContasSkype() { return objContatosContasSkype; }
+	public void setObjContatosContasSkype(Contatos_Contas_Skype objContatosContasSkype) { this.objContatosContasSkype = objContatosContasSkype; }
 	
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Thread#run()
 	 */
 	public void run() {
-		
-		objUsuarioRegras = carregaUsuario();
+				
+		//Carrega o Usuário do Skype que logou no SQLLite
+		objLoginRegras = carregaUsuario();
 		
 		//Valida se o Operador conectou no Skype e Cria o Listener que grava Mensagens enviadas/recebidas
-		if ((objUsuarioRegras != null) && (connectSkype()))
+		if ((objLoginRegras != null) && (connectSkype())) {
+
+			//Cria objetos para verificação dos dados da Conta e Contatos
+			criaContaContatos();
+
+			//Inicia o Listener direto via API Skype
 			startChatListener();
+
+		}
 	}	
 	
-	private Usuario_Logado carregaUsuario() {
+	private void criaContaContatos() {
 		
-		Usuario_Logado objUser = new Usuario_Logado();
+		objContasSkype = new Contas_Skype();
+		objContasSkype.setObjSessionFactory(objSessionFactory);
+		objContasSkype.carregaConta(accountName);
+
+		objContatosContasSkype = new Contatos_Contas_Skype(); 
+		objContatosContasSkype.setObjSessionFactory(objSessionFactory);
+		objContatosContasSkype.carregaContatosConta(objContasSkype.getId_geral());
+	
+	}
+	
+	private Conta_Login carregaUsuario() {
+		
+		Conta_Login objUser = new Conta_Login();
 		
 		objUser.setConnectionSQLLite(connectionSQLLite);
 		objUser.getUsuarioLogado();
@@ -103,8 +134,12 @@ public class IniciaEtlListener extends Thread {
 		EtlListener skypeListener = new EtlListener();;
 		try {
 			
+			//Define os dados da Conta e Contatos do Skype
+			skypeListener.setObjContasSkype(objContasSkype);
+			skypeListener.setObjListaContatosContaSkype(objContatosContasSkype.getObjListaContatosContaSkype());			
+			
 			//Objeto com dados do Usuário Skype
-			skypeListener.setUsuarioRegras(objUsuarioRegras);
+			skypeListener.setUsuarioRegras(objLoginRegras);
 			
 			//Objeto Session Factory Hibernate
 			skypeListener.setObjSessionFactory(objSessionFactory);
@@ -119,6 +154,17 @@ public class IniciaEtlListener extends Thread {
 			JOptionPane.showMessageDialog(null, "Mensagem exceção Listener Skype: " + ex.getMessage());
 			ex.printStackTrace();
 		}
+		
+	}
+	
+	public void finalize() {
+		
+		if (objLoginRegras != null)
+			objLoginRegras = null;
+		if (objContasSkype != null)
+			objContasSkype = null;
+		if (objContatosContasSkype != null)
+			objContatosContasSkype = null;
 		
 	}
 
