@@ -73,7 +73,7 @@ public class IniciaEtlListener extends Thread {
 		Conta_Login objUser = new Conta_Login();
 		
 		objUser.setConnectionSQLLite(connectionSQLLite);
-		objUser.getUsuarioLogado();
+		objUser.carregaContaAtiva();
 		
 		return objUser;
 		

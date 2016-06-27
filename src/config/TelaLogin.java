@@ -1,4 +1,4 @@
-package cfgApplication;
+package config;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -109,12 +109,11 @@ public class TelaLogin extends JDialog {
 
 		// Cria os Edits para adicionar ao painel
 		// Adiciona os Edit´s ao painel criando os respectivos labels
-		JLabel label_1 = new JLabel("Usuário:");
-		label_1.setHorizontalAlignment(SwingConstants.CENTER);
-		label_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		contentPane.add(label_1);
+		JLabel lblUsurioLogin = new JLabel("Usu\u00E1rio Login:");
+		lblUsurioLogin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsurioLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		contentPane.add(lblUsurioLogin);
 		editNmUser = new JTextField();
-		editNmUser.setToolTipText("Somente Usu\u00E1rios Ativos");
 		editNmUser.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		editNmUser.addKeyListener(new KeyAdapter() {
 			@Override
@@ -133,10 +132,10 @@ public class TelaLogin extends JDialog {
 		});
 		contentPane.add(editNmUser);
 
-		JLabel label = new JLabel("Senha:");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		contentPane.add(label);
+		JLabel lblSenhaLogin = new JLabel("Senha Login:");
+		lblSenhaLogin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSenhaLogin.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		contentPane.add(lblSenhaLogin);
 		editSenha = new JPasswordField();
 		editSenha.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		editSenha.setEchoChar('*');

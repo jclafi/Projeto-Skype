@@ -25,7 +25,7 @@ public class Conta_Login {
 	public SqlLiteConnection getConnectionSQLLite() { return connectionSQLLite; }
 	public void setConnectionSQLLite(SqlLiteConnection connectionSQLLite) { this.connectionSQLLite = connectionSQLLite; }	
 	
-	public Conta_Login getUsuarioLogado() {
+	public Conta_Login carregaContaAtiva() {
 		
 		String SQL = null;		
 		ResultSet resultSet = null;
@@ -88,6 +88,48 @@ public class Conta_Login {
 		}
 		
 		return this;
+		
+	}
+	
+	public void carregaContaLogin() { 
+		
+		String SQL = null;		
+		ResultSet resultSet = null;
+		Statement statement = null;
+		
+		try {
+						
+			SQL = " select * from accounts limit 1 ";
+				
+			statement = connectionSQLLite.getConnection().createStatement();
+			resultSet = statement.executeQuery(SQL);
+				
+			while (resultSet.next()) {
+					
+				setId(resultSet.getInt("id"));
+				setIsPermanent(resultSet.getInt("is_permanent"));
+				setStatus(resultSet.getInt("status"));
+				setSigninName(resultSet.getString("signin_name"));
+					
+			}
+				
+			if (! statement.isClosed())
+				statement.close();
+								
+							
+		}
+		catch (Exception ex) {
+			Erros_Skype.salvaErroSkype("Atenção erro ao consultar o Usuário Login Skype: " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		finally {
+			
+			if (statement != null)
+				statement = null;
+			if (resultSet != null)
+				resultSet = null;
+			
+		}
 		
 	}
 

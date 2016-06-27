@@ -67,4 +67,26 @@ public class Configuracao_Skype {
 		
 	}
 	
+	public boolean salvaConfiguracao() {
+		
+		boolean ok = false;
+		
+		Configuracao_Skype_Dao objPersistente = new Configuracao_Skype_Dao();
+		try {
+			
+			objPersistente.setObjSessionFactory(objSessionFactory);
+			objPersistente.setObjRegraConfiguracao(this);
+			
+			ok = objPersistente.salvaConfiguracao();
+			
+		}
+		finally {
+			if (objPersistente != null)
+				objPersistente = null;			
+		}
+		
+		return ok;
+		
+	}
+	
 }

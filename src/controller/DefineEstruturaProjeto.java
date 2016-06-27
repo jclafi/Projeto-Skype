@@ -85,20 +85,22 @@ public class DefineEstruturaProjeto {
 	
 	public void closeSQLLiteJDBC() {
 
-		
-		connectionSQLLite.closeSQLLiteConnection();
+		if (connectionSQLLite != null)		
+			connectionSQLLite.closeSQLLiteConnection();
 		
 	}
 	
 	public void closePostgreSQLHibernate() {
 
-		objPostgreSQLFactory.closeFactory();
+		if (objPostgreSQLFactory != null)		
+			objPostgreSQLFactory.closeFactory();
 
 	}
 	
 	public void closeMySQLHibernate() {
 
-		objMySQLFactory.closeFactory();
+		if (objMySQLFactory != null)		
+			objMySQLFactory.closeFactory();
 
 	}
 	
