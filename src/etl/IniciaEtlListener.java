@@ -1,6 +1,9 @@
 package etl;
 
 import modal.Erros_Skype;
+
+import javax.swing.JOptionPane;
+
 import org.hibernate.SessionFactory;
 import com.skype.Skype;
 import jdbc.SqlLiteConnection;
@@ -80,7 +83,7 @@ public class IniciaEtlListener extends Thread {
 
 		if (! Skype.isInstalled()) {
 		
-			Erros_Skype.salvaErroSkype("Atenção instalação do Skype não Identificada !");
+			JOptionPane.showMessageDialog(null, "Atenção instalação do Skype não Identificada !");
 			return false;
 		
 		}

@@ -1,7 +1,8 @@
 package etl;
 
 import org.hibernate.SessionFactory;
-import main.DefineEstruturaProjeto;
+
+import controller.DefineEstruturaProjeto;
 
 public class IniciaEtlDadosServidor extends Thread {
 	
