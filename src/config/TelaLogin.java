@@ -9,8 +9,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -121,15 +119,6 @@ public class TelaLogin extends JDialog {
 				e.setKeyChar(Character.toUpperCase(e.getKeyChar()));
 			}
 		});
-		editNmUser.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				if (editNmUser.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Atenção Usuário Inválido !");
-					editNmUser.grabFocus();
-				}
-			}
-		});
 		contentPane.add(editNmUser);
 
 		JLabel lblSenhaLogin = new JLabel("Senha Login:");
@@ -143,16 +132,6 @@ public class TelaLogin extends JDialog {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 				arg0.setKeyChar(Character.toUpperCase(arg0.getKeyChar()));
-			}
-		});
-		editSenha.addFocusListener(new FocusAdapter() {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				if ((!editNmUser.getText().isEmpty()) && (editSenha.getText().isEmpty())) {
-					JOptionPane.showMessageDialog(null, "Atenção Senha Inválida !");
-					editSenha.grabFocus();
-				}
 			}
 		});
 		contentPane.add(editSenha);

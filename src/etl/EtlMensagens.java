@@ -82,13 +82,24 @@ public class EtlMensagens {
 					objMensagensRegra.setAccount_logged(objUsuarioRegras.getSigninName());
 					objMensagensRegra.setHost_name(InetAddress.getLocalHost().getHostName());
 					objMensagensRegra.setIp_adress(InetAddress.getLocalHost().getHostAddress());
+					objMensagensRegra.setAccount_verified(objContasSkype.getAccount_verified());
+
 					
 					//Identifica a origem das mensagens de acordo com a estação Cliente
 					if (resultSet.getString("author").equals(objUsuarioRegras.getSigninName())) {
 					
 						objMensagensRegra.setMessage_type("E");
-						objMensagensRegra.setAccount_verified(objContasSkype.getAccount_verified());
-						objMensagensRegra.setContact_verified("*");			
+						objMensagensRegra.setContact_verified("N");
+						
+						//Verifica se o Contato da mensagem recebida está autorizado
+						for (Contatos_Contas_Skype index : objListaContatosContaSkype) {
+							
+							if (index.getAccount_name().equals(resultSet.getString("chatname"))) {
+								objMensagensRegra.setContact_verified(index.getContact_verified());
+								break;
+							}
+							
+						}			
 					
 					}
 					else {
@@ -105,7 +116,6 @@ public class EtlMensagens {
 							}
 							
 						}
-						objMensagensRegra.setAccount_verified("*");
 					
 					}
 										

@@ -33,7 +33,7 @@ public class Erros_Skype {
 		Erros_Skype objErrosTemp = new Erros_Skype();
 		try {
 						
-			objErrosTemp.setContent(getContent());
+			objErrosTemp.setContent(errorContent);
 			objErrosTemp.setError_date(new Date());
 			objErrosTemp.setHost_name(InetAddress.getLocalHost().getHostName());
 			objErrosTemp.setIp_adress(InetAddress.getLocalHost().getHostAddress());
@@ -41,7 +41,7 @@ public class Erros_Skype {
 			objPersistente.setObjSessionFactory(objPostgreSQLFactory);
 			objPersistente.setObjErros_Skype(objErrosTemp);
 			
-			objPersistente.salvaConta();
+			objPersistente.salvaErroSkype();
 				
 		}
 		catch (Exception ex) {

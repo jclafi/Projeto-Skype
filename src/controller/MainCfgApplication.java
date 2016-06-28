@@ -1,7 +1,10 @@
-package config;
+package controller;
 
 import javax.swing.JOptionPane;
-import controller.DefineEstruturaProjeto;
+
+import config.TelaCadastro;
+import config.TelaLogin;
+import modal.Erros_Skype;
 
 public class MainCfgApplication {
 
@@ -9,20 +12,26 @@ public class MainCfgApplication {
 
 		DefineEstruturaProjeto objEstruturaSkype = new DefineEstruturaProjeto();
 		try {
-			
+						
 			//Verifica se o Skype está instalado na máquina Cliente
 			if (!objEstruturaSkype.verificaInstalacaoSkype())
 				objEstruturaSkype.finalizaAplicacao();
 	
 			// Cria a Factory de acesso a Dados
-			if ((objEstruturaSkype.connectPostgreSQLHibernate()) && 
-				(objEstruturaSkype.criaObjetoConfiguracao())) {
+			if (objEstruturaSkype.connectPostgreSQLHibernate()) {
 				
-				//Se o login falhou aborta a aplicação, caso contrário inicia a tela de Config			
-				//Abre a tela de Configuração do Aplicativo
-				if (validaLogin()) 
-					cadastraConfiguracao(objEstruturaSkype);
-	
+				//Define a conexão local para o objeto de Log de Erros
+				Erros_Skype.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
+
+				//Cria o objeto de configuração Base de Dados
+				if (! objEstruturaSkype.criaObjetoConfiguracao())
+					JOptionPane.showMessageDialog(null, "Atenção não foi possível criar o objeto de Configuração !");
+				else {									
+					//Se o login falhou aborta a aplicação, caso contrário inicia a tela de Config			
+					//Abre a tela de Configuração do Aplicativo
+					if (validaLogin()) 
+						cadastraConfiguracao(objEstruturaSkype);
+				}
 			} else 
 				JOptionPane.showMessageDialog(null, "Atenção não foi possível Conectar na Base de dados Local !");
 		}
@@ -30,7 +39,6 @@ public class MainCfgApplication {
 
 			if (objEstruturaSkype != null) {
 				objEstruturaSkype.finalizaAplicacao();
-				objEstruturaSkype = null;
 
 			}		
 

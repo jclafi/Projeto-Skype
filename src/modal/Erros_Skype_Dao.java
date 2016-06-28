@@ -64,7 +64,7 @@ public class Erros_Skype_Dao {
 	}
 	
 	@SuppressWarnings("static-access")
-	public boolean salvaConta() {
+	public boolean salvaErroSkype() {
 
 		//Cria a Session
 		Session session = objSessionFactory.openSession();

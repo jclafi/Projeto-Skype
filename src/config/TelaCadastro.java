@@ -197,7 +197,7 @@ public class TelaCadastro extends JDialog {
 		if (! objEstruturaRegras.getObjConfiguracao().salvaConfiguracao())
 			JOptionPane.showMessageDialog(this, "Atenção não foi possível Salvar os Dados do Skype !");			
 		else
-			JOptionPane.showMessageDialog(this, "Atenção os Dados do Skype foram Salvos !");
+			JOptionPane.showMessageDialog(this, "Dados do Skype Salvos com Sucesso !");
 			
 	}
 
@@ -231,7 +231,9 @@ public class TelaCadastro extends JDialog {
 	
 	private void selecionaSkypeUser() {
 		
-		if (! objEstruturaRegras.connectSQLLiteJDBC()) {
+		objEstruturaRegras.getObjConfiguracao().setSkypeDatabase(edtSkypeDataBase.getText());
+		
+		if (objEstruturaRegras.connectSQLLiteJDBC()) {
 			
 			Conta_Login objPersistente = new Conta_Login();
 			try {
@@ -251,8 +253,10 @@ public class TelaCadastro extends JDialog {
 			
 		}
 		else {
-			
+			edtContaSkype.setText("");
+			edtSkypeDataBase.setText("");
 			JOptionPane.showMessageDialog(this, "Atenção não foi possível conectar na Base SQL Lite do Skype!");
+			edtServerHost.grabFocus();
 			objEstruturaRegras.closeSQLLiteJDBC();
 		}
 

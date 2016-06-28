@@ -58,7 +58,7 @@ public class EtlListener implements ChatMessageListener {
 				}
 				
 			}
-			objMensagem.setAccount_verified("*");
+			objMensagem.setAccount_verified(objContasSkype.getAccount_verified());
 			
 			if (! objMensagem.salvaMensagem())
 				Erros_Skype.salvaErroSkype(VERSION +  "\n  Falha ao inserir a Mensagem via Listener!");
@@ -98,12 +98,19 @@ public class EtlListener implements ChatMessageListener {
 			objMensagem.setIp_adress(InetAddress.getLocalHost().getHostAddress());
 
 			//Verifica se Conta padrão do Sistema está autorizada			
-			if (objUsuarioRegras.getSigninName().equals(sentMessage.getSenderId().toString()))			
-				objMensagem.setAccount_verified(objContasSkype.getAccount_verified());
-			else
-				objMensagem.setAccount_verified("N");
-			objMensagem.setContact_verified("*");			
+			objMensagem.setAccount_verified(objContasSkype.getAccount_verified());
 			
+			//Verifica se o Contato da mensagem recebida está autorizado
+			objMensagem.setContact_verified("N");
+			for (Contatos_Contas_Skype index : objListaContatosContaSkype) {
+				
+				if (index.getAccount_name().equals(sentMessage.getChat().toString())) {
+					objMensagem.setContact_verified(index.getContact_verified());
+					break;
+				}
+				
+			}
+
 			if (! objMensagem.salvaMensagem())
 				Erros_Skype.salvaErroSkype(VERSION +  "\n  Falha ao inserir a Mensagem via Listener!");
 
