@@ -1,5 +1,6 @@
 package modal;
 
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.SQLQuery;
@@ -8,18 +9,18 @@ import org.hibernate.SessionFactory;
 
 public class Contatos_Contas_Skype {
 	
-	private int id_geral;
-	private int id_conta_skype;
+	private long id_geral;
+	private long id_conta_skype;
 	private String account_name;
 	private String display_name;
 	private String contact_verified;
 	private SessionFactory objSessionFactory;
 	private Set<Contatos_Contas_Skype> objListaContatosContaSkype = new HashSet<Contatos_Contas_Skype>();
 
-	public int getId_geral() { return id_geral; }
-	public void setId_geral(int id_geral) { this.id_geral = id_geral; }
-	public int getId_conta_skype() { return id_conta_skype; }
-	public void setId_conta_skype(int id_conta_skype) { this.id_conta_skype = id_conta_skype; }
+	public long getId_geral() { return id_geral; }
+	public void setId_geral(long id_geral) { this.id_geral = id_geral; }
+	public long getId_conta_skype() { return id_conta_skype; }
+	public void setId_conta_skype(long id_conta_skype) { this.id_conta_skype = id_conta_skype; }
 	public String getAccount_name() { return account_name; }
 	public void setAccount_name(String account_name) { this.account_name = account_name; }
 	public String getDisplay_name() { return display_name; }
@@ -31,7 +32,7 @@ public class Contatos_Contas_Skype {
 	public Set<Contatos_Contas_Skype> getObjListaContatosContaSkype() { return objListaContatosContaSkype; }
 	public void setObjListaContatosContaSkype(Set<Contatos_Contas_Skype> objContatosContaSkype) { this.objListaContatosContaSkype = objContatosContaSkype; }
 	
-	public boolean carregaContatosConta(int id_conta_skype) {
+	public boolean carregaContatosConta(long id_conta_skype) {
 		
 		boolean ok = false;
 
@@ -49,12 +50,12 @@ public class Contatos_Contas_Skype {
 			
 			for (int index = 0; index < qryTeste.list().size(); index++) {
 				
-				Integer objTemp = (Integer) qryTeste.list().get(index);
+				BigInteger objTemp = (BigInteger) qryTeste.list().get(index);
 				
 				objPersistente = new Contatos_Contas_Skype_Dao(this);
 				objPersistente.setObjSessionFactory(objSessionFactory);
 				
-				if (objPersistente.carregaContatosConta(objTemp.intValue())) 
+				if (objPersistente.carregaContatosConta(objTemp.longValue())) 
 					ok = objListaContatosContaSkype.add(objPersistente.getContatos_Contas_Skype());
 				else 
 					ok = false;

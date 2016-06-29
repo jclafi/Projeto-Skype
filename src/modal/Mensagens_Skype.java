@@ -1,7 +1,7 @@
 package modal;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.List;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,7 +9,7 @@ import org.hibernate.SessionFactory;
 public class Mensagens_Skype {
 	
 	private long id_geral;
-	private int id;
+	private long id;
 	private String id_sender;
 	private String sender_display_name;
 	private String content;
@@ -25,8 +25,8 @@ public class Mensagens_Skype {
 	
 	public long getId_geral() { return id_geral; }
 	public void setId_geral(long id_geral) { this.id_geral = id_geral; }
-	public int getId() { return id; }
-	public void setId(int id) { this.id = id; }
+	public long getId() { return id; }
+	public void setId(long id) { this.id = id; }
 	public String getId_sender() { return id_sender; }
 	public void setId_sender(String id_sender) { this.id_sender = id_sender; }
 	public String getSender_display_name() { return sender_display_name; } 
@@ -52,56 +52,9 @@ public class Mensagens_Skype {
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 	
-	public int retornaUltimoID(String accountLogged, boolean metodoAntigo) {
+	public long retornaUltimoID(String accountLogged) {
 		
-		int id = 0;
-		
-		final String CUSTOM_SQL = " select * from mensagens_skype where account_logged = :account order by id desc limit 1 ";
-		
-		//Cria a sessão
-		Session session = objSessionFactory.openSession();
-
-		SQLQuery qryTeste = null;
-		try {			
-		
-			qryTeste = session.createSQLQuery(CUSTOM_SQL);
-			qryTeste.setParameter("account", accountLogged);	
-
-			@SuppressWarnings("unchecked")
-			List<Object[]> rows = qryTeste.list();
-		 
-			if ((rows != null) && (! rows.isEmpty())) {
-				for (Object[] index : rows) {
-					id = Integer.parseInt(index[1].toString());
-					break;
-				}
-			}
-		
-		}
-		catch (Exception ex) {
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela (OLD). Mensagem: " + ex.getMessage());
-			ex.printStackTrace();
-		}
-		finally {
-			if (!qryTeste.list().isEmpty()) {
-				qryTeste.list().clear();
-				qryTeste = null;
-			}
-		
-			if (session != null) {
-				if (session.isOpen())
-					session.close();
-				session = null;				
-			}
-		}
-		
-		return id;
-
-	}
-	
-	public int retornaUltimoID(String accountLogged) {
-		
-		int varId = 0;
+		long varId = 0;
 		
 		final String CUSTOM_SQL = " select coalesce(max(id), 0) as id from mensagens_skype where account_logged = :account ";
 				
@@ -115,13 +68,14 @@ public class Mensagens_Skype {
 			qryTeste.setParameter("account", accountLogged);	
 			
 			for (int index = 0; index < qryTeste.list().size();) {
-				varId = (Integer) qryTeste.list().get(index);
+				BigInteger objTemp = (BigInteger) qryTeste.list().get(index);
+				varId = objTemp.longValue();				
 				break;
 			}
 		
 		}
 		catch (Exception ex) {
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela (NEW). Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -140,6 +94,49 @@ public class Mensagens_Skype {
 		return varId;
 
 	}
+	
+//	public int retornaUltimoIDServer(String accountLogged) {
+//		
+//		int varId = 0;
+//		
+//		final String CUSTOM_SQL = " select coalesce(max(id), 0) as id from mensagens_skype where account_logged = :account ";
+//				
+//		//Cria a sessão
+//		Session session = objSessionFactory.openSession();		
+//		
+//		SQLQuery qryTeste = null;
+//		try {			
+//		
+//			qryTeste = session.createSQLQuery(CUSTOM_SQL);
+//			qryTeste.setParameter("account", accountLogged);	
+//			
+//			for (int index = 0; index < qryTeste.list().size();) {
+//				BigInteger objTemp = (BigInteger) qryTeste.list().get(index);
+//				varId = objTemp.intValue();
+//				break;
+//			}
+//		
+//		}
+//		catch (Exception ex) {
+//			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela. Mensagem: " + ex.getMessage());
+//			ex.printStackTrace();
+//		}
+//		finally {
+//			if (!qryTeste.list().isEmpty()) {
+//				qryTeste.list().clear();
+//				qryTeste = null;
+//			}
+//		
+//			if (session != null) {
+//				if (session.isOpen())
+//					session.close();
+//				session = null;				
+//			}
+//		}
+//				
+//		return varId;
+//
+//	}
 	
 	public boolean salvaMensagem() {
 		

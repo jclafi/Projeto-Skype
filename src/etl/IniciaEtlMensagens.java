@@ -64,6 +64,7 @@ public class IniciaEtlMensagens extends Thread {
 			objMensagens.setObjSessionFactory(objSessionFactory);
 			objMensagens.setObjContasSkype(objContasSkype);
 			objMensagens.setObjListaContatosContaSkype(objContatosContasSkype.getObjListaContatosContaSkype());
+		
 			objMensagens.executaCargaMensagens();	
 			
 		}		

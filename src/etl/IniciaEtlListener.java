@@ -1,9 +1,7 @@
 package etl;
 
 import modal.Erros_Skype_Static;
-
 import javax.swing.JOptionPane;
-
 import org.hibernate.SessionFactory;
 import com.skype.Skype;
 import jdbc.SqlLiteConnection;

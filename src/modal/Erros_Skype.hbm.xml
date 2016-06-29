@@ -9,8 +9,9 @@
 <hibernate-mapping package="modal">
 
     <class name="Erros_Skype" table="erros_skype">
-        <id name="id_geral" column="id_geral" type="integer"/>
+        <id name="id_geral" column="id_geral" type="long"/>
         
+        <property name="id" column="id" type="integer"/>
         <property name="content" column="content" type="string"/>
         <property name="ip_adress" column="ip_adress" type="string"/>                
         <property name="host_name" column="host_name" type="string"/>

@@ -7,7 +7,7 @@ import controller.DefineEstruturaProjeto;
 public class IniciaEtlDadosServidor extends Thread {
 	
 	//Entre uma carga e outra aguarda 10 minutos
-	private final long SLEEP_TIME = 1;//600000;
+	private final long SLEEP_TIME = 600000;
 	private String accountName;
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
@@ -74,10 +74,10 @@ public class IniciaEtlDadosServidor extends Thread {
 			objCargaMensagensServidor.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
 			
 			//Verifica e atualzia a Conta e Contatos no Servidor e Máquina Local
-			objCargaMensagensServidor.atualizaDadosContaContatos();
+			//objCargaMensagensServidor.atualizaDadosContaContatos();
 			
 			//Envia as mensagens pendentes para o Servidor
-			//objCargaMensagensServidor.enviaMensagensServidor();
+			objCargaMensagensServidor.enviaMensagensServidor();
 			
 			//Envia os Erros gerados na estação cliente para o Servidor
 			objCargaMensagensServidor.enviaLogErrosServidor();

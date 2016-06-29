@@ -38,7 +38,7 @@ public class EtlListener implements ChatMessageListener {
 		try {					
 			objMensagem.setObjSessionFactory(objSessionFactory);
 			
-			objMensagem.setId(Integer.parseInt(recMessage.getId().toString()));						
+			objMensagem.setId(Long.parseLong(recMessage.getId().toString()));						
 			objMensagem.setId_sender(recMessage.getSenderId().toString());
 			objMensagem.setSender_display_name(recMessage.getSenderDisplayName().toString());			
 			objMensagem.setContent(recMessage.getContent().toString());
@@ -87,7 +87,7 @@ public class EtlListener implements ChatMessageListener {
 		try {					
 			objMensagem.setObjSessionFactory(objSessionFactory);
 			
-			objMensagem.setId(Integer.parseInt(sentMessage.getId().toString()));						
+			objMensagem.setId(Long.parseLong(sentMessage.getId().toString()));						
 			objMensagem.setId_sender(sentMessage.getSenderId().toString());
 			objMensagem.setSender_display_name(sentMessage.getSenderDisplayName().toString());			
 			objMensagem.setContent(sentMessage.getContent().toString());

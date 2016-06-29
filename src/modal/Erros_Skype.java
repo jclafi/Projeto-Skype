@@ -1,5 +1,6 @@
 package modal;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -7,7 +8,8 @@ import org.hibernate.SessionFactory;
 
 public class Erros_Skype {
 
-	private int id_geral;
+	private long id_geral;
+	private int id;
 	private String content;
 	private String ip_adress;
 	private String host_name;
@@ -15,8 +17,10 @@ public class Erros_Skype {
 	private String account_name;
 	private SessionFactory objSessionFactory;
 	
-	public int getId_geral() { return id_geral; }
-	public void setId_geral(int pid_geral) { this.id_geral = pid_geral; }
+	public long getId_geral() { return id_geral; }
+	public void setId_geral(long pid_geral) { this.id_geral = pid_geral; }
+	public int getId() { return id; }
+	public void setId(int id) { this.id = id; }
 	public String getContent() { return content; }
 	public void setContent(String pcontent) { this.content = pcontent; }
 	public String getIp_adress() { return ip_adress; }
@@ -30,9 +34,9 @@ public class Erros_Skype {
 	public SessionFactory getObjSessionFactory() { return objSessionFactory; }
 	public void setObjSessionFactory(SessionFactory varSessionFactory) { this.objSessionFactory = varSessionFactory; };	
 	
-	public int retornaUltimoID(String accountLogged) {
+	public long retornaUltimoID(String accountLogged) {
 		
-		int varId = 0;
+		long varId = 0;
 		
 		final String CUSTOM_SQL = " select coalesce(max(id_geral), 0) as id_geral from erros_skype where account_name = :account ";
 				
@@ -46,13 +50,14 @@ public class Erros_Skype {
 			qryTeste.setParameter("account", accountLogged);	
 			
 			for (int index = 0; index < qryTeste.list().size();) {
-				varId = (Integer) qryTeste.list().get(index);
+				BigInteger objTemp = (BigInteger) qryTeste.list().get(index);
+				varId = objTemp.longValue();
 				break;
 			}
 		
 		}
 		catch (Exception ex) {
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela (NEW). Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -101,6 +106,39 @@ public class Erros_Skype {
 		
 		return ok;
 		
+	}
+	
+	@SuppressWarnings("deprecation")
+	public boolean equals(Object o) {
+		
+		//O parâmetro não pode ser nulo
+		if (o == null) return false;
+		
+		//Se não for um objeto da classe Pessoa retorna nulo
+		if (! (this.getClass().equals(o.getClass()))) return false;
+		
+		Erros_Skype outra = (Erros_Skype) o;
+		
+		return ( (this.id_geral == outra.getId_geral())) &&
+				 (this.account_name.equals(outra.getAccount_name())) &&
+				 (this.content.equals(outra.getContent())) &&
+				 (this.host_name.equals(outra.getHost_name())) &&
+				 (this.ip_adress.equals(outra.getIp_adress()) && 
+				 (this.error_date.getDate() == outra.getError_date().getDate()) );					
+	}	
+
+	public int hashCode() {
+
+		@SuppressWarnings("deprecation")
+		String atributos = (this.id_geral +
+							this.content + 
+							this.host_name + 
+							this.ip_adress + 
+							this.host_name + 
+							this.error_date.getDate());
+		
+		return atributos.hashCode();
+	
 	}
 	
 }

@@ -1,12 +1,14 @@
 package modal;
 
+import java.math.BigInteger;
+
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 public class Contas_Skype {
 
-	private int id_geral;
+	private long id_geral;
 	private String account_name;
 	private String display_name;
 	private String ip_adress;
@@ -14,8 +16,8 @@ public class Contas_Skype {
 	private String account_verified;
 	private SessionFactory objSessionFactory;
 	
-	public int getId_geral() { return id_geral; }
-	public void setId_geral(int id_geral) { this.id_geral = id_geral; }
+	public long getId_geral() { return id_geral; }
+	public void setId_geral(long id_geral) { this.id_geral = id_geral; }
 	public String getAccount_name() { return account_name; }
 	public void setAccount_name(String account_name) { this.account_name = account_name; }
 	public String getDisplay_name() { return display_name; }
@@ -87,7 +89,7 @@ public class Contas_Skype {
 		return bolOk;
 	}
 	
-	public boolean carregaConta(int id_geral) {
+	public boolean carregaConta(long id_geral) {
 		
 		Contas_Skype_Dao objPersistente = new Contas_Skype_Dao(this);
 		try {
@@ -137,8 +139,8 @@ public class Contas_Skype {
 			
 			for (int index = 0; index < qryTeste.list().size();) {
 				
-				Integer objTemp = (Integer) qryTeste.list().get(index);
-				ok =  carregaConta(objTemp.intValue());
+				BigInteger objTemp = (BigInteger) qryTeste.list().get(index);
+				ok =  carregaConta(objTemp.longValue());
 				break;
 				
 			}

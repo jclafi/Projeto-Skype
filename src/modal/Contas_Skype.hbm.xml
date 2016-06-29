@@ -9,7 +9,7 @@
 <hibernate-mapping package="modal">
 
     <class name="Contas_Skype" table="contas_skype">
-        <id name="id_geral" column="id_geral" type="integer"/>
+        <id name="id_geral" column="id_geral" type="long"/>
         
         <property name="account_name" column="account_name" type="string"/>
         <property name="display_name" column="display_name" type="string"/>

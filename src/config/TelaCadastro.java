@@ -121,6 +121,7 @@ public class TelaCadastro extends JDialog {
 		lblSkypeListener.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		contentPane.add(lblSkypeListener);
 		chkListener = new JCheckBox("", false);
+		chkListener.setEnabled(false);
 		chkListener.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		chkListener.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(chkListener);

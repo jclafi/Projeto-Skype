@@ -1,5 +1,7 @@
 package modal;
 
+import java.math.BigInteger;
+
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,9 +23,9 @@ public class Contas_Skype_Dao {
 				
 	}
 	
-	public int getPk() {
+	public long getPk() {
 		
-		int pk = 0;
+		long pk = 0;
 		
 		final String CUSTOM_SQL = " select coalesce(max(id_geral), 0) as id_geral from contas_skype ";
 				
@@ -36,8 +38,8 @@ public class Contas_Skype_Dao {
 			qryTeste = session.createSQLQuery(CUSTOM_SQL);
 
 			for (int index = 0; index < qryTeste.list().size();) {
-				Integer objTemp = (Integer) qryTeste.list().get(index);
-				pk = objTemp.intValue();
+				BigInteger objTemp = (BigInteger) qryTeste.list().get(index);
+				pk = objTemp.longValue();
 				break;
 			}
 		
@@ -174,7 +176,7 @@ public class Contas_Skype_Dao {
 		return true;
 	}
 	
-	public boolean carregaConta(int id_geral) {
+	public boolean carregaConta(long id_geral) {
 
 		// Objeto Session
 		Session session = objSessionFactory.openSession();

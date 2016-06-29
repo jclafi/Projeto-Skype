@@ -4,7 +4,7 @@ import modal.Configuracao_Skype;
 import modal.Mensagens_Skype;
 import modal.Contas_Skype;
 import modal.Contatos_Contas_Skype;
-import modal.Erros_Skype_Static;
+import modal.Erros_Skype;
 
 public class ClassMap {
 
@@ -15,7 +15,7 @@ public class ClassMap {
 						 Mensagens_Skype.class,
 						 Contas_Skype.class,
 						 Contatos_Contas_Skype.class,
-						 Erros_Skype_Static.class};
+						 Erros_Skype.class};
 
 		return lista;
 	}
@@ -26,7 +26,7 @@ public class ClassMap {
 		Class[] lista = {Mensagens_Skype.class,
 						 Contas_Skype.class,
 						 Contatos_Contas_Skype.class,
-						 Erros_Skype_Static.class};
+						 Erros_Skype.class};
 
 		return lista;
 	}

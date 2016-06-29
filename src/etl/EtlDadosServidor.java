@@ -34,7 +34,7 @@ public class EtlDadosServidor {
 			objMensagensPostgreSQL.setObjSessionFactory(this.getObjPostgreSQLFactory());
 									
 			//Identifica o último ID salvo no Servidor MySQL para esta conta do Skype
-			int ultimoID = objMensagensMySQL.retornaUltimoID(objConfiguracao.getSkypeAccount(), true);
+			long ultimoID = objMensagensMySQL.retornaUltimoID(objConfiguracao.getSkypeAccount());
 					
 			//Cria a Session
 			Session localSession = this.getObjPostgreSQLFactory().openSession();	
@@ -103,7 +103,6 @@ public class EtlDadosServidor {
 		
 	}
 	
-	@SuppressWarnings("static-access")
 	public void enviaLogErrosServidor() {
 		
 		try {
@@ -113,7 +112,7 @@ public class EtlDadosServidor {
 			objErroMySQL.setObjSessionFactory(objMySQLFactory);
 			
 			//Identifica o último ID salvo no Servidor MySQL para esta conta do Skype
-			int ultimoID = objErroMySQL.retornaUltimoID(objConfiguracao.getSkypeAccount());
+			long ultimoID = objErroMySQL.retornaUltimoID(objConfiguracao.getSkypeAccount());
 			
 			//Cria a Session
 			Session localSession = this.getObjPostgreSQLFactory().openSession();	
@@ -121,18 +120,19 @@ public class EtlDadosServidor {
 			//Valida os Filtros da Consulta SQL
 			String whereSQL = "where id > " + ultimoID + " and account_name = '" + objConfiguracao.getSkypeAccount() +"' order by id_geral";
 					
-			//Reliza uma consulta das mensagens pendentes de envio da base Local para Servidor
+			//Reliza uma consulta das erros pendentes de envio da base Local para Servidor
 			@SuppressWarnings("unchecked")
 			List<Erros_Skype> qryErros = localSession.createQuery("FROM Erros_Skype " + whereSQL).list();
 			try {
 						
-				//Pega os objetos de Mensagens da base local e os insere no Servidor MysQL
+				//Pega os objetos de Erro da base local e os insere no Servidor MysQL
 				Iterator<Erros_Skype> iterator = qryErros.iterator();
 				while (iterator.hasNext()) {
 					
 					Erros_Skype objTemp = (Erros_Skype) iterator.next();
-
-					//Persiste a Mensagem no Servidor
+					objTemp.setObjSessionFactory(objMySQLFactory);
+					
+					//Persiste o Erro no Servidor
 					if (! objTemp.salvaErroSkype())
 						Erros_Skype_Static.salvaErroSkype("Não foi possível persistir o Log de Erro no Servidor. ");							
 							
@@ -140,9 +140,6 @@ public class EtlDadosServidor {
 
 				}
 			finally {
-
-				//Retorna a conexão local para a estrutura de Log de Erros
-				Erros_Skype_Static.setObjSessionFactory(objPostgreSQLFactory);				
 
 				if (localSession != null) {
 					if (localSession.isConnected())
@@ -155,7 +152,12 @@ public class EtlDadosServidor {
 						qryErros.clear();
 					qryErros = null;
 				}
-		
+				
+
+				if (objErroMySQL != null) {
+					objErroMySQL = null;
+				}
+				
 			}
 		
 		}

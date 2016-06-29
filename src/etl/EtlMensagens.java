@@ -3,6 +3,7 @@ package etl;
 import modal.Conta_Login;
 import modal.Contas_Skype;
 import modal.Contatos_Contas_Skype;
+import modal.Erros_Skype_Static;
 import modal.Mensagens_Skype;
 import jdbc.SqlLiteConnection;
 
@@ -12,8 +13,6 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.swing.JOptionPane;
 
 import org.hibernate.SessionFactory;
 
@@ -44,13 +43,13 @@ public class EtlMensagens {
 		if (objUsuarioRegras != null)
 			executaETL();
 		else
-			JOptionPane.showMessageDialog(null, "Atenção falha ao validar o Usuário Logado no Skype !");
+			Erros_Skype_Static.salvaErroSkype("Atenção falha ao validar o Usuário Logado no Skype !");
 		
 	}
 	
 	private void executaETL() {
 		
-		int ultimoID = 0;
+		long ultimoID = 0;
 	
 		Mensagens_Skype objMensagensRegra = new Mensagens_Skype();
 		try {
@@ -69,7 +68,7 @@ public class EtlMensagens {
 						" from messages where body_xml is not null and id > ? order by timestamp__ms ";
 				
 				statement = connectionSQLLite.getConnection().prepareStatement(SQL);
-				statement.setInt(1, ultimoID);
+				statement.setLong(1, ultimoID);
 				resultSet = statement.executeQuery();
 				
 				while (resultSet.next()) {
@@ -85,7 +84,6 @@ public class EtlMensagens {
 					objMensagensRegra.setIp_adress(InetAddress.getLocalHost().getHostAddress());
 					objMensagensRegra.setAccount_verified(objContasSkype.getAccount_verified());
 
-					
 					//Identifica a origem das mensagens de acordo com a estação Cliente
 					if (resultSet.getString("author").equals(objUsuarioRegras.getSigninName())) {
 					
@@ -121,7 +119,7 @@ public class EtlMensagens {
 					}
 										
 					if (! objMensagensRegra.salvaMensagem())
-						JOptionPane.showMessageDialog(null, "Falha ao inserir a Mensagem via Listener!");
+						Erros_Skype_Static.salvaErroSkype("Falha ao inserir a Mensagem na base Local !");
 
 				}
 				
@@ -138,7 +136,7 @@ public class EtlMensagens {
 			
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Exceção ao Importar Dados Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Importar Dados Skype Base Local. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {

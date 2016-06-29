@@ -26,18 +26,19 @@ public class Erros_Skype_Static {
 
 			objErrosTemp.setAccount_name(objConfiguracao.getSkypeAccount());
 			objErrosTemp.setContent(errorContent);
+			objErrosTemp.setHost_name(InetAddress.getLocalHost().getHostName());
+			objErrosTemp.setIp_adress(InetAddress.getLocalHost().getHostAddress());
+
 			Date date = new Date() ;
 	        Timestamp timestamp = new Timestamp(date.getTime());
 			objErrosTemp.setError_date(timestamp);
-			objErrosTemp.setHost_name(InetAddress.getLocalHost().getHostName());
-			objErrosTemp.setIp_adress(InetAddress.getLocalHost().getHostAddress());
 			
 			ok = objErrosTemp.salvaErroSkype();
 			
 		}
 		catch (Exception ex) {
 
-			System.out.println("Exceção ao Salvar Dados PC estação cliente. Mensagem: " + ex.getMessage());
+			System.out.println("Exceção ao Salvar o Erro na estação cliente. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 			
