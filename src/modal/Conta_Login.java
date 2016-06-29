@@ -63,7 +63,7 @@ public class Conta_Login {
 					 }
 					 catch (InterruptedException ex) {
 
-						 Erros_Skype.salvaErroSkype("Exceção no sleep Login Skype: " + ex.getMessage());
+						 Erros_Skype_Static.salvaErroSkype("Exceção no sleep Login Skype: " + ex.getMessage());
 					 
 					 }
 					
@@ -74,7 +74,7 @@ public class Conta_Login {
 		}
 		catch (Exception ex) {
 			usuarioOk = false;
-			Erros_Skype.salvaErroSkype("Atenção erro ao consultar o Usuário Login Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Atenção erro ao consultar o Usuário Login Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return null;
 		}
@@ -119,7 +119,7 @@ public class Conta_Login {
 							
 		}
 		catch (Exception ex) {
-			Erros_Skype.salvaErroSkype("Atenção erro ao consultar o Usuário Login Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Atenção erro ao consultar o Usuário Login Skype: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {

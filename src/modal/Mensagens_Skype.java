@@ -79,7 +79,7 @@ public class Mensagens_Skype {
 		
 		}
 		catch (Exception ex) {
-			Erros_Skype.salvaErroSkype("Exceção ao Retornar último ID Tabela (OLD). Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela (OLD). Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -121,7 +121,7 @@ public class Mensagens_Skype {
 		
 		}
 		catch (Exception ex) {
-			Erros_Skype.salvaErroSkype("Exceção ao Retornar último ID Tabela (NEW). Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela (NEW). Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {

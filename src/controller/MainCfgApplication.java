@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 import config.TelaCadastro;
 import config.TelaLogin;
-import modal.Erros_Skype;
+import modal.Erros_Skype_Static;
 
 public class MainCfgApplication {
 
@@ -21,8 +21,8 @@ public class MainCfgApplication {
 			if (objEstruturaSkype.connectPostgreSQLHibernate()) {
 				
 				//Define a conexão local para o objeto de Log de Erros
-				Erros_Skype.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
-				Erros_Skype.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
+				Erros_Skype_Static.setObjSessionFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
+				Erros_Skype_Static.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
 				
 				//Cria o objeto de configuração Base de Dados
 				if (! objEstruturaSkype.criaObjetoConfiguracao())

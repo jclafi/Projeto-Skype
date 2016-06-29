@@ -4,40 +4,43 @@ import java.util.Iterator;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
+import modal.Configuracao_Skype;
 import modal.Erros_Skype;
+import modal.Erros_Skype_Static;
 import modal.Mensagens_Skype;
 
 public class EtlDadosServidor {
 	
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
-	private String accountName;
+	private Configuracao_Skype objConfiguracao;
 
 	public SessionFactory getObjPostgreSQLFactory() { return this.objPostgreSQLFactory; }
 	public void setObjPostgreSQLFactory(SessionFactory varSessionFactory) { this.objPostgreSQLFactory = varSessionFactory; };	
 	public SessionFactory getObjMySQLFactory() { return objMySQLFactory; }
 	public void setObjMySQLFactory(SessionFactory objMySQLFactory) { this.objMySQLFactory = objMySQLFactory; }
-	public String getAccountName() { return accountName; }
-	public void setAccountName(String accountName) { this.accountName = accountName; }
+	public Configuracao_Skype getObjConfiguracao() { return this.objConfiguracao; }
+	public void setObjConfiguracao(Configuracao_Skype pobjConfiguracao) { this.objConfiguracao = pobjConfiguracao; }	
 	
 	public void enviaMensagensServidor() {
 				
-		Mensagens_Skype objMensagensMysQL = new Mensagens_Skype();
+		Mensagens_Skype objMensagensMySQL = new Mensagens_Skype();
 		Mensagens_Skype objMensagensPostgreSQL = new Mensagens_Skype();
 		try {
 						
 			//Identifica as conexões com as bases de dados local e remota
-			objMensagensMysQL.setObjSessionFactory(this.getObjMySQLFactory());
+			objMensagensMySQL.setObjSessionFactory(this.getObjMySQLFactory());
 			objMensagensPostgreSQL.setObjSessionFactory(this.getObjPostgreSQLFactory());
 									
 			//Identifica o último ID salvo no Servidor MySQL para esta conta do Skype
-			int ultimoID = objMensagensMysQL.retornaUltimoID(accountName, true);
+			int ultimoID = objMensagensMySQL.retornaUltimoID(objConfiguracao.getSkypeAccount(), true);
 					
 			//Cria a Session
 			Session localSession = this.getObjPostgreSQLFactory().openSession();	
 					
 			//Valida os Filtros da Consulta SQL
-			String whereSQL = "where id > " + ultimoID + " and account_logged = '" + accountName +"' order by id_geral";
+			String whereSQL = "where id > " + ultimoID + " and account_logged = '" + objConfiguracao.getSkypeAccount() +"' order by id_geral";
 					
 			//Reliza uma consulta das mensagens pendentes de envio da base Local para Servidor
 			@SuppressWarnings("unchecked")
@@ -54,7 +57,7 @@ public class EtlDadosServidor {
 							
 					//Persiste a Mensagem no Servidor
 					if (! objTempMensagensMysQL.salvaMensagem())
-						Erros_Skype.salvaErroSkype("Não foi possível persistir a Mensagem no Servidor: " + objTempMensagensMysQL.getId_geral());							
+						Erros_Skype_Static.salvaErroSkype("Não foi possível persistir a Mensagem no Servidor: " + objTempMensagensMysQL.getId_geral());							
 							
 					}
 
@@ -78,14 +81,14 @@ public class EtlDadosServidor {
 		}
 		catch (Exception ex) {
 
-			Erros_Skype.salvaErroSkype("Exceção ao Enviar Mensagens ao Servidor. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Enviar Mensagens ao Servidor. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		
 		}
 		finally {
 
-			if (objMensagensMysQL != null)
-				objMensagensMysQL = null;
+			if (objMensagensMySQL != null)
+				objMensagensMySQL = null;
 			
 			if (objMensagensPostgreSQL != null)
 				objMensagensPostgreSQL = null;
@@ -100,9 +103,68 @@ public class EtlDadosServidor {
 		
 	}
 	
+	@SuppressWarnings("static-access")
 	public void enviaLogErrosServidor() {
 		
+		try {
+			
+			//Objeto Erros Skype
+			Erros_Skype objErroMySQL = new Erros_Skype();
+			objErroMySQL.setObjSessionFactory(objMySQLFactory);
+			
+			//Identifica o último ID salvo no Servidor MySQL para esta conta do Skype
+			int ultimoID = objErroMySQL.retornaUltimoID(objConfiguracao.getSkypeAccount());
+			
+			//Cria a Session
+			Session localSession = this.getObjPostgreSQLFactory().openSession();	
+					
+			//Valida os Filtros da Consulta SQL
+			String whereSQL = "where id > " + ultimoID + " and account_name = '" + objConfiguracao.getSkypeAccount() +"' order by id_geral";
+					
+			//Reliza uma consulta das mensagens pendentes de envio da base Local para Servidor
+			@SuppressWarnings("unchecked")
+			List<Erros_Skype> qryErros = localSession.createQuery("FROM Erros_Skype " + whereSQL).list();
+			try {
+						
+				//Pega os objetos de Mensagens da base local e os insere no Servidor MysQL
+				Iterator<Erros_Skype> iterator = qryErros.iterator();
+				while (iterator.hasNext()) {
+					
+					Erros_Skype objTemp = (Erros_Skype) iterator.next();
+
+					//Persiste a Mensagem no Servidor
+					if (! objTemp.salvaErroSkype())
+						Erros_Skype_Static.salvaErroSkype("Não foi possível persistir o Log de Erro no Servidor. ");							
+							
+					}
+
+				}
+			finally {
+
+				//Retorna a conexão local para a estrutura de Log de Erros
+				Erros_Skype_Static.setObjSessionFactory(objPostgreSQLFactory);				
+
+				if (localSession != null) {
+					if (localSession.isConnected())
+					localSession.close();
+					localSession = null;
+				}
+							
+				if (qryErros != null) {
+					if (qryErros.size() > 0)
+						qryErros.clear();
+					qryErros = null;
+				}
 		
+			}
+		
+		}
+		catch (Exception ex) {
+
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Enviar Log Erros ao Servidor. Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
+	
+		}
 		
 	}
 

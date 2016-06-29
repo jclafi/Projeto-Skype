@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import jdbc.SqlLiteConnection;
 import modal.Contas_Skype;
 import modal.Contatos_Contas_Skype;
-import modal.Erros_Skype;
+import modal.Erros_Skype_Static;
 
 public class EtlContaContatos {
 	
@@ -32,13 +32,13 @@ public class EtlContaContatos {
 		
 		//Verifica se a conta do usuário já foi definida no Banco Local, caso não define, caso sim atualiza		
 		if (! criaAtualizaContaPadrao()) {
-			Erros_Skype.salvaErroSkype("Atenção não foi possível manipular a Conta do Skype !");
+			Erros_Skype_Static.salvaErroSkype("Atenção não foi possível manipular a Conta do Skype !");
 			return;
 		}
 		
 		//Verifica se os contatos da conta já foram definidos na base Local, caso não define, caso sim atualiza
 		if (! criaAtualizaContatosContaPadrao()) {
-			Erros_Skype.salvaErroSkype("Atenção não foi manipular os Contatos da Conta do Skype !");
+			Erros_Skype_Static.salvaErroSkype("Atenção não foi manipular os Contatos da Conta do Skype !");
 			return;
 		}
 	
@@ -133,7 +133,7 @@ public class EtlContaContatos {
 		}
 		catch(Exception ex) {
 		
-			Erros_Skype.salvaErroSkype("Atenção erro ao Atualizara Conta Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Atenção erro ao Atualizara Conta Skype. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 			
@@ -195,7 +195,7 @@ public class EtlContaContatos {
 						objPersistente.setId_conta_skype(objContaSkype.getId_geral());
 						
 						if (! objPersistente.salvaContatosConta())
-							Erros_Skype.salvaErroSkype("Atenção erro ao atualizar os Contatos Skype.");
+							Erros_Skype_Static.salvaErroSkype("Atenção erro ao atualizar os Contatos Skype.");
 
 					}
 					finally {
@@ -215,7 +215,7 @@ public class EtlContaContatos {
 		}
 		catch(Exception ex) {
 		
-			Erros_Skype.salvaErroSkype("Atenção erro ao atualizar os Contatos da Conta Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Atenção erro ao atualizar os Contatos da Conta Skype. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 			
@@ -270,7 +270,7 @@ public class EtlContaContatos {
 		}
 		catch(Exception ex) {
 		
-			Erros_Skype.salvaErroSkype("Atenção erro ao criar a Conta Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Atenção erro ao criar a Conta Skype. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 			
@@ -326,7 +326,7 @@ public class EtlContaContatos {
 		}
 		catch(Exception ex) {
 		
-			Erros_Skype.salvaErroSkype("Atenção erro ao criar os Contatos da Conta Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Atenção erro ao criar os Contatos da Conta Skype. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 			

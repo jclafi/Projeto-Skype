@@ -1,6 +1,6 @@
 package etl;
 
-import modal.Erros_Skype;
+import modal.Erros_Skype_Static;
 
 import javax.swing.JOptionPane;
 
@@ -118,7 +118,7 @@ public class IniciaEtlListener extends Thread {
 				
 			} catch (Exception ex) {
 
-				Erros_Skype.salvaErroSkype("Permissão de Acesso via Listener Skype solicitada !");
+				Erros_Skype_Static.salvaErroSkype("Permissão de Acesso via Listener Skype solicitada !");
 				ex.printStackTrace();
 		
 			}
@@ -166,7 +166,7 @@ public class IniciaEtlListener extends Thread {
 			Skype.setDeamon(false);
 			
 		} catch (Exception ex) {
-			Erros_Skype.salvaErroSkype("Exceção ao definir o Listener Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao definir o Listener Skype: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		

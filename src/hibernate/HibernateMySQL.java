@@ -1,6 +1,6 @@
 package hibernate;
 
-import modal.Erros_Skype;
+import modal.Erros_Skype_Static;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import modal.Configuracao_Skype;
@@ -38,7 +38,7 @@ public class HibernateMySQL {
 		catch (Exception ex) {
 			setFactory(null);
 			ex.printStackTrace();
-			Erros_Skype.salvaErroSkype("Exceção ao criar o MySQL SessionFactory: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao criar o MySQL SessionFactory: " + ex.getMessage());
 			return false;
 		}
 		

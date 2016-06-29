@@ -106,7 +106,7 @@ public class Contas_Skype {
 			}				
 			else {
 				
-				Erros_Skype.salvaErroSkype("Atenção não foi possível carregar a Conta do Usuário !");
+				Erros_Skype_Static.salvaErroSkype("Atenção não foi possível carregar a Conta do Usuário !");
 				return false;
 				
 			}
@@ -145,7 +145,7 @@ public class Contas_Skype {
 		
 		}
 		catch (Exception ex) {
-			Erros_Skype.salvaErroSkype("Exceção ao Carregar a Conta Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Carregar a Conta Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}

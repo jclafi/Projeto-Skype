@@ -43,7 +43,7 @@ public class Contatos_Contas_Skype_Dao {
 		
 		}
 		catch (Exception ex) {
-			Erros_Skype.salvaErroSkype("Exceção ao Identificar a PK DAO Contatos Contas Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Identificar a PK DAO Contatos Contas Skype. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -84,7 +84,7 @@ public class Contatos_Contas_Skype_Dao {
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			Erros_Skype.salvaErroSkype("Exceção ao Salvar DAO Contatos Contas Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Salvar DAO Contatos Contas Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -121,7 +121,7 @@ public class Contatos_Contas_Skype_Dao {
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			Erros_Skype.salvaErroSkype("Exceção ao Remover DAO Contatos Conta Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Remover DAO Contatos Conta Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -157,7 +157,7 @@ public class Contatos_Contas_Skype_Dao {
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			Erros_Skype.salvaErroSkype("Exceção ao Atualizar DAO Contatos Conta Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Atualizar DAO Contatos Conta Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -183,7 +183,7 @@ public class Contatos_Contas_Skype_Dao {
 			setContatos_Contas_Skype(session.get(Contatos_Contas_Skype.class, id_geral));
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			Erros_Skype.salvaErroSkype("Exceção ao Carregar DAO os Contatos da Conta Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exceção ao Carregar DAO os Contatos da Conta Skype: " + ex.getMessage());
 			return false;
 		} finally {
 			if (session != null) {

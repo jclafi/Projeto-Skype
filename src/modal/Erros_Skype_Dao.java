@@ -15,12 +15,6 @@ public class Erros_Skype_Dao {
 	public Erros_Skype getObjErros_Skype() { return objErros_Skype; }
 	public void setObjErros_Skype(Erros_Skype objErros_Skype) { this.objErros_Skype = objErros_Skype; }
 	
-	public Erros_Skype_Dao() {
-		
-		objErros_Skype = new Erros_Skype();
-		
-	}
-	
 	public int getPk() {
 		
 		int pk = 0;
@@ -63,7 +57,6 @@ public class Erros_Skype_Dao {
 
 	}
 	
-	@SuppressWarnings("static-access")
 	public boolean salvaErroSkype() {
 
 		//Cria a Session

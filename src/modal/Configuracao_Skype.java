@@ -53,7 +53,7 @@ public class Configuracao_Skype {
 			}				
 			else {
 				
-				Erros_Skype.salvaErroSkype("Atenção erro ao carregar a configuração !");
+				Erros_Skype_Static.salvaErroSkype("Atenção erro ao carregar a configuração !");
 				return false;
 				
 			}

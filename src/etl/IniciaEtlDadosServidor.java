@@ -7,12 +7,12 @@ import controller.DefineEstruturaProjeto;
 public class IniciaEtlDadosServidor extends Thread {
 	
 	//Entre uma carga e outra aguarda 10 minutos
-	private final long SLEEP_TIME = 600000;
+	private final long SLEEP_TIME = 1;//600000;
 	private String accountName;
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
 	private DefineEstruturaProjeto objEstruturaSkype;
-
+	
 	public SessionFactory getObjPostgreSQLFactory() { return this.objPostgreSQLFactory; }
 	public void setObjPostgreSQLFactory(SessionFactory varSessionFactory) { this.objPostgreSQLFactory = varSessionFactory; };	
 	public SessionFactory getObjMySQLFactory() { return objMySQLFactory; }
@@ -71,13 +71,13 @@ public class IniciaEtlDadosServidor extends Thread {
 			
 			objCargaMensagensServidor.setObjMySQLFactory(this.getObjMySQLFactory());
 			objCargaMensagensServidor.setObjPostgreSQLFactory(this.getObjPostgreSQLFactory());
-			objCargaMensagensServidor.setAccountName(accountName);
+			objCargaMensagensServidor.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
 			
 			//Verifica e atualzia a Conta e Contatos no Servidor e Máquina Local
 			objCargaMensagensServidor.atualizaDadosContaContatos();
 			
 			//Envia as mensagens pendentes para o Servidor
-			objCargaMensagensServidor.enviaMensagensServidor();
+			//objCargaMensagensServidor.enviaMensagensServidor();
 			
 			//Envia os Erros gerados na estação cliente para o Servidor
 			objCargaMensagensServidor.enviaLogErrosServidor();
