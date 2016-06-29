@@ -13,8 +13,8 @@ import modal.Conta_Login;
 
 public class IniciaEtlListener extends Thread {
 	
-	//Entre uma carga e outra aguarda 5 minutos
-	private final long SLEEP_TIME = 300000;
+	//Entre uma carga e outra aguarda 1 minuto
+	private final long SLEEP_TIME = 60000;
 	private String accountName;
 	private SessionFactory objSessionFactory;
 	private SqlLiteConnection connectionSQLLite;
@@ -99,10 +99,22 @@ public class IniciaEtlListener extends Thread {
 		do {
 			try {
 				
-				if (Skype.isRunning())
-					connected = true;
-				else
+				if (Skype.isRunning()) {
+
 					Skype.addApplication("javaw.exe");
+
+					//Pausa para a nova carga de Mensagens
+					try {
+
+						IniciaEtlListener.sleep(2000);
+					
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+
+					if (Skype.isRunning())
+						connected = true;
+				}
 				
 			} catch (Exception ex) {
 

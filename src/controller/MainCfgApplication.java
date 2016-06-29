@@ -22,7 +22,8 @@ public class MainCfgApplication {
 				
 				//Define a conexão local para o objeto de Log de Erros
 				Erros_Skype.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
-
+				Erros_Skype.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
+				
 				//Cria o objeto de configuração Base de Dados
 				if (! objEstruturaSkype.criaObjetoConfiguracao())
 					JOptionPane.showMessageDialog(null, "Atenção não foi possível criar o objeto de Configuração !");

@@ -14,7 +14,8 @@
         <property name="content" column="content" type="string"/>
         <property name="ip_adress" column="ip_adress" type="string"/>                
         <property name="host_name" column="host_name" type="string"/>
-        <property name="error_date" column="error_date" type="date"/>
+        <property name="error_date" column="error_date" type="timestamp"/>
+        <property name="account_name" column="account_name" type="string"/>
     </class>
 
 </hibernate-mapping>

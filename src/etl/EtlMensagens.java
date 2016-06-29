@@ -9,6 +9,7 @@ import jdbc.SqlLiteConnection;
 import java.net.InetAddress;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -78,7 +79,7 @@ public class EtlMensagens {
 					objMensagensRegra.setSender_display_name(resultSet.getString("from_dispname"));
 					objMensagensRegra.setContent(resultSet.getString("body_xml"));
 					objMensagensRegra.setId_sender(resultSet.getString("author"));						
-					objMensagensRegra.setMessage_date(resultSet.getDate("timestamp__ms"));					
+					objMensagensRegra.setMessage_date(new Timestamp(resultSet.getLong("timestamp__ms")));					
 					objMensagensRegra.setAccount_logged(objUsuarioRegras.getSigninName());
 					objMensagensRegra.setHost_name(InetAddress.getLocalHost().getHostName());
 					objMensagensRegra.setIp_adress(InetAddress.getLocalHost().getHostAddress());

@@ -1,6 +1,7 @@
 package etl;
 
 import java.net.InetAddress;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 import modal.Erros_Skype;
@@ -42,7 +43,7 @@ public class EtlListener implements ChatMessageListener {
 			objMensagem.setSender_display_name(recMessage.getSenderDisplayName().toString());			
 			objMensagem.setContent(recMessage.getContent().toString());
 			objMensagem.setChat(recMessage.getChat().toString());
-			objMensagem.setMessage_date(recMessage.getTime());
+			objMensagem.setMessage_date(new Timestamp(recMessage.getTime().getTime()));
 			objMensagem.setMessage_type("R");
 			objMensagem.setAccount_logged(objUsuarioRegras.getSigninName());			
 			objMensagem.setHost_name(InetAddress.getLocalHost().getHostName());
@@ -91,7 +92,7 @@ public class EtlListener implements ChatMessageListener {
 			objMensagem.setSender_display_name(sentMessage.getSenderDisplayName().toString());			
 			objMensagem.setContent(sentMessage.getContent().toString());
 			objMensagem.setChat(sentMessage.getChat().toString());
-			objMensagem.setMessage_date(sentMessage.getTime());
+			objMensagem.setMessage_date(new Timestamp(sentMessage.getTime().getTime()));
 			objMensagem.setMessage_type("E");
 			objMensagem.setAccount_logged(objUsuarioRegras.getSigninName());			
 			objMensagem.setHost_name(InetAddress.getLocalHost().getHostName());

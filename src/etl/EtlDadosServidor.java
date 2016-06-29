@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
 import modal.Erros_Skype;
 import modal.Mensagens_Skype;
 
@@ -21,7 +20,7 @@ public class EtlDadosServidor {
 	public String getAccountName() { return accountName; }
 	public void setAccountName(String accountName) { this.accountName = accountName; }
 	
-	public void executaEnvioServidor() {
+	public void enviaMensagensServidor() {
 				
 		Mensagens_Skype objMensagensMysQL = new Mensagens_Skype();
 		Mensagens_Skype objMensagensPostgreSQL = new Mensagens_Skype();
@@ -92,6 +91,18 @@ public class EtlDadosServidor {
 				objMensagensPostgreSQL = null;
 
 		}
+		
+	}
+	
+	public void atualizaDadosContaContatos() {
+		
+		
+		
+	}
+	
+	public void enviaLogErrosServidor() {
+		
+		
 		
 	}
 

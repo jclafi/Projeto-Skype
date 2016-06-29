@@ -1,6 +1,6 @@
 package modal;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -15,7 +15,7 @@ public class Mensagens_Skype {
 	private String content;
 	private String chat;
 	private String message_type;
-	private Date message_date;
+	private Timestamp message_date;
 	private String ip_adress;
 	private String host_name;
 	private String account_logged;
@@ -37,8 +37,8 @@ public class Mensagens_Skype {
 	public void setChat(String chat) { this.chat = chat; }
 	public String getMessage_type() {	return message_type; }
 	public void setMessage_type(String message_type) { this.message_type = message_type; }
-	public Date getMessage_date() { return message_date; }
-	public void setMessage_date(Date message_date) { this.message_date = message_date; }	
+	public Timestamp getMessage_date() { return message_date; }
+	public void setMessage_date(Timestamp pmessage_date) { this.message_date = pmessage_date; }	
 	public String getIp_adress() { return ip_adress; }
 	public void setIp_adress(String ip_adress) { this.ip_adress = ip_adress; }
 	public String getHost_name() { return host_name; }

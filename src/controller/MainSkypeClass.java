@@ -22,6 +22,7 @@ class MainSkypeClass {
 			
 			//Define a conexão local para o objeto de Log de Erros
 			Erros_Skype.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
+			Erros_Skype.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
 			
 			//Realiza a carga inicial da conta e contatos do Skype via processo local, para criar a estrutura das Threads
 			IniciaEtlContaContatos objCargaContaContatosInicial = new IniciaEtlContaContatos();

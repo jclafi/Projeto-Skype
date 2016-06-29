@@ -72,8 +72,16 @@ public class IniciaEtlDadosServidor extends Thread {
 			objCargaMensagensServidor.setObjMySQLFactory(this.getObjMySQLFactory());
 			objCargaMensagensServidor.setObjPostgreSQLFactory(this.getObjPostgreSQLFactory());
 			objCargaMensagensServidor.setAccountName(accountName);
-			objCargaMensagensServidor.executaEnvioServidor();
 			
+			//Verifica e atualzia a Conta e Contatos no Servidor e Máquina Local
+			objCargaMensagensServidor.atualizaDadosContaContatos();
+			
+			//Envia as mensagens pendentes para o Servidor
+			objCargaMensagensServidor.enviaMensagensServidor();
+			
+			//Envia os Erros gerados na estação cliente para o Servidor
+			objCargaMensagensServidor.enviaLogErrosServidor();
+						
 		}
 		finally {
 			
