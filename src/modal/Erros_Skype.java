@@ -9,7 +9,7 @@ import org.hibernate.SessionFactory;
 public class Erros_Skype {
 
 	private long id_geral;
-	private int id;
+	private long id;
 	private String content;
 	private String ip_adress;
 	private String host_name;
@@ -19,8 +19,8 @@ public class Erros_Skype {
 	
 	public long getId_geral() { return id_geral; }
 	public void setId_geral(long pid_geral) { this.id_geral = pid_geral; }
-	public int getId() { return id; }
-	public void setId(int id) { this.id = id; }
+	public long getId() { return id; }
+	public void setId(long id) { this.id = id; }
 	public String getContent() { return content; }
 	public void setContent(String pcontent) { this.content = pcontent; }
 	public String getIp_adress() { return ip_adress; }
@@ -38,7 +38,7 @@ public class Erros_Skype {
 		
 		long varId = 0;
 		
-		final String CUSTOM_SQL = " select coalesce(max(id_geral), 0) as id_geral from erros_skype where account_name = :account ";
+		final String CUSTOM_SQL = " select coalesce(max(id), 0) as id from erros_skype where account_name = :account ";
 				
 		//Cria a sessão
 		Session session = objSessionFactory.openSession();		
@@ -120,6 +120,7 @@ public class Erros_Skype {
 		Erros_Skype outra = (Erros_Skype) o;
 		
 		return ( (this.id_geral == outra.getId_geral())) &&
+				 (this.id == outra.getId()) &&
 				 (this.account_name.equals(outra.getAccount_name())) &&
 				 (this.content.equals(outra.getContent())) &&
 				 (this.host_name.equals(outra.getHost_name())) &&

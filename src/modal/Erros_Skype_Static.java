@@ -24,6 +24,8 @@ public class Erros_Skype_Static {
 
 			objErrosTemp.setObjSessionFactory(objSessionFactory);
 
+			long id = objErrosTemp.retornaUltimoID(objConfiguracao.getSkypeAccount());
+			objErrosTemp.setId(++id);
 			objErrosTemp.setAccount_name(objConfiguracao.getSkypeAccount());
 			objErrosTemp.setContent(errorContent);
 			objErrosTemp.setHost_name(InetAddress.getLocalHost().getHostName());

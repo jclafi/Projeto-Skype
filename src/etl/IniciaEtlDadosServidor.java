@@ -77,7 +77,7 @@ public class IniciaEtlDadosServidor extends Thread {
 			//objCargaMensagensServidor.atualizaDadosContaContatos();
 			
 			//Envia as mensagens pendentes para o Servidor
-			objCargaMensagensServidor.enviaMensagensServidor();
+			//objCargaMensagensServidor.enviaMensagensServidor();
 			
 			//Envia os Erros gerados na estação cliente para o Servidor
 			objCargaMensagensServidor.enviaLogErrosServidor();
