@@ -7,8 +7,8 @@ import modal.Contatos_Contas_Skype;
 
 public class IniciaEtlMensagens extends Thread {
 	
-	//Entre uma carga e outra aguarda 1 minuto
-	private final long SLEEP_TIME = 60000;
+	//Entre uma carga e outra aguarda 10 minutos
+	private final long SLEEP_TIME = 600000;
 	private String accountName;	
 	private SessionFactory objSessionFactory;
 	private SqlLiteConnection connectionSQLLite;	

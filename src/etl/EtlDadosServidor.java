@@ -197,7 +197,8 @@ public class EtlDadosServidor {
 				
 				//Identifica que já existem Contatos para esta Conta no Servidor
 				cargaInicialServidor = false;
-						
+					
+				iterator.next();
 				//Pega o objMensagens_Skype da lista e o persiste no Servidor
 				//Contatos_Contas_Skype objTempContatos = (Contatos_Contas_Skype) iterator.next();
 				//objTempContatos.setObjSessionFactory(this.getObjMySQLFactory());

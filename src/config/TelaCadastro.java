@@ -283,7 +283,8 @@ public class TelaCadastro extends JDialog {
 			}
 		});
 		itemCadastros.add(itemLista_User);
-
+		itemCadastros.addSeparator();
+		
 		JMenuItem itemSub_Item = new JMenuItem("Base Servidor");
 		itemSub_Item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

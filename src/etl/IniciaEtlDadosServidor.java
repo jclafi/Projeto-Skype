@@ -6,8 +6,8 @@ import controller.DefineEstruturaProjeto;
 
 public class IniciaEtlDadosServidor extends Thread {
 	
-	//Entre uma carga e outra aguarda 10 minutos
-	private final long SLEEP_TIME = 600000;
+	//Entre uma carga e outra aguarda 15 minutos
+	private final long SLEEP_TIME = 900000;
 	private String accountName;
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
