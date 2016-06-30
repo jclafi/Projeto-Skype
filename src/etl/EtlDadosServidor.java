@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import modal.Configuracao_Skype;
+import modal.Contas_Skype;
+import modal.Contatos_Contas_Skype;
 import modal.Erros_Skype;
 import modal.Erros_Skype_Static;
 import modal.Mensagens_Skype;
@@ -15,13 +17,16 @@ public class EtlDadosServidor {
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
 	private Configuracao_Skype objConfiguracao;
+	private Contas_Skype objConta_Skype;
 
 	public SessionFactory getObjPostgreSQLFactory() { return this.objPostgreSQLFactory; }
 	public void setObjPostgreSQLFactory(SessionFactory varSessionFactory) { this.objPostgreSQLFactory = varSessionFactory; };	
 	public SessionFactory getObjMySQLFactory() { return objMySQLFactory; }
 	public void setObjMySQLFactory(SessionFactory objMySQLFactory) { this.objMySQLFactory = objMySQLFactory; }
 	public Configuracao_Skype getObjConfiguracao() { return this.objConfiguracao; }
-	public void setObjConfiguracao(Configuracao_Skype pobjConfiguracao) { this.objConfiguracao = pobjConfiguracao; }	
+	public void setObjConfiguracao(Configuracao_Skype pobjConfiguracao) { this.objConfiguracao = pobjConfiguracao; }
+	public Contas_Skype getObjConta() { return objConta_Skype; }
+	public void setObjConta(Contas_Skype objConta) { this.objConta_Skype = objConta; }
 	
 	public void enviaMensagensServidor() {
 				
@@ -44,11 +49,11 @@ public class EtlDadosServidor {
 					
 			//Reliza uma consulta das mensagens pendentes de envio da base Local para Servidor
 			@SuppressWarnings("unchecked")
-			List<Mensagens_Skype> QryMensagens = localSession.createQuery("FROM Mensagens_Skype " + whereSQL).list();
+			List<Mensagens_Skype> qryMensagens = localSession.createQuery("FROM Mensagens_Skype " + whereSQL).list();
 			try {
 						
 				//Pega os objetos de Mensagens da base local e os insere no Servidor MysQL
-				Iterator<Mensagens_Skype> iterator = QryMensagens.iterator();
+				Iterator<Mensagens_Skype> iterator = qryMensagens.iterator();
 				while (iterator.hasNext()) {
 							
 					//Pega o objMensagens_Skype da lista e o persiste no Servidor
@@ -70,10 +75,10 @@ public class EtlDadosServidor {
 					localSession = null;
 				}
 						
-				if (QryMensagens != null) {
-					if (QryMensagens.size() > 0)
-						QryMensagens.clear();
-					QryMensagens = null;
+				if (qryMensagens != null) {
+					if (qryMensagens.size() > 0)
+						qryMensagens.clear();
+					qryMensagens = null;
 				}
 						
 			}
@@ -97,13 +102,150 @@ public class EtlDadosServidor {
 		
 	}
 	
-	public void atualizaDadosContaContatos() {
+	public void enviaDadosConta() {
 		
+		//Pesquisa a Conta Local do Skype
+		objConta_Skype = new Contas_Skype();
+		objConta_Skype.setObjSessionFactory(objPostgreSQLFactory);
 		
+		//Se não carregar a conta cria log de erro e limpa objeto
+		if (! objConta_Skype.carregaConta(objConfiguracao.getSkypeAccount())) {
+			Erros_Skype_Static.salvaErroSkype("Não foi possível carregar a Conta do Skype !");
+			objConta_Skype = null;			
+		}
+		else
+		{
+			
+			//Verifica no servidor se a conta existe, caso não insere, caso sim atualiza
+			Contas_Skype objContaServidor = new Contas_Skype();
+			try {
+				objContaServidor.setObjSessionFactory(objMySQLFactory);
+				
+				//Se não carrega a conta insere uma nova 
+				if (! objContaServidor.carregaConta(objConfiguracao.getSkypeAccount())) {
+					
+					objContaServidor.setAccount_name(objConta_Skype.getAccount_name());
+					objContaServidor.setAccount_verified(objConta_Skype.getAccount_verified());
+					objContaServidor.setDisplay_name(objConta_Skype.getDisplay_name());
+					objContaServidor.setHost_name(objConta_Skype.getHost_name());
+					objContaServidor.setIp_adress(objConta_Skype.getIp_adress());
+					
+					if (! objContaServidor.salvaConta()) {
+						
+						Erros_Skype_Static.salvaErroSkype("Não foi possível carregar a Conta do Skype !");
+						objConta_Skype = null;		
+						return;
+						
+					}
+
+				}
+				else {
+					
+					return;
+					
+				}
+			}
+			finally {
+				
+				if (objContaServidor != null)
+					objContaServidor = null;
+				
+			}			
+			
+		}	
 		
 	}
 	
-	public void enviaLogErrosServidor() {
+	public void enviaDadosContatos() {
+		
+		//Verifica se a Conta Local foi definida, caso não aborta
+		if (objConta_Skype == null) {
+			
+			Erros_Skype_Static.salvaErroSkype("Não foi possível atualizar os Contatos. Conta Local não definida !");
+			return;
+			
+		}
+		
+		//Identifica se deve realizar a carga inicial para o servidor
+		boolean cargaInicialServidor = true;
+		
+		//Objeto Lista de Contatos da Base Local
+		Contatos_Contas_Skype objContatos_Local = new Contatos_Contas_Skype();
+		objContatos_Local.setObjSessionFactory(objPostgreSQLFactory);
+		
+		if (! objContatos_Local.carregaContatosConta(objConta_Skype.getId_geral())) {
+			
+			Erros_Skype_Static.salvaErroSkype("Não foi possível consultar os Contatos da Conta. !");
+			return;			
+		
+		}
+		
+		//Cria a Session do Servidor
+		Session localSession = this.getObjMySQLFactory().openSession();	
+				
+		//Valida os Filtros da Consulta SQL
+		String whereSQL = "where id_conta_skype = (select id_geral from Contas_Skype where account_name = '" + objConfiguracao.getSkypeAccount()+ "')";		
+		
+		try {
+			//Reliza uma consulta das mensagens pendentes de envio da base Local para Servidor
+			@SuppressWarnings("unchecked")
+			List<Contatos_Contas_Skype> qryContatosServidor = localSession.createQuery("FROM Contatos_Contas_Skype " + whereSQL).list();
+			
+			//Pega os objetos de Mensagens da base local e os insere no Servidor MysQL
+			Iterator<Contatos_Contas_Skype> iterator = qryContatosServidor.iterator();
+			while (iterator.hasNext()) {
+				
+				//Identifica que já existem Contatos para esta Conta no Servidor
+				cargaInicialServidor = false;
+						
+				//Pega o objMensagens_Skype da lista e o persiste no Servidor
+				//Contatos_Contas_Skype objTempContatos = (Contatos_Contas_Skype) iterator.next();
+				//objTempContatos.setObjSessionFactory(this.getObjMySQLFactory());
+						
+				//Verifica se o Contato já existe no Servidor, caso sim atualiza, contrário cria novo					
+				//Erros_Skype_Static.salvaErroSkype("Não foi possível persistir a Mensagem no Servidor: " + objTempMensagensMysQL.getId_geral());							
+						
+			}
+			
+			//Se não foi identificada nenhuma conta no Servidor realiza a carga inicial
+			if (cargaInicialServidor) {
+				
+				for (Contatos_Contas_Skype index : objContatos_Local.getObjListaContatosContaSkype()) {
+					
+					index.setObjSessionFactory(objMySQLFactory);
+					if (! index.salvaContatosConta())
+						Erros_Skype_Static.salvaErroSkype("Não foi possível persistir o Contato no Servidor: " + index.getAccount_name()); 
+					
+				}
+				
+			}
+
+		}
+		catch (Exception ex) {
+			
+			Erros_Skype_Static.salvaErroSkype("Erro SQL ao consultar os Contatos da Conta Skype. Mensagem: " + ex.getMessage());
+			ex.printStackTrace();
+			
+		}
+		finally {
+			
+			if (localSession != null) {
+				if (localSession.isConnected())
+					localSession.close();
+				localSession = null;
+			}
+			
+			if (objContatos_Local != null) {
+				if (objContatos_Local.getObjListaContatosContaSkype() != null)
+					objContatos_Local.getObjListaContatosContaSkype().clear();
+				objContatos_Local = null;
+			}
+					
+		}
+		
+	}
+		
+	public void enviaLogErroServidor() {
 		
 		try {
 			

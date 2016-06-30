@@ -95,49 +95,6 @@ public class Mensagens_Skype {
 
 	}
 	
-//	public int retornaUltimoIDServer(String accountLogged) {
-//		
-//		int varId = 0;
-//		
-//		final String CUSTOM_SQL = " select coalesce(max(id), 0) as id from mensagens_skype where account_logged = :account ";
-//				
-//		//Cria a sessão
-//		Session session = objSessionFactory.openSession();		
-//		
-//		SQLQuery qryTeste = null;
-//		try {			
-//		
-//			qryTeste = session.createSQLQuery(CUSTOM_SQL);
-//			qryTeste.setParameter("account", accountLogged);	
-//			
-//			for (int index = 0; index < qryTeste.list().size();) {
-//				BigInteger objTemp = (BigInteger) qryTeste.list().get(index);
-//				varId = objTemp.intValue();
-//				break;
-//			}
-//		
-//		}
-//		catch (Exception ex) {
-//			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela. Mensagem: " + ex.getMessage());
-//			ex.printStackTrace();
-//		}
-//		finally {
-//			if (!qryTeste.list().isEmpty()) {
-//				qryTeste.list().clear();
-//				qryTeste = null;
-//			}
-//		
-//			if (session != null) {
-//				if (session.isOpen())
-//					session.close();
-//				session = null;				
-//			}
-//		}
-//				
-//		return varId;
-//
-//	}
-	
 	public boolean salvaMensagem() {
 		
 		boolean bolOk = false;

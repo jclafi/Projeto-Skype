@@ -73,14 +73,17 @@ public class IniciaEtlDadosServidor extends Thread {
 			objCargaMensagensServidor.setObjPostgreSQLFactory(this.getObjPostgreSQLFactory());
 			objCargaMensagensServidor.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
 			
-			//Verifica e atualzia a Conta e Contatos no Servidor e Máquina Local
-			//objCargaMensagensServidor.atualizaDadosContaContatos();
+			//Verifica e atualzia a Conta Servidor e Máquina Local
+			objCargaMensagensServidor.enviaDadosConta();
+			
+			//Verifica e atualzia os Contatos no Servidor e Máquina Local
+			objCargaMensagensServidor.enviaDadosContatos();
 			
 			//Envia as mensagens pendentes para o Servidor
-			//objCargaMensagensServidor.enviaMensagensServidor();
+			objCargaMensagensServidor.enviaMensagensServidor();
 			
 			//Envia os Erros gerados na estação cliente para o Servidor
-			objCargaMensagensServidor.enviaLogErrosServidor();
+			objCargaMensagensServidor.enviaLogErroServidor();
 						
 		}
 		finally {

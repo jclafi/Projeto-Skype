@@ -11,6 +11,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -41,7 +44,8 @@ public class TelaCadastro extends JDialog {
 		getContentPane().add(new JPanel(), BorderLayout.NORTH);
 		getContentPane().add(montaDados(), BorderLayout.CENTER);
 		getContentPane().add(montaBotoes(), BorderLayout.SOUTH);
-
+		adicionaMainMenu();		
+		
 		setTitle("Cadastro de Configura\u00E7\u00F5es");
 		setAlwaysOnTop(true);
 		setResizable(false);
@@ -262,5 +266,72 @@ public class TelaCadastro extends JDialog {
 		}
 
 	}
+	
+	private void adicionaMainMenu() {
+		//Cria a Barra de Menu e Item
+		//===========================================			
+		JMenuBar barra = new JMenuBar();			
+		JMenu itemCadastros = new JMenu("Conecta Banco");
+		barra.add(itemCadastros);
+		
+		JMenuItem itemLista_User = new JMenuItem("Base Cliente");
+		itemLista_User.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				conectaBaseCliente();
+			
+			}
+		});
+		itemCadastros.add(itemLista_User);
 
+		JMenuItem itemSub_Item = new JMenuItem("Base Servidor");
+		itemSub_Item.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				conectaBaseServidor();				
+			
+			}
+		});
+		itemCadastros.add(itemSub_Item);
+			
+		setJMenuBar(barra);
+		
+	}
+	
+	private void conectaBaseCliente() {
+		
+		if (objEstruturaRegras.connectSQLLiteJDBC()) {
+			
+			objEstruturaRegras.closeSQLLiteJDBC();
+			JOptionPane.showMessageDialog(this, "Conexão realizada com Sucesso !");
+			
+		}
+		else
+		{
+
+			objEstruturaRegras.closeSQLLiteJDBC();
+			JOptionPane.showMessageDialog(this, "Falha ao realizar a Conexão !");
+			
+		}
+		
+	}
+	
+	private void conectaBaseServidor() {
+		
+		if (objEstruturaRegras.connectMySQLHibernate()) {
+			
+			objEstruturaRegras.closeMySQLHibernate();
+			JOptionPane.showMessageDialog(this, "Conexão realizada com Sucesso !");			
+			
+		}
+		else
+		{
+
+			objEstruturaRegras.closeMySQLHibernate();
+			JOptionPane.showMessageDialog(this, "Falha a realizar a Conexão !");			
+			
+		}
+		
+	}
+	
 }
