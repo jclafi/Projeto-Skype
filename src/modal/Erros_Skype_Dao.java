@@ -39,7 +39,7 @@ public class Erros_Skype_Dao {
 		
 		}
 		catch (Exception ex) {
-			System.out.println("Exceção ao Executar SQL Conta: " + ex.getMessage());
+			System.out.println("Exception ao Executar SQL Conta: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -76,11 +76,13 @@ public class Erros_Skype_Dao {
 				session.save(objErros_Skype);
 				tx.commit();			
 			}
+			else
+				tx.rollback();
 		}
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			System.out.println("Exceção ao Salvar Conta: " + ex.getMessage());
+			System.out.println("Exception ao Salvar Conta: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}

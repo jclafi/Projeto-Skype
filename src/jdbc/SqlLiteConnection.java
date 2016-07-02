@@ -26,7 +26,7 @@ public class SqlLiteConnection {
 		} 
 		catch (Exception ex) {
 			setConnection(null);
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Conectar na Base SQL Lite: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Conectar na Base SQL Lite: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		} 
@@ -44,7 +44,7 @@ public class SqlLiteConnection {
 					connection.close();
 				connection = null;
 			} catch (Exception ex) {
-				Erros_Skype_Static.salvaErroSkype("Exceção ao Des-Conectar na Base SQL Lite: " + ex.getMessage());
+				Erros_Skype_Static.salvaErroSkype("Exception ao Desconectar na Base SQL Lite: " + ex.getMessage());
 				ex.printStackTrace();
 			} 
 			

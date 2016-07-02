@@ -17,7 +17,7 @@ public class EtlDadosServidor {
 	private SessionFactory objPostgreSQLFactory;
 	private SessionFactory objMySQLFactory;
 	private Configuracao_Skype objConfiguracao;
-	private Contas_Skype objConta_Skype;
+	private Contas_Skype objContaLocal;
 
 	public SessionFactory getObjPostgreSQLFactory() { return this.objPostgreSQLFactory; }
 	public void setObjPostgreSQLFactory(SessionFactory varSessionFactory) { this.objPostgreSQLFactory = varSessionFactory; };	
@@ -25,8 +25,8 @@ public class EtlDadosServidor {
 	public void setObjMySQLFactory(SessionFactory objMySQLFactory) { this.objMySQLFactory = objMySQLFactory; }
 	public Configuracao_Skype getObjConfiguracao() { return this.objConfiguracao; }
 	public void setObjConfiguracao(Configuracao_Skype pobjConfiguracao) { this.objConfiguracao = pobjConfiguracao; }
-	public Contas_Skype getObjConta() { return objConta_Skype; }
-	public void setObjConta(Contas_Skype objConta) { this.objConta_Skype = objConta; }
+	public Contas_Skype getObjConta() { return objContaLocal; }
+	public void setObjConta(Contas_Skype objConta) { this.objContaLocal = objConta; }
 	
 	public void enviaMensagensServidor() {
 				
@@ -86,7 +86,7 @@ public class EtlDadosServidor {
 		}
 		catch (Exception ex) {
 
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Enviar Mensagens ao Servidor. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Enviar Mensagens ao Servidor. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		
 		}
@@ -105,13 +105,13 @@ public class EtlDadosServidor {
 	public void enviaDadosConta() {
 		
 		//Pesquisa a Conta Local do Skype
-		objConta_Skype = new Contas_Skype();
-		objConta_Skype.setObjSessionFactory(objPostgreSQLFactory);
+		objContaLocal = new Contas_Skype();
+		objContaLocal.setObjSessionFactory(objPostgreSQLFactory);
 		
 		//Se não carregar a conta cria log de erro e limpa objeto
-		if (! objConta_Skype.carregaConta(objConfiguracao.getSkypeAccount())) {
-			Erros_Skype_Static.salvaErroSkype("Não foi possível carregar a Conta do Skype !");
-			objConta_Skype = null;			
+		if (! objContaLocal.carregaConta(objConfiguracao.getSkypeAccount())) {
+			Erros_Skype_Static.salvaErroSkype("Não foi possível enviar Conta Servidor !");
+			objContaLocal = null;			
 		}
 		else
 		{
@@ -124,16 +124,16 @@ public class EtlDadosServidor {
 				//Se não carrega a conta insere uma nova 
 				if (! objContaServidor.carregaConta(objConfiguracao.getSkypeAccount())) {
 					
-					objContaServidor.setAccount_name(objConta_Skype.getAccount_name());
-					objContaServidor.setAccount_verified(objConta_Skype.getAccount_verified());
-					objContaServidor.setDisplay_name(objConta_Skype.getDisplay_name());
-					objContaServidor.setHost_name(objConta_Skype.getHost_name());
-					objContaServidor.setIp_adress(objConta_Skype.getIp_adress());
+					objContaServidor.setAccount_name(objContaLocal.getAccount_name());
+					objContaServidor.setAccount_verified(objContaLocal.getAccount_verified());
+					objContaServidor.setDisplay_name(objContaLocal.getDisplay_name());
+					objContaServidor.setHost_name(objContaLocal.getHost_name());
+					objContaServidor.setIp_adress(objContaLocal.getIp_adress());
 					
 					if (! objContaServidor.salvaConta()) {
 						
-						Erros_Skype_Static.salvaErroSkype("Não foi possível carregar a Conta do Skype !");
-						objConta_Skype = null;		
+						Erros_Skype_Static.salvaErroSkype("Não foi possível Salvar a Conta do Skype no Server !");
+						objContaLocal = null;		
 						return;
 						
 					}
@@ -141,9 +141,17 @@ public class EtlDadosServidor {
 				}
 				else {
 					
-					return;
+					//Verifica se o flag da Conta do Servidor foi alterado
+					if (! objContaServidor.getAccount_verified().equals(objContaLocal.getAccount_verified())) {
+					
+						objContaLocal.setAccount_verified(objContaServidor.getAccount_verified());
+						if (! objContaLocal.salvaConta())
+							Erros_Skype_Static.salvaErroSkype("Não foi possível Atualizar o flag de Conta verificada !");
+						
+					}						
 					
 				}
+				
 			}
 			finally {
 				
@@ -159,21 +167,22 @@ public class EtlDadosServidor {
 	public void enviaDadosContatos() {
 		
 		//Verifica se a Conta Local foi definida, caso não aborta
-		if (objConta_Skype == null) {
+		if (objContaLocal == null) {
 			
-			Erros_Skype_Static.salvaErroSkype("Não foi possível atualizar os Contatos. Conta Local não definida !");
+			Erros_Skype_Static.salvaErroSkype("Não foi possível atualizar os Contatos no Server. Conta Local não definida !");
 			return;
 			
 		}
 		
 		//Identifica se deve realizar a carga inicial para o servidor
 		boolean cargaInicialServidor = true;
+		boolean identificouContatoServidor = false;
 		
 		//Objeto Lista de Contatos da Base Local
 		Contatos_Contas_Skype objContatos_Local = new Contatos_Contas_Skype();
 		objContatos_Local.setObjSessionFactory(objPostgreSQLFactory);
 		
-		if (! objContatos_Local.carregaContatosConta(objConta_Skype.getId_geral())) {
+		if (! objContatos_Local.carregaContatosConta(objContaLocal.getId_geral())) {
 			
 			Erros_Skype_Static.salvaErroSkype("Não foi possível consultar os Contatos da Conta. !");
 			return;			
@@ -187,24 +196,43 @@ public class EtlDadosServidor {
 		String whereSQL = "where id_conta_skype = (select id_geral from Contas_Skype where account_name = '" + objConfiguracao.getSkypeAccount()+ "')";		
 		
 		try {
-			//Reliza uma consulta das mensagens pendentes de envio da base Local para Servidor
+			//Realiza uma consulta dos contatos e valida o flag com os dados do Servidor
 			@SuppressWarnings("unchecked")
 			List<Contatos_Contas_Skype> qryContatosServidor = localSession.createQuery("FROM Contatos_Contas_Skype " + whereSQL).list();
 			
-			//Pega os objetos de Mensagens da base local e os insere no Servidor MysQL
+			//Pega os objetos de Contatos e verifica se insere ou atualiza
 			Iterator<Contatos_Contas_Skype> iterator = qryContatosServidor.iterator();
 			while (iterator.hasNext()) {
 				
-				//Identifica que já existem Contatos para esta Conta no Servidor
+				//Flags de Controle
 				cargaInicialServidor = false;
-					
-				iterator.next();
-				//Pega o objMensagens_Skype da lista e o persiste no Servidor
-				//Contatos_Contas_Skype objTempContatos = (Contatos_Contas_Skype) iterator.next();
-				//objTempContatos.setObjSessionFactory(this.getObjMySQLFactory());
+				identificouContatoServidor = false;
+				
+				//Identifica que já existem Contatos para esta Conta no Servidor, se sim 
+				//verifica flag Contato Certificado, caso não cadastra o Contato
+				Contatos_Contas_Skype objContatosServidor = (Contatos_Contas_Skype) iterator.next();
+				
+				//Percorre os conatos locais e valida o flag de autorizado
+				for (Contatos_Contas_Skype objContatosLocal : objContatos_Local.getObjListaContatosContaSkype()) {
+										
+					//Localiza o Contato
+					if (objContatosServidor.getAccount_name().equals(objContatosLocal.getAccount_name())) {
 						
-				//Verifica se o Contato já existe no Servidor, caso sim atualiza, contrário cria novo					
-				//Erros_Skype_Static.salvaErroSkype("Não foi possível persistir a Mensagem no Servidor: " + objTempMensagensMysQL.getId_geral());							
+						//Testa o flag autorizado da base cliente e servisdor
+						if (! objContatosServidor.getContact_verified().equals(objContatosLocal.getContact_verified())) {
+							
+							//Atualiza o flag na base cliente
+							objContatos_Local.setObjSessionFactory(objPostgreSQLFactory);
+							objContatos_Local.setContact_verified(objContatosServidor.getContact_verified());
+							
+							if (! objContatos_Local.salvaContatosConta())
+								Erros_Skype_Static.salvaErroSkype("Erro ao atualizar o Flag de Contato Verificado na base cliente.");
+							
+						}
+						
+					}
+						
+				}
 						
 			}
 			
@@ -224,7 +252,7 @@ public class EtlDadosServidor {
 		}
 		catch (Exception ex) {
 			
-			Erros_Skype_Static.salvaErroSkype("Erro SQL ao consultar os Contatos da Conta Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao consultar os Contatos da Conta Skype. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			
 		}
@@ -286,7 +314,7 @@ public class EtlDadosServidor {
 
 				if (localSession != null) {
 					if (localSession.isConnected())
-					localSession.close();
+						localSession.close();
 					localSession = null;
 				}
 							
@@ -306,7 +334,7 @@ public class EtlDadosServidor {
 		}
 		catch (Exception ex) {
 
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Enviar Log Erros ao Servidor. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Enviar Log Erros ao Servidor. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 	
 		}

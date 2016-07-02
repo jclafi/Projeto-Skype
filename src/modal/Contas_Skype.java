@@ -147,7 +147,7 @@ public class Contas_Skype {
 		
 		}
 		catch (Exception ex) {
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Carregar a Conta Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Carregar a Conta Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}

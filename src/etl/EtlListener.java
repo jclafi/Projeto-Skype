@@ -62,15 +62,15 @@ public class EtlListener implements ChatMessageListener {
 			objMensagem.setAccount_verified(objContasSkype.getAccount_verified());
 			
 			if (! objMensagem.salvaMensagem())
-				Erros_Skype_Static.salvaErroSkype(VERSION +  "\n  Falha ao inserir a Mensagem via Listener!");
+				Erros_Skype_Static.salvaErroSkype(VERSION +  " - Falha ao inserir a Mensagem via Listener!");
 				
 		}
 		catch (final SkypeException ex) {
-			Erros_Skype_Static.salvaErroSkype(VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype(VERSION +  " - Skype Exception no Skype Listener. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		catch (Exception ex) {
-			Erros_Skype_Static.salvaErroSkype(VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype(VERSION +  " -  Exception no Skype Listener. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -113,15 +113,15 @@ public class EtlListener implements ChatMessageListener {
 			}
 
 			if (! objMensagem.salvaMensagem())
-				Erros_Skype_Static.salvaErroSkype(VERSION +  "\n  Falha ao inserir a Mensagem via Listener!");
+				Erros_Skype_Static.salvaErroSkype(VERSION +  " - Falha ao inserir a Mensagem via Listener!");
 
 		}
 		catch (final SkypeException ex) {
-			Erros_Skype_Static.salvaErroSkype(VERSION +  "\n  Exceção no Skype Listener. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype(VERSION +  " - Skype Exception no Skype Listener. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		catch (Exception ex) {
-			Erros_Skype_Static.salvaErroSkype(VERSION +  "\n  Exceção no Listener. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype(VERSION +  " - Exceção no Listener. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {

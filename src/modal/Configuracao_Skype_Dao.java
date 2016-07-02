@@ -28,14 +28,14 @@ public class Configuracao_Skype_Dao {
 		}
 		catch (HibernateException ex) {
 			ex.printStackTrace();
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Carregar Configuração Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Hibernate Exception ao Carregar Configuração Skype. Mensagem: " + ex.getMessage());
 			return false;			
 		}		
 		catch (Exception ex) {
 		
 			setObjRegraConfiguracao(null);
 			ex.printStackTrace();
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Carregar Configuração Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Carregar Configuração Skype. Mensagem: " + ex.getMessage());
 			return false;
 		
 		} 
@@ -66,15 +66,17 @@ public class Configuracao_Skype_Dao {
 
 		} 
 		catch (HibernateException ex) {
-			tx.rollback();
+			if (tx != null)
+				tx.rollback();
 			ex.printStackTrace();
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Salvar Configuração Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Hibernate Exception Exceção ao Salvar Configuração Skype. Mensagem: " + ex.getMessage());
 			return false;			
 		}		
 		catch (Exception ex) {
-			tx.rollback();
+			if (tx != null)
+				tx.rollback();
 			ex.printStackTrace();
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Salvar Configuração Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Salvar Configuração Skype. Mensagem: " + ex.getMessage());
 			return false;
 		} 
 		finally {

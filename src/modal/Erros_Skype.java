@@ -57,7 +57,7 @@ public class Erros_Skype {
 		
 		}
 		catch (Exception ex) {
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Retornar último ID Tabela. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -92,7 +92,7 @@ public class Erros_Skype {
 		}
 		catch (Exception ex) {
 
-			System.out.println("Exceção ao Salvar Dados PC estação cliente. Mensagem: " + ex.getMessage());
+			System.out.println("Exception ao Salvar Dados PC estação cliente. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 			

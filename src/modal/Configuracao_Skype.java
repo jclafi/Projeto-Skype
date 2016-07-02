@@ -79,6 +79,13 @@ public class Configuracao_Skype {
 			
 			ok = objPersistente.salvaConfiguracao();
 			
+			if (! ok) {
+				
+				Erros_Skype_Static.salvaErroSkype("Atenção erro ao salvar a configuração !");
+				return false;
+				
+			}
+			
 		}
 		finally {
 			if (objPersistente != null)

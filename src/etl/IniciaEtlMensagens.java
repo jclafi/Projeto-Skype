@@ -77,7 +77,6 @@ public class IniciaEtlMensagens extends Thread {
 		
 		System.gc();
 		
-		//Pausa para a nova carga de Mensagens
 		try {
 
 			IniciaEtlMensagens.sleep(SLEEP_TIME);

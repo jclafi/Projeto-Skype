@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import jdbc.SqlLiteConnection;
 import modal.Configuracao_Skype;
 import modal.Conta_Login;
+import modal.Erros_Skype_Static;
 
 public class IniciaEtlContaContatos  extends Thread {
 	
@@ -35,6 +36,8 @@ public class IniciaEtlContaContatos  extends Thread {
 		//Valida se o Operador conectou no Skype e Cria o cria/atualiza os Contatos e Contas
 		if (objLoginRegras != null) 
 			criaObjetoContaContatos();
+		else
+			Erros_Skype_Static.salvaErroSkype("Falha ao indetificar Usuário Conta Contatos ! !");			
 		
 	}
 	
@@ -103,10 +106,11 @@ public class IniciaEtlContaContatos  extends Thread {
 			IniciaEtlContaContatos.sleep(SLEEP_TIME);
 		
 		} catch (InterruptedException e) {
+			Erros_Skype_Static.salvaErroSkype("Interrupted Exception no Timer Conta Contatos !");
 			e.printStackTrace();
 		}
 		
-		//Método recursivo para carga de Mensagens
+		//Método recursivo para carga de Contatos
 		criaObjetoContaContatos();
 		
 	}

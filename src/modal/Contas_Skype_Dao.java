@@ -45,7 +45,7 @@ public class Contas_Skype_Dao {
 		
 		}
 		catch (Exception ex) {
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Identificar PK DAO Contas Skype. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Identificar PK DAO Contas Skype. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {
@@ -82,11 +82,13 @@ public class Contas_Skype_Dao {
 				session.save(conta);
 				tx.commit();			
 			}
+			else
+				tx.rollback();
 		}
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Salvar DAO Conta Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Salvar DAO Conta Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -118,6 +120,8 @@ public class Contas_Skype_Dao {
 				session.delete(conta);			
 				tx.commit();
 			}
+			else
+				tx.rollback();
 
 		}
 		catch (Exception ex) {
@@ -155,11 +159,14 @@ public class Contas_Skype_Dao {
 				session.update(conta);			
 				tx.commit();
 			}
+			else
+				tx.rollback();
+			
 		}
 		catch (Exception ex) {
 			if (tx != null)
 				tx.rollback();
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Atualizar DAO a Conta Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Atualizar DAO a Conta Skype: " + ex.getMessage());
 			ex.printStackTrace();
 			return false;
 		}
@@ -184,7 +191,7 @@ public class Contas_Skype_Dao {
 			setObjContas_Skype(session.get(Contas_Skype.class, id_geral));
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Carregar DAO a Conta Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Carregar DAO da Conta Skype: " + ex.getMessage());
 			return false;
 		} finally {
 			if (session != null) {

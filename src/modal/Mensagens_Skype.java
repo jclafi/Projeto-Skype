@@ -1,3 +1,4 @@
+
 package modal;
 
 import java.math.BigInteger;
@@ -75,7 +76,7 @@ public class Mensagens_Skype {
 		
 		}
 		catch (Exception ex) {
-			Erros_Skype_Static.salvaErroSkype("Exceção ao Retornar último ID Tabela. Mensagem: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao Retornar último ID Tabela. Mensagem: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		finally {

@@ -3,6 +3,7 @@ package etl;
 import org.hibernate.SessionFactory;
 
 import controller.DefineEstruturaProjeto;
+import modal.Erros_Skype_Static;
 
 public class IniciaEtlDadosServidor extends Thread {
 	
@@ -43,6 +44,7 @@ public class IniciaEtlDadosServidor extends Thread {
 				IniciaEtlDadosServidor.sleep(SLEEP_TIME);
 			
 			} catch (InterruptedException e) {
+				Erros_Skype_Static.salvaErroSkype("Interrupted Exception no Timer Dados Servidor");
 				e.printStackTrace();
 			}
 			
@@ -73,10 +75,10 @@ public class IniciaEtlDadosServidor extends Thread {
 			objCargaMensagensServidor.setObjPostgreSQLFactory(this.getObjPostgreSQLFactory());
 			objCargaMensagensServidor.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
 			
-			//Verifica e atualzia a Conta Servidor e Máquina Local
+			//Verifica e atualiza a Conta Servidor e Máquina Local
 			objCargaMensagensServidor.enviaDadosConta();
 			
-			//Verifica e atualzia os Contatos no Servidor e Máquina Local
+			//Verifica e atualiza os Contatos no Servidor e Máquina Local
 			objCargaMensagensServidor.enviaDadosContatos();
 			
 			//Envia as mensagens pendentes para o Servidor

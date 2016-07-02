@@ -101,7 +101,6 @@ public class IniciaEtlListener extends Thread {
 
 					Skype.addApplication("javaw.exe");
 
-					//Pausa para a nova carga de Mensagens
 					try {
 
 						IniciaEtlListener.sleep(2000);
@@ -124,7 +123,6 @@ public class IniciaEtlListener extends Thread {
 			//Se não conectou aguarda para a próxima tentativa
 			if (! connected) {
 
-				//Pausa para a nova carga de Mensagens
 				try {
 
 					IniciaEtlListener.sleep(SLEEP_TIME);
@@ -164,7 +162,7 @@ public class IniciaEtlListener extends Thread {
 			Skype.setDeamon(false);
 			
 		} catch (Exception ex) {
-			Erros_Skype_Static.salvaErroSkype("Exceção ao definir o Listener Skype: " + ex.getMessage());
+			Erros_Skype_Static.salvaErroSkype("Exception ao definir o Listener Skype: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		
