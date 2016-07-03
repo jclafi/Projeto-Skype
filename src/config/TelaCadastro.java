@@ -11,9 +11,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -44,7 +41,6 @@ public class TelaCadastro extends JDialog {
 		getContentPane().add(new JPanel(), BorderLayout.NORTH);
 		getContentPane().add(montaDados(), BorderLayout.CENTER);
 		getContentPane().add(montaBotoes(), BorderLayout.SOUTH);
-		adicionaMainMenu();		
 		
 		setTitle("Cadastro de Configura\u00E7\u00F5es");
 		setAlwaysOnTop(true);
@@ -152,17 +148,28 @@ public class TelaCadastro extends JDialog {
 		});
 		contentPane.add(button);
 
-		JButton button_3 = new JButton("Sair");
-		button_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		button_3.addActionListener(new ActionListener() {
+		JButton btnBdSkype = new JButton("Skype");
+		btnBdSkype.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnBdSkype.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				setVisible(false);
+				conectaBaseSkype();
 
 			}
 		});
-		contentPane.add(button_3);
+		contentPane.add(btnBdSkype);
 
+		JButton btnBdServidor = new JButton("Servidor");
+		btnBdServidor.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnBdServidor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				conectaBaseServidor();
+				
+			}
+		});
+		contentPane.add(btnBdServidor);
+		
 		return contentPane;
 
 	}
@@ -266,40 +273,8 @@ public class TelaCadastro extends JDialog {
 		}
 
 	}
-	
-	private void adicionaMainMenu() {
-		//Cria a Barra de Menu e Item
-		//===========================================			
-		JMenuBar barra = new JMenuBar();			
-		JMenu itemCadastros = new JMenu("Conecta Banco");
-		barra.add(itemCadastros);
 		
-		JMenuItem itemLista_User = new JMenuItem("Base Cliente");
-		itemLista_User.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-				conectaBaseCliente();
-			
-			}
-		});
-		itemCadastros.add(itemLista_User);
-		itemCadastros.addSeparator();
-		
-		JMenuItem itemSub_Item = new JMenuItem("Base Servidor");
-		itemSub_Item.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-				conectaBaseServidor();				
-			
-			}
-		});
-		itemCadastros.add(itemSub_Item);
-			
-		setJMenuBar(barra);
-		
-	}
-	
-	private void conectaBaseCliente() {
+	private void conectaBaseSkype() {
 		
 		if (objEstruturaRegras.connectSQLLiteJDBC()) {
 			

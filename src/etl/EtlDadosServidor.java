@@ -212,11 +212,13 @@ public class EtlDadosServidor {
 				//verifica flag Contato Certificado, caso não cadastra o Contato
 				Contatos_Contas_Skype objContatosServidor = (Contatos_Contas_Skype) iterator.next();
 				
-				//Percorre os conatos locais e valida o flag de autorizado
+				//Percorre os contatos locais e valida o flag de autorizado
 				for (Contatos_Contas_Skype objContatosLocal : objContatos_Local.getObjListaContatosContaSkype()) {
 										
 					//Localiza o Contato
 					if (objContatosServidor.getAccount_name().equals(objContatosLocal.getAccount_name())) {
+
+						identificouContatoServidor = true;
 						
 						//Testa o flag autorizado da base cliente e servisdor
 						if (! objContatosServidor.getContact_verified().equals(objContatosLocal.getContact_verified())) {
@@ -229,9 +231,21 @@ public class EtlDadosServidor {
 								Erros_Skype_Static.salvaErroSkype("Erro ao atualizar o Flag de Contato Verificado na base cliente.");
 							
 						}
+													
+						break;
 						
 					}
-						
+											
+				}
+				
+				//Insere o Contato noServidor
+				if (! identificouContatoServidor) {
+					
+					objContatos_Local.setObjSessionFactory(objMySQLFactory);
+					
+					if (! objContatos_Local.salvaContatosConta())
+						Erros_Skype_Static.salvaErroSkype("Erro ao atualizar o Flag de Contato Verificado na base Servidor.");						
+					
 				}
 						
 			}
@@ -239,11 +253,11 @@ public class EtlDadosServidor {
 			//Se não foi identificada nenhuma conta no Servidor realiza a carga inicial
 			if (cargaInicialServidor) {
 				
-				for (Contatos_Contas_Skype index : objContatos_Local.getObjListaContatosContaSkype()) {
+				for (Contatos_Contas_Skype listaContatosLocal : objContatos_Local.getObjListaContatosContaSkype()) {
 					
-					index.setObjSessionFactory(objMySQLFactory);
-					if (! index.salvaContatosConta())
-						Erros_Skype_Static.salvaErroSkype("Não foi possível persistir o Contato no Servidor: " + index.getAccount_name()); 
+					listaContatosLocal.setObjSessionFactory(objMySQLFactory);
+					if (! listaContatosLocal.salvaContatosConta())
+						Erros_Skype_Static.salvaErroSkype("Não foi possível persistir o Contato no Servidor: " + listaContatosLocal.getAccount_name()); 
 					
 				}
 				

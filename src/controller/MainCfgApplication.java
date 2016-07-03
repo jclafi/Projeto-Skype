@@ -85,6 +85,7 @@ public class MainCfgApplication {
 			if (frmCadastro != null) {
 				frmCadastro.dispose();
 			}
+			
 		}
 		
 	}
