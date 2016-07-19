@@ -64,7 +64,6 @@ public class EtlContaContatos {
 		}
 				
 		return (objContaSkype.getId_geral() > 0);
-		
 	}
 	
 	private boolean criaAtualizaContatosContaPadrao() {
