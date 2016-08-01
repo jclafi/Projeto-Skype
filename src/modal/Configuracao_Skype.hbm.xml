@@ -17,6 +17,7 @@
         <property name="mySqlPassWord" column="mysqlpassword" type="string"/> 
         <property name="mySQLHost" column="mysqlhost" type="string"/>
         <property name="skypeAccount" column="skypeaccount" type="string"/> 
+        <property name="statusListener" column="statuslistener" type="string"/> 
     </class>
 
 </hibernate-mapping>

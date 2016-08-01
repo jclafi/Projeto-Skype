@@ -6,7 +6,7 @@ import modal.Configuracao_Skype;
 import modal.Conta_Login;
 import modal.Erros_Skype_Static;
 
-public class IniciaEtlContaContatos  extends Thread {
+public class IniciaEtlContaContatos extends Thread {
 	
 	//Entre uma carga e outra aguarda 30 minutos
 	private final long SLEEP_TIME = 1800000;	

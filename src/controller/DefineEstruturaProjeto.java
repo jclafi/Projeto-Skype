@@ -104,7 +104,10 @@ public class DefineEstruturaProjeto {
 
 	}
 	
-	public void finalizaAplicacao() {
+	public void finalizaAplicacao(boolean validaFlagExecucao) {
+		
+		if ((validaFlagExecucao) && (getObjConfiguracao() != null))
+			getObjConfiguracao().defineFlagExecucao('P');
 		
 		closePostgreSQLHibernate();
 		closeMySQLHibernate();

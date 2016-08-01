@@ -19,7 +19,10 @@ import javax.swing.SwingConstants;
 import controller.DefineEstruturaProjeto;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.concurrent.TimeUnit;
+
 import modal.Conta_Login;
+import modal.Erros_Skype_Static;
 
 public class TelaCadastro extends JDialog {
 
@@ -31,7 +34,9 @@ public class TelaCadastro extends JDialog {
 	private JTextField edtServerHost;
 	private JPasswordField edtServerPassWord;
 	private JCheckBox chkListener;
+	private JButton btnPararServico;	
 	private DefineEstruturaProjeto objEstruturaRegras;
+	private final long TEMPO_SEGUNDOS = 10;	
 	
 	public DefineEstruturaProjeto getObjEstruturaRegras() { return objEstruturaRegras; }
 	public void setObjEstruturaRegras(DefineEstruturaProjeto objEstruturaRegras) { this.objEstruturaRegras = objEstruturaRegras; }
@@ -42,7 +47,7 @@ public class TelaCadastro extends JDialog {
 		getContentPane().add(montaDados(), BorderLayout.CENTER);
 		getContentPane().add(montaBotoes(), BorderLayout.SOUTH);
 		
-		setTitle("Cadastro de Configura\u00E7\u00F5es");
+		setTitle("Cadastro de Configura\u00E7\u00F5es ETL");
 		setAlwaysOnTop(true);
 		setResizable(false);
 		setModal(true);
@@ -121,7 +126,6 @@ public class TelaCadastro extends JDialog {
 		lblSkypeListener.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		contentPane.add(lblSkypeListener);
 		chkListener = new JCheckBox("", false);
-		chkListener.setEnabled(false);
 		chkListener.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		chkListener.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(chkListener);
@@ -135,6 +139,7 @@ public class TelaCadastro extends JDialog {
 		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		JButton button = new JButton("Salvar");
+		button.setToolTipText("Salva Configura\u00E7\u00F5es");
 		button.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -149,6 +154,7 @@ public class TelaCadastro extends JDialog {
 		contentPane.add(button);
 
 		JButton btnBdSkype = new JButton("Skype");
+		btnBdSkype.setToolTipText("Testa Conex\u00E3o Local");
 		btnBdSkype.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnBdSkype.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -160,6 +166,7 @@ public class TelaCadastro extends JDialog {
 		contentPane.add(btnBdSkype);
 
 		JButton btnBdServidor = new JButton("Servidor");
+		btnBdServidor.setToolTipText("Testa Conex\u00E3o Servidor");
 		btnBdServidor.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnBdServidor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -169,6 +176,18 @@ public class TelaCadastro extends JDialog {
 			}
 		});
 		contentPane.add(btnBdServidor);
+		
+		btnPararServico = new JButton("Parar ETL");
+		btnPararServico.setToolTipText("Para o Serviço do ETL");
+		btnPararServico.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnPararServico.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			
+				finalizaServicoETL();
+			
+			}
+		});
+		contentPane.add(btnPararServico);
 		
 		return contentPane;
 
@@ -308,6 +327,49 @@ public class TelaCadastro extends JDialog {
 			
 		}
 		
+	}
+	 
+	private void finalizaServicoETL() {
+		
+		btnPararServico.setEnabled(false);
+		try {
+			//Verifica se o sistema está sendo executado
+			if (objEstruturaRegras.getObjConfiguracao().carregaConfiguracao(objEstruturaRegras.getObjConfiguracao().getCODIGO_CONFIGURACAO())) {
+				
+				if (objEstruturaRegras.getObjConfiguracao().getStatusListener().equals("E")) {
+					
+					objEstruturaRegras.getObjConfiguracao().defineFlagExecucao('F');
+					while (! objEstruturaRegras.getObjConfiguracao().getStatusListener().toString().equals("P")) {
+						
+						try {
+							TimeUnit.SECONDS.sleep(TEMPO_SEGUNDOS);
+						} catch (InterruptedException ex) {
+							Erros_Skype_Static.salvaErroSkype("Interrupted Exception no sleep Login Skype: " + ex.getMessage());					
+						}
+						
+						objEstruturaRegras.getObjConfiguracao().carregaConfiguracao(objEstruturaRegras.getObjConfiguracao().getCODIGO_CONFIGURACAO());
+
+					}
+					
+					JOptionPane.showMessageDialog(this, "Serviço Finalizado !");				
+				}
+				else
+					JOptionPane.showMessageDialog(this, 
+							"O Serviço não está em execução. Status atual: " + (
+									objEstruturaRegras.getObjConfiguracao().getStatusListener().toString().equals("P") ? "Parado" : "Finalizando"));
+				
+			}
+			else {
+				
+				JOptionPane.showMessageDialog(this, "Não foi possível carregar a Configuração do Sistema !");
+				
+			}
+		}
+		finally {
+			
+			btnPararServico.setEnabled(true);
+			
+		}
 	}
 	
 }

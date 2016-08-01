@@ -15,7 +15,7 @@ public class MainCfgApplication {
 						
 			//Verifica se o Skype está instalado na máquina Cliente
 			if (!objEstruturaSkype.verificaInstalacaoSkype())
-				objEstruturaSkype.finalizaAplicacao();
+				objEstruturaSkype.finalizaAplicacao(false);
 	
 			// Cria a Factory de acesso a Dados
 			if (objEstruturaSkype.connectPostgreSQLHibernate()) {
@@ -34,12 +34,12 @@ public class MainCfgApplication {
 						cadastraConfiguracao(objEstruturaSkype);
 				}
 			} else 
-				JOptionPane.showMessageDialog(null, "Atenção não foi possível Conectar na Base de dados Local !");
+				JOptionPane.showMessageDialog(null, "Não foi possível Conectar na Base Local Skype !");
 		}
 		finally {
 
 			if (objEstruturaSkype != null) {
-				objEstruturaSkype.finalizaAplicacao();
+				objEstruturaSkype.finalizaAplicacao(false);
 
 			}		
 

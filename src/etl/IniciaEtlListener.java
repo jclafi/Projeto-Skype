@@ -12,7 +12,8 @@ import modal.Conta_Login;
 public class IniciaEtlListener extends Thread {
 	
 	//Entre uma carga e outra aguarda 1 minuto
-	private final long SLEEP_TIME = 60000;
+	private final long SLEEP_TIME_CONNECT = 60000;
+	private final long SLEEP_TIME_API = 2000;
 	private String accountName;
 	private SessionFactory objSessionFactory;
 	private SqlLiteConnection connectionSQLLite;
@@ -46,7 +47,7 @@ public class IniciaEtlListener extends Thread {
 		if ((objLoginRegras != null) && (connectSkype())) {
 
 			//Cria objetos para verificação dos dados da Conta e Contatos
-			criaContaContatos();
+			criaObjetosContaContatos();
 
 			//Inicia o Listener direto via API Skype
 			startChatListener();
@@ -54,7 +55,7 @@ public class IniciaEtlListener extends Thread {
 		}
 	}	
 	
-	private void criaContaContatos() {
+	private void criaObjetosContaContatos() {
 		
 		objContasSkype = new Contas_Skype();
 		objContasSkype.setObjSessionFactory(objSessionFactory);
@@ -103,7 +104,7 @@ public class IniciaEtlListener extends Thread {
 
 					try {
 
-						IniciaEtlListener.sleep(2000);
+						IniciaEtlListener.sleep(SLEEP_TIME_API);
 					
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -125,7 +126,7 @@ public class IniciaEtlListener extends Thread {
 
 				try {
 
-					IniciaEtlListener.sleep(SLEEP_TIME);
+					IniciaEtlListener.sleep(SLEEP_TIME_CONNECT);
 				
 				} catch (InterruptedException e) {
 					e.printStackTrace();

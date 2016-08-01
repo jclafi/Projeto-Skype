@@ -13,12 +13,15 @@ class MainSkypeClass {
 		DefineEstruturaProjeto objEstruturaSkype = new DefineEstruturaProjeto();
 		
 		if (! objEstruturaSkype.verificaInstalacaoSkype())
-			objEstruturaSkype.finalizaAplicacao();
+			objEstruturaSkype.finalizaAplicacao(true);
 	
 		// Cria a Factory de acesso a Dados
 		if (objEstruturaSkype.connectPostgreSQLHibernate() && 
 			objEstruturaSkype.criaObjetoConfiguracao() && 
 			objEstruturaSkype.connectSQLLiteJDBC()) {
+			
+			//Define que o serviço foi iniciado
+			objEstruturaSkype.getObjConfiguracao().defineFlagExecucao('E');
 			
 			//Define a conexão local para o objeto de Log de Erros
 			Erros_Skype_Static.setObjSessionFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
@@ -42,7 +45,7 @@ class MainSkypeClass {
 			//Verifica se a leitura é via listener ou banco de dados
 			if (objEstruturaSkype.verificaTipoImportacao()) {			
 				
-				//Cria a Thread que gerencia a as mensagens via Listener para o Banco de Dados
+				//Cria a Thread que gerencia a as mensagens via Listener para o Banco de Dados Local
 				IniciaEtlListener objSkypeListener = new IniciaEtlListener();
 				objSkypeListener.setObjSessionFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
 				objSkypeListener.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());
@@ -61,23 +64,28 @@ class MainSkypeClass {
 			
 			}
 		
-			//Cria a Thread que envia as Mensagens do Banco Local para Servidor
-			IniciaEtlDadosServidor IniciaCargaServidor = new IniciaEtlDadosServidor();
-			IniciaCargaServidor.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
-			IniciaCargaServidor.setObjEstruturaSkype(objEstruturaSkype);
-			IniciaCargaServidor.setAccountName(objEstruturaSkype.getObjConfiguracao().getSkypeAccount());
-			IniciaCargaServidor.start();
+			//Cria a Thread que envia as Mensagens e Contatos do Banco Local para Servidor
+			IniciaEtlDadosServidor objIniciaCargaServidor = new IniciaEtlDadosServidor();
+			objIniciaCargaServidor.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
+			objIniciaCargaServidor.setObjEstruturaSkype(objEstruturaSkype);
+			objIniciaCargaServidor.setAccountName(objEstruturaSkype.getObjConfiguracao().getSkypeAccount());
+			objIniciaCargaServidor.start();
 			
-			//Cria a Thread de identificação do conta e contatos do Skype
-			IniciaEtlContaContatos IniciaContaContatos = new IniciaEtlContaContatos();
-			IniciaContaContatos.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
-			IniciaContaContatos.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());			
-			IniciaContaContatos.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
-			IniciaContaContatos.start();
-						
+			//Cria a Thread que envia a Conta e Contatos do Skype para o Banco Local
+			IniciaEtlContaContatos objIniciaContaContatos = new IniciaEtlContaContatos();
+			objIniciaContaContatos.setObjPostgreSQLFactory(objEstruturaSkype.getObjPostgreSQLFactory().getFactory());
+			objIniciaContaContatos.setConnectionSQLLite(objEstruturaSkype.getConnectionSQLLite());			
+			objIniciaContaContatos.setObjConfiguracao(objEstruturaSkype.getObjConfiguracao());
+			objIniciaContaContatos.start();
+
+			//Cria a Thread de Gerenciamento de Sessão do ETL
+			GerenciaSessao objGerenciaSessao = new GerenciaSessao();
+			objGerenciaSessao.setObjEstruturaSkype(objEstruturaSkype);
+			objGerenciaSessao.start();
+			
 		}
 		else
-			objEstruturaSkype.finalizaAplicacao();
+			objEstruturaSkype.finalizaAplicacao(true);
 
 	}
 	

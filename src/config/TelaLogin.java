@@ -141,7 +141,7 @@ public class TelaLogin extends JDialog {
 
 	private boolean validaLogin(String user, String passWord) {
 
-		if (user.equals("ADMIN") && passWord.equals("SKYPEAPP") ) {
+		if (user.equals("ADMINSKYPE") && passWord.equals("SKYPEAPP") ) {
 			return true;
 		} else
 			return false;

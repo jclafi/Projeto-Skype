@@ -11,6 +11,7 @@ public class Configuracao_Skype {
 	private String mySqlPassWord;
 	private String mySQLHost;
 	private String skypeAccount;
+	private String statusListener; //E: Serviço em execução. P: Servico Parado. F: Finalizando.
 	
 	public int getId_geral() { return id_geral; }
 	public void setId_geral(int id_geral) { this.id_geral = id_geral; }
@@ -26,6 +27,8 @@ public class Configuracao_Skype {
 	public void setMySQLHost(String mySQLHost) { this.mySQLHost = mySQLHost; }
 	public String getSkypeAccount() { return skypeAccount; }
 	public void setSkypeAccount(String skypeAccount) { this.skypeAccount = skypeAccount; }
+	public String getStatusListener() { return statusListener; }
+	public void setStatusListener(String statusListener) { this.statusListener = statusListener; }
 
 	private final int CODIGO_CONFIGURACAO = 1;
 	private SessionFactory objSessionFactory;		
@@ -50,6 +53,7 @@ public class Configuracao_Skype {
 				setMySqlPassWord(objPersistente.getObjRegraConfiguracao().getMySqlPassWord());
 				setMySqlRoot(objPersistente.getObjRegraConfiguracao().getMySqlRoot());
 				setSkypeAccount(objPersistente.getObjRegraConfiguracao().getSkypeAccount());
+				setStatusListener(objPersistente.getObjRegraConfiguracao().getStatusListener());
 			}				
 			else {
 				
@@ -93,6 +97,19 @@ public class Configuracao_Skype {
 		}
 		
 		return ok;
+		
+	}
+	
+	public void defineFlagExecucao(char statusListener) {
+		
+		switch (statusListener) {
+			case 'E' : setStatusListener("E"); break;
+			case 'F' : setStatusListener("F"); break;
+			case 'P' : setStatusListener("P"); break;
+		}
+		
+		if (! salvaConfiguracao())
+			Erros_Skype_Static.salvaErroSkype("Falha ao definir o Status do Flag de Execução");
 		
 	}
 	

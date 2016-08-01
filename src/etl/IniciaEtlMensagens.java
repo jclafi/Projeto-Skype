@@ -90,4 +90,14 @@ public class IniciaEtlMensagens extends Thread {
 
 	}
 	
+	public void finalize() {
+		
+		if (objContasSkype != null)
+			objContasSkype = null;
+		
+		if (objContatosContasSkype != null)
+			objContatosContasSkype = null;
+		
+	}
+	
 }
