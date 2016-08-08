@@ -34,7 +34,7 @@ public class TelaCadastro extends JDialog {
 	private JTextField edtServerHost;
 	private JPasswordField edtServerPassWord;
 	private JCheckBox chkListener;
-	private JButton btnPararServico;	
+	private JButton btnStatusServico;	
 	private DefineEstruturaProjeto objEstruturaRegras;
 	private final long TEMPO_SEGUNDOS = 10;	
 	
@@ -177,17 +177,17 @@ public class TelaCadastro extends JDialog {
 		});
 		contentPane.add(btnBdServidor);
 		
-		btnPararServico = new JButton("Parar ETL");
-		btnPararServico.setToolTipText("Para o Serviço do ETL");
-		btnPararServico.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnPararServico.addActionListener(new ActionListener() {
+		btnStatusServico = new JButton("Parar");
+		btnStatusServico.setToolTipText("Finaliza o Serviço");
+		btnStatusServico.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnStatusServico.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			
 				finalizaServicoETL();
 			
 			}
 		});
-		contentPane.add(btnPararServico);
+		contentPane.add(btnStatusServico);
 		
 		return contentPane;
 
@@ -241,7 +241,24 @@ public class TelaCadastro extends JDialog {
 		edtServerRoot.setText(objEstruturaRegras.getObjConfiguracao().getMySqlRoot());
 		edtServerPassWord.setText(objEstruturaRegras.getObjConfiguracao().getMySqlPassWord());
 		chkListener.setSelected(objEstruturaRegras.getObjConfiguracao().getSkypeListener().equals("S"));
-					
+		setBotaoStatus(objEstruturaRegras.getObjConfiguracao().getStatusListener());
+		
+	}
+	
+	private void setBotaoStatus(String status) {
+
+		if (status.equals("E"))
+			btnStatusServico.setText("Ativo");
+	
+		if (status.equals("P"))
+			btnStatusServico.setText("Parado");
+	
+		if (status.equals("F"))
+			btnStatusServico.setText("Finalizando");
+			
+		if (status.equals("N"))
+			btnStatusServico.setText("N/D");
+		
 	}
 	
 	private void selecionaSkypeBD() {
@@ -331,7 +348,7 @@ public class TelaCadastro extends JDialog {
 	 
 	private void finalizaServicoETL() {
 		
-		btnPararServico.setEnabled(false);
+		btnStatusServico.setEnabled(false);
 		try {
 			//Verifica se o sistema está sendo executado
 			if (objEstruturaRegras.getObjConfiguracao().carregaConfiguracao(objEstruturaRegras.getObjConfiguracao().getCODIGO_CONFIGURACAO())) {
@@ -339,6 +356,7 @@ public class TelaCadastro extends JDialog {
 				if (objEstruturaRegras.getObjConfiguracao().getStatusListener().equals("E")) {
 					
 					objEstruturaRegras.getObjConfiguracao().defineFlagExecucao('F');
+					setBotaoStatus("F");
 					while (! objEstruturaRegras.getObjConfiguracao().getStatusListener().toString().equals("P")) {
 						
 						try {
@@ -351,23 +369,26 @@ public class TelaCadastro extends JDialog {
 
 					}
 					
+					setBotaoStatus(objEstruturaRegras.getObjConfiguracao().getStatusListener());
 					JOptionPane.showMessageDialog(this, "Serviço Finalizado !");				
 				}
-				else
+				else {
+					setBotaoStatus(objEstruturaRegras.getObjConfiguracao().getStatusListener());
 					JOptionPane.showMessageDialog(this, 
 							"O Serviço não está em execução. Status atual: " + (
 									objEstruturaRegras.getObjConfiguracao().getStatusListener().toString().equals("P") ? "Parado" : "Finalizando"));
-				
+				}
 			}
 			else {
 				
+				setBotaoStatus("N");
 				JOptionPane.showMessageDialog(this, "Não foi possível carregar a Configuração do Sistema !");
 				
 			}
 		}
 		finally {
 			
-			btnPararServico.setEnabled(true);
+			btnStatusServico.setEnabled(true);
 			
 		}
 	}
